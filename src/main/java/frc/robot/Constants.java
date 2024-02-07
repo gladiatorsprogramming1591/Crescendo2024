@@ -50,7 +50,7 @@ public final class Constants {
     public static final double kFrontRightChassisAngularOffset = 0;
     public static final double kBackLeftChassisAngularOffset = Math.PI;
     public static final double kBackRightChassisAngularOffset = Math.PI / 2;
-
+    // TODO review CAN IDs before deploying
     // SPARK MAX CAN IDs
     public static final int kFrontLeftDrivingCanId = 11;
     public static final int kRearLeftDrivingCanId = 13;
@@ -114,6 +114,15 @@ public final class Constants {
 
     public static final int kDrivingMotorCurrentLimit = 50; // amps
     public static final int kTurningMotorCurrentLimit = 20; // amps
+  }
+  //Initial values taken from Roberta
+  public static final class ShooterConstants{
+    public static final double kShooterP = 0.00075;
+    public static final double kShooterI = 0.0;
+    public static final double kShooterD = 0.02;
+    public static final double kShooterFF = 0.00019;
+
+    public static final double kShooterSpeed = 0.6; 
   }
 
   public static final class OIConstants {
