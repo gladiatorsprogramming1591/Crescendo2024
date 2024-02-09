@@ -122,7 +122,13 @@ public final class Constants {
     public static final double kShooterD = 0.02;
     public static final double kShooterFF = 0.00019;
 
-    public static final double kShooterSpeed = 0.6; 
+    public static final int kTransferCANId = 4;
+    public static final int kLeftShooterCANId = 5;
+    public static final int kRightShooterCANId = 6;
+
+    public static final double kRightShooterSpeed = 0.6; 
+    public static final double kLeftShooterSpeed = 0.75; 
+    public static final double kTransferSpeed = 0.5;
   }
 
   public static final class OIConstants {

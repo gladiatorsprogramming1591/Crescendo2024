@@ -9,21 +9,24 @@ import com.revrobotics.CANSparkFlex;
 import com.revrobotics.CANSparkLowLevel;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.CANSparkBase.ControlType;
+import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkBase;
 
 
 public class ShooterSubsystem extends SubsystemBase {
     CANSparkFlex m_rightShooterMotor; 
     CANSparkFlex m_leftShooterMotor; 
+    CANSparkMax m_transferMotor;
     RelativeEncoder m_rightEncoder; 
     RelativeEncoder m_leftEncoder; 
-    double m_rightTargetVelocity; 
-    double m_leftTargetVelocity; 
+    double m_rightTargetVelocity = Constants.ShooterConstants.kRightShooterSpeed; 
+    double m_leftTargetVelocity = Constants.ShooterConstants.kLeftShooterSpeed; 
 
 
     public ShooterSubsystem(){
-        m_rightShooterMotor = new CANSparkFlex(0, null);
-        m_leftShooterMotor = new CANSparkFlex(0, null);
+        m_rightShooterMotor = new CANSparkFlex(Constants.ShooterConstants.kRightShooterCANId, MotorType.kBrushless);
+        m_leftShooterMotor = new CANSparkFlex(Constants.ShooterConstants.kLeftShooterCANId, MotorType.kBrushless);
         m_rightEncoder = m_rightShooterMotor.getEncoder();
         m_leftEncoder = m_leftShooterMotor.getEncoder();
         m_rightShooterMotor.setIdleMode(CANSparkMax.IdleMode.kCoast);
@@ -32,43 +35,54 @@ public class ShooterSubsystem extends SubsystemBase {
         m_rightShooterMotor.getPIDController().setI(ShooterConstants.kShooterI);
         m_rightShooterMotor.getPIDController().setD(ShooterConstants.kShooterD);
         m_rightShooterMotor.getPIDController().setFF(ShooterConstants.kShooterFF);
+        m_rightShooterMotor.getPIDController().setReference(0, ControlType.kVoltage);
 
         m_leftShooterMotor.getPIDController().setP(ShooterConstants.kShooterP);
         m_leftShooterMotor.getPIDController().setI(ShooterConstants.kShooterI);
         m_leftShooterMotor.getPIDController().setD(ShooterConstants.kShooterD);
         m_leftShooterMotor.getPIDController().setFF(ShooterConstants.kShooterFF);
+        m_leftShooterMotor.getPIDController().setReference(0, ControlType.kVoltage);
 
         m_rightShooterMotor.enableVoltageCompensation(12);
         m_leftShooterMotor.enableVoltageCompensation(12);
+
+        m_transferMotor = new CANSparkMax(Constants.ShooterConstants.kTransferCANId, MotorType.kBrushless);
+        m_rightShooterMotor.setIdleMode(CANSparkMax.IdleMode.kCoast);
     }
 
 
     public void shooterOn() {
         //Turns on the shooter motor
         System.out.println("Turning shooter on");
+        m_rightShooterMotor.getPIDController().setReference(m_rightTargetVelocity, ControlType.kVoltage);
+        m_leftShooterMotor.getPIDController().setReference(m_leftTargetVelocity, ControlType.kVoltage);
                   
-        
-          // m_rightShooterMotor.getPIDController().setFF(speed * 1 + 0);
-          System.out.println("Setting shooter speed to " + Constants.kShooterMotorSpeed);
-          // System.out.println("Setting shooter speed to " + speed);
-          // m_rightShooterMotor.getPIDController().setReference(speed, ControlType.kVelocity);
-          m_rightShooterMotor.set(Constants.kShooterMotorSpeed);
-        }
-    
+        System.out.println("Setting left shooter speed to " + m_leftTargetVelocity);
+        System.out.println("Setting right shooter speed to " + m_rightTargetVelocity);
       }
 
       public void shooterOff() {
         System.out.println("Turning shooter off");
         m_rightShooterMotor.set(0);
+        m_leftShooterMotor.set(0);
       }
 
       public boolean isShooterAtSpeed() {
-        return ((m_leftEncoder.getVelocity() >= (m_leftTargetVelocity * 1) - 25)
-          && (m_leftEncoder.getVelocity() <= (m_leftTargetVelocity * 1) + 25)
-          && (m_rightEncoder.getVelocity() >= (m_rightTargetVelocity * 1) - 25)
-          && (m_rightEncoder.getVelocity() <= (m_rightTargetVelocity * 1) + 25)); 
+        // return ((m_leftEncoder.getVelocity() >= (m_leftTargetVelocity * 1) - 25)
+        //   && (m_leftEncoder.getVelocity() <= (m_leftTargetVelocity * 1) + 25)
+        //   && (m_rightEncoder.getVelocity() >= (m_rightTargetVelocity * 1) - 25)
+        //   && (m_rightEncoder.getVelocity() <= (m_rightTargetVelocity * 1) + 25)); 
+        return false; //TODO Determine how to get atSpeed. May need to use Roborio PIDcontroller
           
       } 
+
+      public void transferOn(){
+        m_transferMotor.set(Constants.ShooterConstants.kTransferSpeed);
+      }
+
+      public void transferOff(){
+        m_transferMotor.set(0);
+      }
 
       @Override
         public void periodic() {
