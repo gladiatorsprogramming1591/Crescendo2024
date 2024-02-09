@@ -122,18 +122,37 @@ public final class Constants {
     public static final double kShooterD = 0.02;
     public static final double kShooterFF = 0.00019;
 
-    public static final int kTransferCANId = 4;
+    
     public static final int kLeftShooterCANId = 5;
     public static final int kRightShooterCANId = 6;
+    public static final int kTransferCANId = 7;
 
     public static final double kRightShooterSpeed = 0.6; 
     public static final double kLeftShooterSpeed = 0.75; 
     public static final double kTransferSpeed = 0.5;
   }
 
+  public static final class IntakeConstants{
+    public static final int kLeftIntakeCANId = 3;
+    public static final int kRightIntakeCANId = 4; 
+
+    public static final double kIntakeSpeed = 0.6;
+  }
+
+  public static final class ArmConstants{
+    public static final int kLeftArmCANId = 8;
+    public static final int kRightArmCANId = 2;
+
+    public static final double kArmP = 1.00;
+    public static final double kArmI = 0.00;
+    public static final double kArmD = 0.00;
+    public static final double kArmFF = 1.00;
+  }
+
   public static final class OIConstants {
     public static final int kDriverControllerPort = 0;
     public static final double kDriveDeadband = 0.05;
+    public static final double kArmDeadband = 0.1;
   }
 
   public static final class AutoConstants {

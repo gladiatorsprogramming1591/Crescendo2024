@@ -30,6 +30,7 @@ public class ShooterSubsystem extends SubsystemBase {
         m_rightEncoder = m_rightShooterMotor.getEncoder();
         m_leftEncoder = m_leftShooterMotor.getEncoder();
         m_rightShooterMotor.setIdleMode(CANSparkMax.IdleMode.kCoast);
+        m_leftShooterMotor.setIdleMode(CANSparkMax.IdleMode.kCoast);
 
         m_rightShooterMotor.getPIDController().setP(ShooterConstants.kShooterP);
         m_rightShooterMotor.getPIDController().setI(ShooterConstants.kShooterI);
@@ -47,7 +48,6 @@ public class ShooterSubsystem extends SubsystemBase {
         m_leftShooterMotor.enableVoltageCompensation(12);
 
         m_transferMotor = new CANSparkMax(Constants.ShooterConstants.kTransferCANId, MotorType.kBrushless);
-        m_rightShooterMotor.setIdleMode(CANSparkMax.IdleMode.kCoast);
     }
 
 
