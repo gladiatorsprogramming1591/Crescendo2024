@@ -31,6 +31,8 @@ public class ShooterSubsystem extends SubsystemBase {
         m_leftEncoder = m_leftShooterMotor.getEncoder();
         m_rightShooterMotor.setIdleMode(CANSparkMax.IdleMode.kCoast);
         m_leftShooterMotor.setIdleMode(CANSparkMax.IdleMode.kCoast);
+        m_rightShooterMotor.setInverted(true);
+        m_leftShooterMotor.setInverted(false);
 
         m_rightShooterMotor.getPIDController().setP(ShooterConstants.kShooterP);
         m_rightShooterMotor.getPIDController().setI(ShooterConstants.kShooterI);
@@ -54,8 +56,8 @@ public class ShooterSubsystem extends SubsystemBase {
     public void shooterOn() {
         //Turns on the shooter motor
         System.out.println("Turning shooter on");
-        m_rightShooterMotor.getPIDController().setReference(m_rightTargetVelocity, ControlType.kVoltage);
-        m_leftShooterMotor.getPIDController().setReference(m_leftTargetVelocity, ControlType.kVoltage);
+        m_rightShooterMotor.getPIDController().setReference(m_rightTargetVelocity, ControlType.kDutyCycle);
+        m_leftShooterMotor.getPIDController().setReference(m_leftTargetVelocity, ControlType.kDutyCycle);
                   
         System.out.println("Setting left shooter speed to " + m_leftTargetVelocity);
         System.out.println("Setting right shooter speed to " + m_rightTargetVelocity);

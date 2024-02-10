@@ -18,16 +18,20 @@ import edu.wpi.first.wpilibj.PS4Controller.Button;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
+import frc.robot.commands.armCommands.ArmToPosition;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.subsystems.ArmSubsystem.armPositions;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+
+import java.time.Instant;
 import java.util.List;
 
 /*
@@ -76,18 +80,22 @@ public class RobotContainer {
    * {@link JoystickButton}.
    */
   private void configureButtonBindings() {
-    m_driverController.a().onTrue(new RunCommand(() -> m_ShooterSubsystem.shooterOn()));
-    m_driverController.b().onTrue(new RunCommand(() -> m_ShooterSubsystem.shooterOff()));
-    m_driverController.x().onTrue(new RunCommand(() -> m_ShooterSubsystem.transferOn()));
-    m_driverController.y().onTrue(new RunCommand(() -> m_ShooterSubsystem.transferOff()));
-    m_driverController.leftBumper().onTrue(new RunCommand(() -> m_IntakeSubsystem.intakeOn()));
-    m_driverController.rightBumper().onTrue(new RunCommand(() -> m_IntakeSubsystem.intakeOff()));
+    m_driverController.a().onTrue(new InstantCommand(() -> m_ShooterSubsystem.shooterOn(), m_ShooterSubsystem));
+    m_driverController.b().onTrue(new InstantCommand(() -> m_ShooterSubsystem.shooterOff(), m_ShooterSubsystem));
+    m_driverController.x().onTrue(new InstantCommand(() -> m_ShooterSubsystem.transferOn(), m_ShooterSubsystem));
+    m_driverController.y().onTrue(new InstantCommand(() -> m_ShooterSubsystem.transferOff(), m_ShooterSubsystem));
+    m_driverController.leftBumper().onTrue(new InstantCommand(() -> m_IntakeSubsystem.intakeOn(), m_IntakeSubsystem));
+    m_driverController.rightBumper().onTrue(new RunCommand(() -> m_IntakeSubsystem.intakeOff(), m_IntakeSubsystem));
     m_driverController.rightTrigger(OIConstants.kArmDeadband).whileTrue(new RunCommand(() -> 
       m_ArmSubsystem.ArmBackward(m_driverController.getRightTriggerAxis()), m_ArmSubsystem));
-    m_driverController.rightTrigger(OIConstants.kArmDeadband).onFalse(new InstantCommand(() -> m_ArmSubsystem.ArmOff()));
+    m_driverController.rightTrigger(OIConstants.kArmDeadband).onFalse(new InstantCommand(() -> m_ArmSubsystem.ArmOff(), m_ArmSubsystem));
     m_driverController.leftTrigger(OIConstants.kArmDeadband).whileTrue(new RunCommand(() -> 
       m_ArmSubsystem.ArmForward(m_driverController.getLeftTriggerAxis()), m_ArmSubsystem));
-    m_driverController.leftTrigger(OIConstants.kArmDeadband).onFalse(new InstantCommand(() -> m_ArmSubsystem.ArmOff()));
+    m_driverController.leftTrigger(OIConstants.kArmDeadband).onFalse(new InstantCommand(() -> m_ArmSubsystem.ArmOff(), m_ArmSubsystem));
+    m_driverController.povDown().onTrue(new ArmToPosition(m_ArmSubsystem, armPositions.TRANSFER)); 
+    m_driverController.povLeft().onTrue(new ArmToPosition(m_ArmSubsystem, armPositions.PODIUM)); 
+    m_driverController.povUp().onTrue(new ArmToPosition(m_ArmSubsystem, armPositions.SUBWOOFER)); 
+    m_driverController.povRight().onTrue(new ArmToPosition(m_ArmSubsystem, armPositions.AMP)); 
   }
 
   /**
