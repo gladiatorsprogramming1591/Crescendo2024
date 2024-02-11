@@ -129,42 +129,46 @@ public final class Constants {
 
     public static final double kRightShooterSpeed = 0.6; 
     public static final double kLeftShooterSpeed = 0.75; 
-    public static final double kTransferSpeed = 0.5;
+    public static final double kTransferSpeed = 0.3;
+    public static final double kTransferSpeedFull = 1.0;
   }
 
   public static final class IntakeConstants{
     public static final int kLeftIntakeCANId = 3;
     public static final int kRightIntakeCANId = 4; 
 
-    public static final double kIntakeSpeed = -0.8;
+    public static final double kIntakeSpeed = -0.95;
   }
 
   public static final class ArmConstants{
     public static final int kLeftArmCANId = 8;
     public static final int kRightArmCANId = 2;
 
-    public static final double kArmP = 0.08;
+    public static final double kArmP = 6.4;
     public static final double kArmI = 0.00;
     public static final double kArmD = 0.00;
     public static final double kArmFF = 0.00;
-    public static final double kMinHeightAbs = 0;
-    public static final double kMaxHeightAbs = 0;
     //TODO Update min and max heights with measured values
 
+    public static final double kMaxOpenLoopSpeed = 0.2; 
+    
+
     // Arm Positions
-    public static final double kOffset = 0.306;
-    public static final double kTRANSFER = kOffset + 0.011;
-    public static final double kSUBWOOFER = kOffset + 0.150;
-    public static final double kPODIUM = kOffset + 0.280;
-    public static final double kCLIMBSTART = kOffset + 0.325;
-    public static final double kCLIMBFINISH = kOffset + 0.367;
-    public static final double kAMP = kOffset + 0.367;
-    public static final double kAllowedErrAbs = 0.001;
+    public static final double kOffset = 0.85;
+    public static final double kTRANSFER = kOffset - 0.01;
+    public static final double kSUBWOOFER = kOffset - 0.12;
+    public static final double kPODIUM = kOffset - 0.06;
+    // public static final double kCLIMBSTART = kOffset + 0.325;
+    // public static final double kCLIMBFINISH = kOffset + 0.367;
+    public static final double kAMP = kOffset - 0.368;
+    public static final double kAllowedErrAbs = 0.01;
+    public static final double kMinHeightAbs = kOffset;
+    public static final double kMaxHeightAbs = 0.2;
     //TODO Update arm positions with measured values
 
     // Arm Speed
-    public static final double kArmMinOutput = -0.3; //-1.00
-    public static final double kArmMaxOutput = 0.3; //1.00
+    public static final double kArmMinOutput = -0.6; //-1.00
+    public static final double kArmMaxOutput = 0.6; //1.00
   }
 
   public static final class OIConstants {

@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -22,6 +23,7 @@ public class ShooterSubsystem extends SubsystemBase {
     RelativeEncoder m_leftEncoder; 
     double m_rightTargetVelocity = Constants.ShooterConstants.kRightShooterSpeed; 
     double m_leftTargetVelocity = Constants.ShooterConstants.kLeftShooterSpeed; 
+    DigitalInput m_ShooterBeamBreak = new DigitalInput(4); 
 
 
     public ShooterSubsystem(){
@@ -31,8 +33,8 @@ public class ShooterSubsystem extends SubsystemBase {
         m_leftEncoder = m_leftShooterMotor.getEncoder();
         m_rightShooterMotor.setIdleMode(CANSparkMax.IdleMode.kCoast);
         m_leftShooterMotor.setIdleMode(CANSparkMax.IdleMode.kCoast);
-        m_rightShooterMotor.setInverted(true);
-        m_leftShooterMotor.setInverted(false);
+        m_rightShooterMotor.setInverted(false);
+        m_leftShooterMotor.setInverted(true);
 
         m_rightShooterMotor.getPIDController().setP(ShooterConstants.kShooterP);
         m_rightShooterMotor.getPIDController().setI(ShooterConstants.kShooterI);
@@ -78,18 +80,33 @@ public class ShooterSubsystem extends SubsystemBase {
           
       } 
 
-      public void transferOn(){
-        m_transferMotor.set(Constants.ShooterConstants.kTransferSpeed);
+      public void transferOn(boolean beamBreak){
+        
+
+        if(beamBreak){
+          if(m_ShooterBeamBreak.get()){
+            m_transferMotor.set(Constants.ShooterConstants.kTransferSpeed);
+          } else {
+            m_transferMotor.set(0);
+          }
+        } else {
+          m_transferMotor.set(Constants.ShooterConstants.kTransferSpeedFull);
+        }
       }
 
       public void transferOff(){
         m_transferMotor.set(0);
       }
 
+      public void transferReverse(){
+        m_transferMotor.set(-0.5);
+      }
+
       @Override
         public void periodic() {
           // This method will be called once per scheduler run
           SmartDashboard.putString("Shooter Vel", "" + Math.round(m_leftEncoder.getVelocity()));
+          SmartDashboard.putBoolean("ShooterBeamBreak", m_ShooterBeamBreak.get()); 
         }
       
 

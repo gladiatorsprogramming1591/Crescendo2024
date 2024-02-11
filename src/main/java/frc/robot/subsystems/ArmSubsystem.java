@@ -32,7 +32,7 @@ public class ArmSubsystem extends SubsystemBase {
     private final DutyCycleEncoder armAbsEncoder = new DutyCycleEncoder(0);
     double m_speed = 0.0;
     EnumMap<armPositions, Double> mapAbs = new EnumMap<>(armPositions.class);
-    private final PIDController m_AbsPidController = new PIDController(0.0, 0.0, 0.0); //i was 0.2 | p is set below
+    private final PIDController m_AbsPidController = new PIDController(ArmConstants.kArmP, ArmConstants.kArmI, ArmConstants.kArmD); //i was 0.2 | p is set below
     
     public enum armPositions{
       TRANSFER, 
@@ -59,12 +59,6 @@ public class ArmSubsystem extends SubsystemBase {
         m_rightArmMotor.getPIDController().setFF(ArmConstants.kArmFF);
         m_rightArmMotor.getPIDController().setReference(0, ControlType.kVoltage);
 
-        m_leftArmMotor.getPIDController().setP(ArmConstants.kArmP);
-        m_leftArmMotor.getPIDController().setI(ArmConstants.kArmI);
-        m_leftArmMotor.getPIDController().setD(ArmConstants.kArmD);
-        m_leftArmMotor.getPIDController().setFF(ArmConstants.kArmFF);
-        m_leftArmMotor.getPIDController().setReference(0, ControlType.kVoltage);
-
         m_rightArmMotor.enableVoltageCompensation(12);
         m_leftArmMotor.enableVoltageCompensation(12);
 
@@ -74,30 +68,30 @@ public class ArmSubsystem extends SubsystemBase {
         mapAbs.put(armPositions.TRANSFER, ArmConstants.kTRANSFER);
         mapAbs.put(armPositions.SUBWOOFER, ArmConstants.kSUBWOOFER);
         mapAbs.put(armPositions.PODIUM, ArmConstants.kPODIUM);
-        mapAbs.put(armPositions.CLIMBSTART, ArmConstants.kCLIMBSTART);
-        mapAbs.put(armPositions.CLIMBFINISH, ArmConstants.kCLIMBFINISH); // Single Substation
+        // mapAbs.put(armPositions.CLIMBSTART, ArmConstants.kCLIMBSTART);
+        // mapAbs.put(armPositions.CLIMBFINISH, ArmConstants.kCLIMBFINISH); // Single Substation
         mapAbs.put(armPositions.AMP, ArmConstants.kAMP); //At hard stop:
     }
 
     public void ArmToPosition(armPositions position) {
-        if (((armAbsEncoder.getAbsolutePosition() < ArmConstants.kMinHeightAbs) && (position == armPositions.TRANSFER)) ||
-            ((armAbsEncoder.getAbsolutePosition() > ArmConstants.kMaxHeightAbs) && (position == armPositions.AMP))) {
+        if (((armAbsEncoder.getAbsolutePosition() > ArmConstants.kMinHeightAbs) && (position == armPositions.TRANSFER)) ||
+            ((armAbsEncoder.getAbsolutePosition() < ArmConstants.kMaxHeightAbs) && (position == armPositions.AMP))) {
             m_leftArmMotor.set(0);
             return;
         }
 
-        switch (position) {
-            case SUBWOOFER:
-            case CLIMBSTART:
-            case CLIMBFINISH://TODO Finish probably needs its own p
-                m_AbsPidController.setP(11.0);
-                break;
-            case TRANSFER:
-            case PODIUM:
-            default:
-                m_AbsPidController.setP(9.0);
-                break;
-        }
+        // switch (position) {
+        //     case SUBWOOFER:
+        //     case CLIMBSTART:
+        //     case CLIMBFINISH://TODO Finish probably needs its own p
+        //         m_AbsPidController.setP(11.0);
+        //         break;
+        //     case TRANSFER:
+        //     case PODIUM:
+        //     default:
+        //         m_AbsPidController.setP(9.0);
+        //         break;
+        // }
         double ref = mapAbs.get(position);
 
         double pidOut = MathUtil.clamp(
@@ -111,16 +105,18 @@ public class ArmSubsystem extends SubsystemBase {
 
 
     public void ArmForward(double speed) {
+        MathUtil.clamp(speed, 0, ArmConstants.kMaxOpenLoopSpeed); 
         //Turns on the Arm motor
         System.out.println("Turning Arm forward");
         // m_rightArmMotor.getPIDController().setReference(m_rightTargetVelocity, ControlType.kVoltage);
         // m_leftArmMotor.getPIDController().setReference(m_leftTargetVelocity, ControlType.kVoltage);
-        m_rightArmMotor.set(speed);
+        m_rightArmMotor.set(-speed);
                   
-        System.out.println("Setting Arm speed to " + speed);
+        System.out.println("Setting Arm speed to " + -speed);
       }
     
-        public void ArmBackward(double speed) {
+      public void ArmBackward(double speed) {
+        MathUtil.clamp(speed, 0, ArmConstants.kMaxOpenLoopSpeed); 
         //Turns on the Arm motor
         System.out.println("Turning Arm backward");
         // m_rightArmMotor.getPIDController().setReference(m_rightTargetVelocity, ControlType.kVoltage);
@@ -143,11 +139,11 @@ public class ArmSubsystem extends SubsystemBase {
       @Override
         public void periodic() {
           // This method will be called once per scheduler run
-          SmartDashboard.putString("Arm Pos", "" + m_leftEncoder.getPosition());
+          SmartDashboard.putString("Arm Pos", "" + armAbsEncoder.getAbsolutePosition());
           m_speed = m_rightArmMotor.getEncoder().getVelocity();
 
-          if (((armAbsEncoder.getAbsolutePosition() < ArmConstants.kMinHeightAbs) && (m_speed < 0)) ||
-            ((armAbsEncoder.getAbsolutePosition() > ArmConstants.kMaxHeightAbs) && (m_speed > 0))) {
+          if (((armAbsEncoder.getAbsolutePosition() > ArmConstants.kMinHeightAbs) && (m_speed < 0)) ||
+            ((armAbsEncoder.getAbsolutePosition() < ArmConstants.kMaxHeightAbs) && (m_speed > 0))) {
             m_rightArmMotor.set(0);
             }
         }
