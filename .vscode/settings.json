@@ -12,7 +12,9 @@
     "**/.project": true,
     "**/.settings": true,
     "**/.factorypath": true,
-    "**/*~": true
+    "**/*~": true,
+    "workbench.editor.decorations.badges":false,
+    
   },
   "java.test.config": [
     {

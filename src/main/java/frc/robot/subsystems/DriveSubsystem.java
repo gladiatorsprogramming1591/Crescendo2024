@@ -4,22 +4,47 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+// import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.math.trajectory.TrajectoryConfig;
+import edu.wpi.first.math.trajectory.TrajectoryGenerator;
+import edu.wpi.first.math.util.Units;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.math.trajectory.Trajectory; 
 import edu.wpi.first.util.WPIUtilJNI;
-import edu.wpi.first.wpilibj.ADIS16470_IMU;
-import edu.wpi.first.wpilibj.ADIS16470_IMU.IMUAxis;
+import edu.wpi.first.wpilibj.DriverStation;
+// import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Constants;
 import frc.robot.Constants.DriveConstants;
 import frc.utils.SwerveUtils;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
+import com.pathplanner.lib.util.PIDConstants;
+import com.pathplanner.lib.util.ReplanningConfig;
+
+// import java.util.List;
+
+import com.ctre.phoenix6.hardware.Pigeon2;
 
 public class DriveSubsystem extends SubsystemBase {
+  public static final double kTurnRateToleranceDegPerS = 0;
+
+public static double kTurnToleranceDeg;
+
   // Create MAXSwerveModules
   private final MAXSwerveModule m_frontLeft = new MAXSwerveModule(
       DriveConstants.kFrontLeftDrivingCanId,
@@ -42,7 +67,7 @@ public class DriveSubsystem extends SubsystemBase {
       DriveConstants.kBackRightChassisAngularOffset);
 
   // The gyro sensor
-  private final ADIS16470_IMU m_gyro = new ADIS16470_IMU();
+  private final Pigeon2 m_gyro = new Pigeon2(Constants.DriveConstants.kPigeonCanId);
 
   // Slew rate filter variables for controlling lateral acceleration
   private double m_currentRotation = 0.0;
@@ -53,10 +78,18 @@ public class DriveSubsystem extends SubsystemBase {
   private SlewRateLimiter m_rotLimiter = new SlewRateLimiter(DriveConstants.kRotationalSlewRate);
   private double m_prevTime = WPIUtilJNI.now() * 1e-6;
 
+  // AprilTag readings from network table
+  private double x = 0;
+  private double y = 0;
+  private double a = 0;
+
+  private final Field2d m_field = new Field2d();
+  // private final Trajectory m_trajectory; 
+
   // Odometry class for tracking robot pose
   SwerveDriveOdometry m_odometry = new SwerveDriveOdometry(
       DriveConstants.kDriveKinematics,
-      Rotation2d.fromDegrees(m_gyro.getAngle(IMUAxis.kZ)),
+      Rotation2d.fromDegrees(getHeading()),
       new SwerveModulePosition[] {
           m_frontLeft.getPosition(),
           m_frontRight.getPosition(),
@@ -64,23 +97,158 @@ public class DriveSubsystem extends SubsystemBase {
           m_rearRight.getPosition()
       });
 
+  private double id;
+
+  private double prev_x;
+  private double prev_y;
+  private double prev_id; 
+  private double prev_a;
+
+  private int invalidCount = 9999; //initialized to value that represents invalid 
+  private int maxinvalidCount = 0;
+
+  //TODO Add tolerances to PID Controllers
+  private final PIDController m_rotVisionPidController = new PIDController(0.020, 0.0, 0.002);
+  private final PIDController m_yVisionPidController = new PIDController(0.033, 0.0, 0.005);
+  private final PIDController m_xVisionPidController = new PIDController(0.033, 0.0, 0.005);
+  
+
   /** Creates a new DriveSubsystem. */
   public DriveSubsystem() {
+    final double kWheelBase = 22.5; 
+    double radius = Units.inchesToMeters((kWheelBase/2) * Math.sqrt(2)); 
+
+    m_rotVisionPidController.enableContinuousInput(-180, 180);
+    m_rotVisionPidController.setTolerance(0.5);
+    m_yVisionPidController.setTolerance(0.5);
+    m_xVisionPidController.setTolerance(0.5);
+         // Configure AutoBuilder last
+
+        AutoBuilder.configureHolonomic(
+                this::getPose, // Robot pose supplier
+                this::resetOdometry, // Method to reset odometry (will be called if your auto has a starting pose)
+                this::getSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
+                this::driveRobotRelative, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
+                new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
+                        new PIDConstants(1.9, 1.2, 0.7), // Translation PID constants
+                        new PIDConstants(1.0, 0.0, 0.0), // Rotation PID constants
+                        2, // Max module speed, in m/s
+                        radius, // Drive base radius in meters. Distance from robot center to furthest module.
+                        new ReplanningConfig() // Default path replanning config. See the API for the options here
+                ),
+                //TODO edit constants above
+                () -> {
+                    // Boolean supplier that controls when the path will be mirrored for the red alliance
+                    // This will flip the path being followed to the red side of the field.
+                    // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+
+                    var alliance = DriverStation.getAlliance();
+                    if (alliance.isPresent()) {
+                        return alliance.get() == DriverStation.Alliance.Red;
+                    }
+                    return false;
+                },
+                this // Reference to this subsystem to set requirements
+        );
+        
+         // Create the trajectory to follow in autonomous. It is best to initialize
+    // trajectories here to avoid wasting time in autonomous.
+    // m_trajectory =
+    //     TrajectoryGenerator.generateTrajectory(
+    //         new Pose2d(0, 0, Rotation2d.fromDegrees(0)),
+    //         List.of(new Translation2d(1, 1), new Translation2d(2, -1)),
+    //         new Pose2d(3, 0, Rotation2d.fromDegrees(0)),
+    //         new TrajectoryConfig(Units.feetToMeters(3.0), Units.feetToMeters(3.0)));
+
+    // Do this in either robot or subsystem init
+    SmartDashboard.putData("Field", m_field);
+    // Push the trajectory to Field2d.
+    // m_field.getObject("traj").setTrajectory(m_trajectory);
+
+
+    // Do this in either robot periodic or subsystem periodic
+  }
+
+  public boolean visionDriveAligned(double desiredId, double desiredY, double rotVisionSetpoint) {
+    boolean retValue = true; //true = at desired location
+    updateAprilTagInfo(desiredId);
+    double rotSpeed = MathUtil.clamp(m_rotVisionPidController.calculate(getHeadingMod180(), rotVisionSetpoint), 
+      -DriveConstants.maxVisionRotSpeed, DriveConstants.maxVisionRotSpeed);
+    double ySpeed = MathUtil.clamp(m_yVisionPidController.calculate(x, 0),
+    -DriveConstants.maxVisionStrafeSpeed, DriveConstants.maxVisionStrafeSpeed);
+    double xSpeed = MathUtil.clamp(m_xVisionPidController.calculate(-y, desiredY),
+    -DriveConstants.maxVisionStrafeSpeed, DriveConstants.maxVisionStrafeSpeed);
+    // if (m_yVisionPidController.atSetpoint()){
+    if (m_rotVisionPidController.atSetpoint() && m_xVisionPidController.atSetpoint() && m_yVisionPidController.atSetpoint()){
+      drive(0, 0, 0, false, true); 
+    }
+    else { 
+      drive(xSpeed, ySpeed, rotSpeed, false, true);  
+      retValue = false; 
+    }
+    return retValue; 
   }
 
   @Override
   public void periodic() {
+    double gyroAngle = getHeading(); 
+    double gyroYaw = m_gyro.getYaw().getValueAsDouble(); 
+
     // Update the odometry in the periodic block
     m_odometry.update(
-        Rotation2d.fromDegrees(m_gyro.getAngle(IMUAxis.kZ)),
+        Rotation2d.fromDegrees(gyroAngle),
         new SwerveModulePosition[] {
             m_frontLeft.getPosition(),
             m_frontRight.getPosition(),
             m_rearLeft.getPosition(),
             m_rearRight.getPosition()
         });
+        m_field.setRobotPose(m_odometry.getPoseMeters());
+
+      SmartDashboard.putNumber("gyroAngle:", gyroAngle);
+      SmartDashboard.putNumber("gyroYaw:", gyroYaw);
+      SmartDashboard.putNumber("Odometry.x:" , m_odometry.getPoseMeters().getX());
+      SmartDashboard.putNumber("Odometry.y:" , m_odometry.getPoseMeters().getY());
+
+      updateAprilTagInfo(5.0);
   }
 
+  public void updateAprilTagInfo(double desiredId) {
+
+    NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
+    NetworkTableEntry tx = table.getEntry("tx");
+    NetworkTableEntry ty = table.getEntry("ty");
+    NetworkTableEntry ta = table.getEntry("ta");
+    NetworkTableEntry tid = table.getEntry("tid");
+
+
+    //read values periodically
+    x = tx.getDouble(0.0);
+    y = ty.getDouble(0.0);
+    a = ta.getDouble(0.0);
+    id = tid.getDouble(0.0);
+    
+    if (id == desiredId) {
+      prev_x = x; 
+      prev_y = y; 
+      prev_a = a; 
+      prev_id = id; 
+      invalidCount = 0; 
+    } 
+    else { 
+      invalidCount++;
+      if (invalidCount != 9999 && invalidCount > maxinvalidCount) {
+        maxinvalidCount = invalidCount;
+      }
+    }
+
+    SmartDashboard.putNumber("AprilTag x", x); 
+    SmartDashboard.putNumber("AprilTag y", y); 
+    SmartDashboard.putNumber("AprilTag a", a); 
+    SmartDashboard.putNumber("AprilTag Id", id); 
+    SmartDashboard.putNumber("Invalid Count", invalidCount); 
+    SmartDashboard.putNumber("Max Invalid Count", maxinvalidCount); 
+  }
   /**
    * Returns the currently-estimated pose of the robot.
    *
@@ -97,7 +265,7 @@ public class DriveSubsystem extends SubsystemBase {
    */
   public void resetOdometry(Pose2d pose) {
     m_odometry.resetPosition(
-        Rotation2d.fromDegrees(m_gyro.getAngle(IMUAxis.kZ)),
+        Rotation2d.fromDegrees(getHeading()),
         new SwerveModulePosition[] {
             m_frontLeft.getPosition(),
             m_frontRight.getPosition(),
@@ -177,7 +345,7 @@ public class DriveSubsystem extends SubsystemBase {
 
     var swerveModuleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(
         fieldRelative
-            ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered, Rotation2d.fromDegrees(m_gyro.getAngle(IMUAxis.kZ)))
+            ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered, Rotation2d.fromDegrees(getHeading()))
             : new ChassisSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered));
     SwerveDriveKinematics.desaturateWheelSpeeds(
         swerveModuleStates, DriveConstants.kMaxSpeedMetersPerSecond);
@@ -210,7 +378,16 @@ public class DriveSubsystem extends SubsystemBase {
     m_rearLeft.setDesiredState(desiredStates[2]);
     m_rearRight.setDesiredState(desiredStates[3]);
   }
+  public SwerveModuleState[] getModuleStates() {
+    SwerveModuleState[] states = new SwerveModuleState[4];
+    states[0] = m_frontLeft.getState(); 
+    states[1] = m_frontRight.getState(); 
+    states[2] = m_rearLeft.getState(); 
+    states[3] = m_rearRight.getState(); 
 
+    return states;
+}
+  
   /** Resets the drive encoders to currently read a position of 0. */
   public void resetEncoders() {
     m_frontLeft.resetEncoders();
@@ -230,7 +407,16 @@ public class DriveSubsystem extends SubsystemBase {
    * @return the robot's heading in degrees, from -180 to 180
    */
   public double getHeading() {
-    return Rotation2d.fromDegrees(m_gyro.getAngle(IMUAxis.kZ)).getDegrees();
+    return -m_gyro.getAngle();
+  }
+
+  /**
+   * Returns the heading of the robot.
+   *
+   * @return the robot's heading in degrees, from -180 to 180
+   */
+  public double getHeadingMod180() {
+    return MathUtil.inputModulus(-m_gyro.getAngle(), -180, 180);
   }
 
   /**
@@ -239,6 +425,20 @@ public class DriveSubsystem extends SubsystemBase {
    * @return The turn rate of the robot, in degrees per second
    */
   public double getTurnRate() {
-    return m_gyro.getRate(IMUAxis.kZ) * (DriveConstants.kGyroReversed ? -1.0 : 1.0);
+    return m_gyro.getRate() * (DriveConstants.kGyroReversed ? -1.0 : 1.0);
   }
+
+  public ChassisSpeeds getSpeeds() {
+    return Constants.DriveConstants.kDriveKinematics.toChassisSpeeds(getModuleStates());
+  }
+
+  public void driveRobotRelative(ChassisSpeeds robotRelativeSpeeds) {
+    ChassisSpeeds targetSpeeds = ChassisSpeeds.discretize(robotRelativeSpeeds, 0.02);
+
+    SwerveModuleState[] targetStates = Constants.DriveConstants.kDriveKinematics.toSwerveModuleStates(targetSpeeds);
+    setModuleStates(targetStates);
+  }
+
+
 }
+
