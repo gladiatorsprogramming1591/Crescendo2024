@@ -50,7 +50,7 @@ public final class Constants {
     public static final double kFrontRightChassisAngularOffset = 0;
     public static final double kBackLeftChassisAngularOffset = Math.PI;
     public static final double kBackRightChassisAngularOffset = Math.PI / 2;
-
+    // TODO review CAN IDs before deploying
     // SPARK MAX CAN IDs
     public static final int kFrontLeftDrivingCanId = 11;
     public static final int kRearLeftDrivingCanId = 13;
@@ -127,10 +127,66 @@ public final class Constants {
     public static final double kExampleTurningI = 0; 
     public static final double kExampleTurningD = 0;
   }
+  //Initial values taken from Roberta
+  public static final class ShooterConstants{
+    public static final double kShooterP = 0.00075;
+    public static final double kShooterI = 0.0;
+    public static final double kShooterD = 0.02;
+    public static final double kShooterFF = 0.00019;
+
+    
+    public static final int kLeftShooterCANId = 5;
+    public static final int kRightShooterCANId = 6;
+    public static final int kTransferCANId = 7;
+
+    public static final double kRightShooterSpeed = 0.6; 
+    public static final double kLeftShooterSpeed = 0.75; 
+    public static final double kTransferSpeed = 0.3;
+    public static final double kTransferSpeedFull = 1.0;
+  }
+
+  public static final class IntakeConstants{
+    public static final int kLeftIntakeCANId = 3;
+    public static final int kRightIntakeCANId = 4; 
+
+    public static final double kIntakeSpeed = -0.95;
+  }
+
+  public static final class ArmConstants{
+    public static final int kLeftArmCANId = 8;
+    public static final int kRightArmCANId = 2;
+
+    public static final double kArmP = 6.4;
+    public static final double kArmI = 0.00;
+    public static final double kArmD = 0.00;
+    public static final double kArmFF = 0.00;
+    //TODO Update min and max heights with measured values
+
+    public static final double kMaxOpenLoopSpeed = 0.2; 
+    
+
+    // Arm Positions
+    public static final double kOffset = 0.85;
+    public static final double kTRANSFER = kOffset - 0.01;
+    public static final double kSUBWOOFER = kOffset - 0.12;
+    public static final double kPODIUM = kOffset - 0.06;
+    // public static final double kCLIMBSTART = kOffset + 0.325;
+    // public static final double kCLIMBFINISH = kOffset + 0.367;
+    public static final double kAMP = kOffset - 0.368;
+    public static final double kAllowedErrAbs = 0.01;
+    public static final double kMinHeightAbs = kOffset;
+    public static final double kMaxHeightAbs = 0.2;
+    //TODO Update arm positions with measured values
+
+    // Arm Speed
+    public static final double kArmMinOutput = -0.6; //-1.00
+    public static final double kArmMaxOutput = 0.6; //1.00
+  }
 
   public static final class OIConstants {
     public static final int kDriverControllerPort = 0;
     public static final double kDriveDeadband = 0.05;
+    public static final double kArmDeadband = 0.1;
   }
 
   public static final class AutoConstants {
