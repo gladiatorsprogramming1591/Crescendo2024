@@ -79,7 +79,10 @@ public class ShooterSubsystem extends SubsystemBase {
         return false; //TODO Determine how to get atSpeed. May need to use Roborio PIDcontroller
           
       } 
-
+      public boolean isBeamBroken(){
+        return m_ShooterBeamBreak.get(); 
+      }
+ 
       public void transferOn(boolean beamBreak){
         
 
