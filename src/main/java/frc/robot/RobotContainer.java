@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
+import frc.robot.commands.ShootIntoAmp;
 import frc.robot.commands.armCommands.ArmToPosition;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
@@ -49,6 +50,7 @@ public class RobotContainer {
 
   // The driver's controller
   CommandXboxController m_driverController = new CommandXboxController(OIConstants.kDriverControllerPort);
+  CommandXboxController m_operatorController = new CommandXboxController(OIConstants.kOperatorControllerPort);
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -98,6 +100,8 @@ public class RobotContainer {
     m_driverController.povUp().onTrue(new ArmToPosition(m_ArmSubsystem, armPositions.SUBWOOFER)); 
     m_driverController.povRight().onTrue(new ArmToPosition(m_ArmSubsystem, armPositions.AMP)); 
     m_driverController.leftStick().onTrue(new InstantCommand(() -> m_ShooterSubsystem.transferReverse(), m_ShooterSubsystem)); 
+    m_operatorController.rightTrigger().onTrue(new ShootIntoAmp(m_ShooterSubsystem, m_ArmSubsystem, armPositions.SUBWOOFER)); 
+    m_operatorController.leftTrigger().onTrue(new ShootIntoAmp(m_ShooterSubsystem, m_ArmSubsystem, armPositions.PODIUM)); 
   }
 
 
