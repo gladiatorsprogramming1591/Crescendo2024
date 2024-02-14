@@ -18,7 +18,8 @@ import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
-import frc.robot.commands.ShootIntoAmp;
+import frc.robot.commands.IntakeNote;
+import frc.robot.commands.ShootNote;
 import frc.robot.commands.armCommands.ArmToPosition;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
@@ -100,8 +101,9 @@ public class RobotContainer {
     m_driverController.povUp().onTrue(new ArmToPosition(m_ArmSubsystem, armPositions.SUBWOOFER)); 
     m_driverController.povRight().onTrue(new ArmToPosition(m_ArmSubsystem, armPositions.AMP)); 
     m_driverController.leftStick().onTrue(new InstantCommand(() -> m_ShooterSubsystem.transferReverse(), m_ShooterSubsystem)); 
-    m_operatorController.rightTrigger().onTrue(new ShootIntoAmp(m_ShooterSubsystem, m_ArmSubsystem, armPositions.SUBWOOFER)); 
-    m_operatorController.leftTrigger().onTrue(new ShootIntoAmp(m_ShooterSubsystem, m_ArmSubsystem, armPositions.PODIUM)); 
+    m_operatorController.rightTrigger().onTrue(new ShootNote(m_ShooterSubsystem, m_ArmSubsystem, armPositions.SUBWOOFER)); 
+    m_operatorController.leftTrigger().onTrue(new ShootNote(m_ShooterSubsystem, m_ArmSubsystem, armPositions.PODIUM)); 
+    m_operatorController.a().onTrue(new IntakeNote(m_ShooterSubsystem, m_ArmSubsystem, m_IntakeSubsystem)); 
   }
 
 

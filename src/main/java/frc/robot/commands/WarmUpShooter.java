@@ -13,17 +13,11 @@ public class WarmUpShooter extends Command {
 
     @Override
     public void execute(){
-       m_shooter.transferOn(true);
+       m_shooter.shooterOn();
     }
 
     @Override
     public boolean isFinished(){
-        return m_shooter.isBeamBroken(); 
-        
-    }
-
-    @Override
-    public void end(boolean isInterrupted){
-        m_shooter.transferOff();
+        return m_shooter.isShooterAtSpeed(); 
     }
 }
