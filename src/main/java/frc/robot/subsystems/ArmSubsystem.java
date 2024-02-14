@@ -40,7 +40,8 @@ public class ArmSubsystem extends SubsystemBase {
       PODIUM,
       CLIMBSTART,
       CLIMBFINISH,
-      AMP
+      AMP,
+      CURRENT
   }
 
 
@@ -62,8 +63,8 @@ public class ArmSubsystem extends SubsystemBase {
         m_rightArmMotor.enableVoltageCompensation(12);
         m_leftArmMotor.enableVoltageCompensation(12);
 
-        m_rightArmMotor.setSmartCurrentLimit(10);
-        m_leftArmMotor.setSmartCurrentLimit(10);
+        m_rightArmMotor.setSmartCurrentLimit(20);
+        m_leftArmMotor.setSmartCurrentLimit(20);
 
         mapAbs.put(armPositions.TRANSFER, ArmConstants.kTRANSFER);
         mapAbs.put(armPositions.SUBWOOFER, ArmConstants.kSUBWOOFER);
