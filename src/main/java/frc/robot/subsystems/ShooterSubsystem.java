@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.ShooterConstants;
@@ -52,6 +53,7 @@ public class ShooterSubsystem extends SubsystemBase {
         m_leftShooterMotor.enableVoltageCompensation(12);
 
         m_transferMotor = new CANSparkMax(Constants.ShooterConstants.kTransferCANId, MotorType.kBrushless);
+        m_transferMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
     }
 
 
@@ -80,7 +82,7 @@ public class ShooterSubsystem extends SubsystemBase {
           
       } 
       public boolean isBeamBroken(){
-        return m_ShooterBeamBreak.get(); 
+        return m_ShooterBeamBreak.get() == false; 
       }
  
       public void transferOn(boolean beamBreak){
@@ -112,6 +114,12 @@ public class ShooterSubsystem extends SubsystemBase {
           SmartDashboard.putBoolean("ShooterBeamBreak", m_ShooterBeamBreak.get()); 
           SmartDashboard.putBoolean("ShooterAtSpeed", isShooterAtSpeed()); 
         }
+
+
+      public Subsystem withTimeout(int i) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'withTimeout'");
+      }
       
 
 }   

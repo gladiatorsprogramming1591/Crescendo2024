@@ -1,3 +1,4 @@
+
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -20,7 +21,7 @@ public class IntakeNote extends SequentialCommandGroup {
         addCommands(
             new ArmToPositionWithEnd(armSubsystem, armPositions.TRANSFER), 
             new ParallelRaceGroup(
-                new WarmUpShooter(shooterSubsystem), 
+                new TransferOnWithBeamBreak(shooterSubsystem), 
                 new RunCommand(()-> intakeSubsystem.intakeOn(), intakeSubsystem)
             ), 
             new InstantCommand(()-> intakeSubsystem.intakeOff(), intakeSubsystem)

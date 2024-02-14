@@ -41,9 +41,9 @@ import com.pathplanner.lib.util.ReplanningConfig;
 import com.ctre.phoenix6.hardware.Pigeon2;
 
 public class DriveSubsystem extends SubsystemBase {
-  public static final double kTurnRateToleranceDegPerS = 0;
+  public static final double kTurnRateToleranceDegPerS = 5.0;
 
-public static double kTurnToleranceDeg;
+public static final double kTurnToleranceDeg = 1.0; 
 
   // Create MAXSwerveModules
   private final MAXSwerveModule m_frontLeft = new MAXSwerveModule(
@@ -342,6 +342,11 @@ public static double kTurnToleranceDeg;
     double xSpeedDelivered = xSpeedCommanded * DriveConstants.kMaxSpeedMetersPerSecond;
     double ySpeedDelivered = ySpeedCommanded * DriveConstants.kMaxSpeedMetersPerSecond;
     double rotDelivered = m_currentRotation * DriveConstants.kMaxAngularSpeed;
+
+    SmartDashboard.putNumber("XSpeed", xSpeedDelivered); 
+    SmartDashboard.putNumber("YSpeed", ySpeedDelivered); 
+    SmartDashboard.putNumber("RotSpeed", rotDelivered); 
+    SmartDashboard.putNumber("Rot", m_currentRotation); 
 
     var swerveModuleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(
         fieldRelative
