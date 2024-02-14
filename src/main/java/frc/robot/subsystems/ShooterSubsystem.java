@@ -110,6 +110,7 @@ public class ShooterSubsystem extends SubsystemBase {
           // This method will be called once per scheduler run
           SmartDashboard.putString("Shooter Vel", "" + Math.round(m_leftEncoder.getVelocity()));
           SmartDashboard.putBoolean("ShooterBeamBreak", m_ShooterBeamBreak.get()); 
+          SmartDashboard.putBoolean("ShooterAtSpeed", isShooterAtSpeed()); 
         }
       
 

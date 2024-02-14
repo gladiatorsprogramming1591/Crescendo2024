@@ -4,7 +4,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
-import frc.robot.commands.armCommands.ArmToPosition;
+import frc.robot.commands.armCommands.ArmToPositionWithEnd;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.ArmSubsystem.armPositions;
@@ -18,7 +18,7 @@ public class IntakeNote extends SequentialCommandGroup {
                         ){
 
         addCommands(
-            new ArmToPosition(armSubsystem, armPositions.TRANSFER), 
+            new ArmToPositionWithEnd(armSubsystem, armPositions.TRANSFER), 
             new ParallelRaceGroup(
                 new WarmUpShooter(shooterSubsystem), 
                 new RunCommand(()-> intakeSubsystem.intakeOn(), intakeSubsystem)
