@@ -17,7 +17,7 @@ public class IntakeNote extends SequentialCommandGroup {
                         ArmSubsystem armSubsystem,
                         IntakeSubsystem intakeSubsystem
                         ){
-
+        addRequirements(shooterSubsystem, armSubsystem, intakeSubsystem);
         addCommands(
             new ArmToPositionWithEnd(armSubsystem, armPositions.TRANSFER), 
             new ParallelRaceGroup(

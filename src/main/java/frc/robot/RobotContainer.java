@@ -42,6 +42,8 @@ import java.time.Instant;
 import java.util.List;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.path.PathPlannerPath;
 
 /*
@@ -50,14 +52,14 @@ import com.pathplanner.lib.path.PathPlannerPath;
  * periodic methods (other than the scheduler calls).  Instead, the structure of the robot
  * (including subsystems, commands, and button mappings) should be declared here.
  */
-public class RobotContainer {
-  SendableChooser<Command> m_autoChooser = new SendableChooser<>();
-
+public class RobotContainer {  
+  
   // The robot's subsystems
-  private final DriveSubsystem m_robotDrive = new DriveSubsystem();
+  public final DriveSubsystem m_robotDrive = new DriveSubsystem();
   private final ShooterSubsystem m_ShooterSubsystem = new ShooterSubsystem();
   private final IntakeSubsystem m_IntakeSubsystem = new IntakeSubsystem();
   private final ArmSubsystem m_ArmSubsystem = new ArmSubsystem();
+  private SendableChooser<Command> m_autoChooser; 
 
   // The driver's controller
   CommandXboxController m_driverController = new CommandXboxController(OIConstants.kDriverControllerPort);
@@ -67,9 +69,13 @@ public class RobotContainer {
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
-    addAutoOptions();
+    m_autoChooser = AutoBuilder.buildAutoChooser(); 
+    SmartDashboard.putData("Auto Mode", m_autoChooser);
     // Configure the button bindings
     configureButtonBindings();
+
+    //Register Named Commands 
+    registerNamedCommands(); 
 
     // Configure default commands
     m_robotDrive.setDefaultCommand(
@@ -77,9 +83,9 @@ public class RobotContainer {
         // Turning is controlled by the X axis of the right stick.
         new RunCommand(
             () -> m_robotDrive.drive(
-                -MathUtil.applyDeadband(m_driverController.getLeftY(), OIConstants.kDriveDeadband),
-                -MathUtil.applyDeadband(m_driverController.getLeftX(), OIConstants.kDriveDeadband),
-                -MathUtil.applyDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband),
+                -MathUtil.applyDeadband(m_driverController.getLeftY() * DriveConstants.kTeleopPercentLimit, OIConstants.kDriveDeadband),
+                -MathUtil.applyDeadband(m_driverController.getLeftX() * DriveConstants.kTeleopPercentLimit, OIConstants.kDriveDeadband),
+                -MathUtil.applyDeadband(m_driverController.getRightX() * DriveConstants.kTeleopPercentLimit, OIConstants.kDriveDeadband),
                 true, false),
             m_robotDrive));
   }
@@ -171,17 +177,16 @@ public class RobotContainer {
 
   }
 
-
-  private void addAutoOptions() {
-    m_autoChooser.setDefaultOption("Copy Of Example Path", getPathplannerCommand());
-    m_autoChooser.addOption("Vision Drive Aligned", new VisionDriveAligned(5, 0, 0, m_robotDrive));
-    SmartDashboard.putData("Auto Mode", m_autoChooser);
-  }
   //  * Use this to pass the autonomous command to the main {@link Robot} class.
   //  *
   //  * @return the command to run in autonomous
    
   public Command getAutonomousCommand() { //TODO use pathplanner auto 
-    return m_autoChooser.getSelected();
-    }
+    return m_autoChooser.getSelected(); 
+  }
+
+  public void registerNamedCommands(){
+    NamedCommands.registerCommand("ShootSubwoofer", new ShootNote(m_ShooterSubsystem, m_ArmSubsystem, armPositions.SUBWOOFER)); 
+  
+  }
 }   

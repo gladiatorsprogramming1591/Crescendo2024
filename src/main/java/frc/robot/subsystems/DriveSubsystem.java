@@ -131,8 +131,8 @@ public static final double kTurnToleranceDeg = 1.0;
                 this::driveRobotRelative, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
                 new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
                         new PIDConstants(1.9, 1.2, 0.7), // Translation PID constants
-                        new PIDConstants(1.0, 0.0, 0.0), // Rotation PID constants
-                        2, // Max module speed, in m/s
+                        new PIDConstants(1.5, 0.0, 0.0), // Rotation PID constants
+                        DriveConstants.kMaxModuleMetersPerSecond, // Max module speed, in m/s
                         radius, // Drive base radius in meters. Distance from robot center to furthest module.
                         new ReplanningConfig() // Default path replanning config. See the API for the options here
                 ),
@@ -260,10 +260,9 @@ public static final double kTurnToleranceDeg = 1.0;
 
   /**
    * Resets the odometry to the specified pose.
-   *
-   * @param pose The pose to which to set the odometry.
+   * @param initialpose 
    */
-  public void resetOdometry(Pose2d pose) {
+  public void resetOdometry(Pose2d initialpose) {
     m_odometry.resetPosition(
         Rotation2d.fromDegrees(getHeading()),
         new SwerveModulePosition[] {
@@ -271,8 +270,8 @@ public static final double kTurnToleranceDeg = 1.0;
             m_frontRight.getPosition(),
             m_rearLeft.getPosition(),
             m_rearRight.getPosition()
-        },
-        pose);
+        }, initialpose
+        );
   }
 
   /**
