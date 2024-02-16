@@ -22,7 +22,7 @@ public class ShootNote extends SequentialCommandGroup {
                 new RunCommand(() -> shooterSubsystem.shooterOn(), shooterSubsystem).withTimeout(1.0)
                 // new WarmUpShooter(shooterSubsystem
             ),
-            new RunCommand(()-> shooterSubsystem.transferOn(false), shooterSubsystem).withTimeout(1.0),
+            new RunCommand(()-> shooterSubsystem.transferOn(false), shooterSubsystem).withTimeout(0.25),
             new InstantCommand(()-> shooterSubsystem.shooterOff(), shooterSubsystem),
             new InstantCommand(()-> shooterSubsystem.transferOff(), shooterSubsystem),
             new ArmToPositionWithEnd(armSubsystem, armPositions.TRANSFER) //TODO This might need to be moved out for autos

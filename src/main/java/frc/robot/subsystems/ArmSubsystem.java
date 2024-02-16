@@ -72,6 +72,7 @@ public class ArmSubsystem extends SubsystemBase {
         // mapAbs.put(armPositions.CLIMBSTART, ArmConstants.kCLIMBSTART);
         // mapAbs.put(armPositions.CLIMBFINISH, ArmConstants.kCLIMBFINISH); // Single Substation
         mapAbs.put(armPositions.AMP, ArmConstants.kAMP); //At hard stop:
+        m_AbsPidController.setTolerance(ArmConstants.kPositionTolerance);
     }
 
     public void ArmToPosition(armPositions position) {
@@ -81,24 +82,13 @@ public class ArmSubsystem extends SubsystemBase {
             return;
         }
 
-        // switch (position) {
-        //     case SUBWOOFER:
-        //     case CLIMBSTART:
-        //     case CLIMBFINISH://TODO Finish probably needs its own p
-        //         m_AbsPidController.setP(11.0);
-        //         break;
-        //     case TRANSFER:
-        //     case PODIUM:
-        //     default:
-        //         m_AbsPidController.setP(9.0);
-        //         break;
-        // }
         double ref = mapAbs.get(position);
 
         double pidOut = MathUtil.clamp(
             m_AbsPidController.calculate(armAbsEncoder.getAbsolutePosition(),ref),
             Constants.ArmConstants.kArmMinOutput, Constants.ArmConstants.kArmMaxOutput);
             
+        SmartDashboard.putNumber("Arm Position Error", m_AbsPidController.getPositionError());
         SmartDashboard.putNumber("Arm Abs Target Pos", ref);
         SmartDashboard.putNumber("Arm Abs Speed", pidOut);
         m_rightArmMotor.set(pidOut);

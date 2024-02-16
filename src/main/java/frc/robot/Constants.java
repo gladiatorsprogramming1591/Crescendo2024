@@ -29,8 +29,8 @@ public final class Constants {
     // the robot, rather the allowed maximum speeds
     public static final double kMaxModuleMetersPerSecond = 5.66; // TODO Increase speed when done testing autos at low speed or add speed toggle button
     public static final double kMaxSpeedMetersPerSecond = kMaxModuleMetersPerSecond; // TODO Increase speed when done testing autos at low speed or add speed toggle button
-    public static final double kMaxAngularSpeed =  1 * Math.PI; // radians per second
-    public static final double kTeleopPercentLimit = 0.5; 
+    public static final double kMaxAngularSpeed =  2 * Math.PI; // radians per second
+    public static final double kTeleopPercentLimit = 0.75; 
 
     public static final double kDirectionSlewRate = 2.4; // radians per second
     public static final double kMagnitudeSlewRate = 3.6; // percent per second (1 = 100%)
@@ -140,8 +140,8 @@ public final class Constants {
     public static final int kRightShooterCANId = 6;
     public static final int kTransferCANId = 7;
 
-    public static final double kRightShooterSpeed = 0.35; 
-    public static final double kLeftShooterSpeed = 0.60; 
+    public static final double kRightShooterSpeed = 0.50; 
+    public static final double kLeftShooterSpeed = 0.75; 
     public static final double kTransferSpeed = 0.25;
     public static final double kTransferSpeedFull = 1.0;
   }
@@ -167,10 +167,10 @@ public final class Constants {
     
     //TODO make source position to intake note from there. 
     // Arm Positions
-    public static final double kOffset = 0.85;
+    public static final double kOffset = 0.88;
     public static final double kTRANSFER = kOffset - 0.01;
-    public static final double kSUBWOOFER = kOffset - 0.12;
-    public static final double kPODIUM = kOffset - 0.06;
+    public static final double kSUBWOOFER = kOffset - 0.15;
+    public static final double kPODIUM = kOffset - 0.075;
     // public static final double kCLIMBSTART = kOffset + 0.325;
     // public static final double kCLIMBFINISH = kOffset + 0.367;
     public static final double kAMP = kOffset - 0.368;
@@ -182,6 +182,8 @@ public final class Constants {
     // Arm Speed
     public static final double kArmMinOutput = -0.6; //-1.00
     public static final double kArmMaxOutput = 0.6; //1.00
+    public static final double kPositionTolerance = 0.005; 
+    public static final double kVelocityTolerance = 0.01; 
   }
 
   public static final class OIConstants {

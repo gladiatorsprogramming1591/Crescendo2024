@@ -23,6 +23,7 @@ import frc.robot.Constants.OIConstants;
 import frc.robot.commands.VisionDriveAligned;
 import frc.robot.commands.IntakeNote;
 import frc.robot.commands.ShootNote;
+import frc.robot.commands.TransferOnWithBeamBreak;
 import frc.robot.commands.TurnToAngleProfiled;
 import frc.robot.commands.armCommands.ArmToPosition;
 import frc.robot.subsystems.ArmSubsystem;
@@ -69,13 +70,13 @@ public class RobotContainer {
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
+    //Register Named Commands 
+    registerNamedCommands();
+
     m_autoChooser = AutoBuilder.buildAutoChooser(); 
     SmartDashboard.putData("Auto Mode", m_autoChooser);
     // Configure the button bindings
     configureButtonBindings();
-
-    //Register Named Commands 
-    registerNamedCommands(); 
 
     // Configure default commands
     m_robotDrive.setDefaultCommand(
@@ -104,7 +105,7 @@ public class RobotContainer {
     m_driverController.start().onTrue(new InstantCommand(() -> m_robotDrive.zeroHeading()));
     m_driverController.a().onTrue(new InstantCommand(() -> m_ShooterSubsystem.shooterOn(), m_ShooterSubsystem));
     m_driverController.b().onTrue(new InstantCommand(() -> m_ShooterSubsystem.shooterOff(), m_ShooterSubsystem));
-    m_driverController.x().onTrue(new RunCommand(() -> m_ShooterSubsystem.transferOn(true), m_ShooterSubsystem));
+    m_driverController.x().onTrue(new TransferOnWithBeamBreak(m_ShooterSubsystem));
     m_driverController.y().onTrue(new InstantCommand(() -> m_ShooterSubsystem.transferOff(), m_ShooterSubsystem));
     m_driverController.back().onTrue(new InstantCommand(() -> m_ShooterSubsystem.transferOn(false), m_ShooterSubsystem));
     m_driverController.leftBumper().onTrue(new InstantCommand(() -> m_IntakeSubsystem.intakeOn(), m_IntakeSubsystem));
@@ -129,53 +130,6 @@ public class RobotContainer {
     m_operatorController.povRight().onTrue(new ArmToPosition(m_ArmSubsystem, armPositions.AMP)); 
     //TODO change the rotation to be the letter buttons 
   }
-  public Command getPathplannerCommand(){
-    // Create config for trajectory
-    // TrajectoryConfig config = new TrajectoryConfig(
-    //      AutoConstants.kMaxSpeedMetersPerSecond,
-    //     AutoConstants.kMaxAccelerationMetersPerSecondSquared)
-    //     // Add kinematics to ensure max speed is actually obeyed
-    //     .setKinematics(DriveConstants.kDriveKinematics);
-
-    // // An example trajectory to follow. All units in meters.
-    // Trajectory exampleTrajectory = TrajectoryGenerator.generateTrajectory(
-    //     // Start at the origin facing the +X direction
-    //     new Pose2d(0, 2, Rotation2d.fromDegrees(0)),
-    //     // Pass through these two interior waypoints, making an 's' curve path
-    //     List.of(new Translation2d(1, 1), new Translation2d(2, -1)),
-    //     // End 3 meters straight ahead of where we started, facing forward
-    //     new Pose2d(3, 0, new Rotation2d(0)),
-    //     config); 
-
-    // var thetaController = new ProfiledPIDController(
-    //     AutoConstants.kPThetaController, 0, 0, AutoConstants.kThetaControllerConstraints);
-    // thetaController.enableContinuousInput(-Math.PI, Math.PI);
-
-    // SwerveControllerCommand swerveControllerCommand = new SwerveControllerCommand(
-    //     exampleTrajectory,
-    //     m_robotDrive::getPose, // Functional interface to feed supplier
-    //     DriveConstants.kDriveKinematics,
-
-    //     // Position controllers
-    //     new PIDController(AutoConstants.kPXController, 0, 0),
-    //     new PIDController(AutoConstants.kPYController, 0, 0),
-    //     thetaController,
-    //     m_robotDrive::setModuleStates,
-    //     m_robotDrive);
-
-        // PathPlannerPath path = PathPlannerPath.fromPathFile("Example Path");
-        // Pose2d initialpose = new Pose2d(2, 7, Rotation2d.fromDegrees(0)); 
-
-        PathPlannerPath path = PathPlannerPath.fromPathFile("Copy of Example Path");
-        Pose2d initialpose = new Pose2d(0, 1, Rotation2d.fromDegrees(0)); 
-        // Reset odometry to the starting pose of the trajectory.
-         m_robotDrive.resetOdometry(initialpose);
-
-        // Create a path following command using AutoBuilder. This will also trigger event markers.
-        
-        return AutoBuilder.followPath(path);
-
-  }
 
   //  * Use this to pass the autonomous command to the main {@link Robot} class.
   //  *
@@ -187,6 +141,8 @@ public class RobotContainer {
 
   public void registerNamedCommands(){
     NamedCommands.registerCommand("ShootSubwoofer", new ShootNote(m_ShooterSubsystem, m_ArmSubsystem, armPositions.SUBWOOFER)); 
+    NamedCommands.registerCommand("ShootPodium", new ShootNote(m_ShooterSubsystem, m_ArmSubsystem, armPositions.PODIUM)); 
+    NamedCommands.registerCommand("Intake", new IntakeNote(m_ShooterSubsystem, m_ArmSubsystem, m_IntakeSubsystem)); 
   
   }
 }   
