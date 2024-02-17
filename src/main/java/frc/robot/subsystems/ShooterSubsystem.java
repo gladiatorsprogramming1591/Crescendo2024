@@ -29,14 +29,14 @@ public class ShooterSubsystem extends SubsystemBase {
     private final double m_rightTargetVelocity = Constants.ShooterConstants.kRightShooterSpeedRPM; 
     private final double m_leftTargetVelocity = Constants.ShooterConstants.kLeftShooterSpeedRPM; 
     private final DigitalInput m_ShooterBeamBreak = new DigitalInput(4); 
-    private final PIDController m_leftPidController = new PIDController(
-        ShooterConstants.kShooterP, ShooterConstants.kShooterI, ShooterConstants.kShooterD);
-    private final PIDController m_rightPidController = new PIDController(
-        ShooterConstants.kShooterP, ShooterConstants.kShooterI, ShooterConstants.kShooterD);
-    private final SimpleMotorFeedforward m_leftShooterFeedforward =new SimpleMotorFeedforward(
-          ShooterConstants.kSVolts, ShooterConstants.kVVoltSecondsPerRotation);
-    private final SimpleMotorFeedforward m_rightShooterFeedforward =new SimpleMotorFeedforward(
-          ShooterConstants.kSVolts, ShooterConstants.kVVoltSecondsPerRotation);
+    // private final PIDController m_leftPidController = new PIDController(
+    //     ShooterConstants.kShooterP, ShooterConstants.kShooterI, ShooterConstants.kShooterD);
+    // private final PIDController m_rightPidController = new PIDController(
+    //     ShooterConstants.kShooterP, ShooterConstants.kShooterI, ShooterConstants.kShooterD);
+    // private final SimpleMotorFeedforward m_leftShooterFeedforward =new SimpleMotorFeedforward(
+    //       ShooterConstants.kSVolts, ShooterConstants.kVVoltSecondsPerRotation);
+    // private final SimpleMotorFeedforward m_rightShooterFeedforward =new SimpleMotorFeedforward(
+    //       ShooterConstants.kSVolts, ShooterConstants.kVVoltSecondsPerRotation);
 
     public ShooterSubsystem(){
         m_rightShooterMotor = new CANSparkFlex(Constants.ShooterConstants.kRightShooterCANId, MotorType.kBrushless);
@@ -60,8 +60,8 @@ public class ShooterSubsystem extends SubsystemBase {
         // m_leftShooterMotor.getPIDController().setFF(ShooterConstants.kShooterFF);
         // m_leftShooterMotor.getPIDController().setReference(0, ControlType.kVoltage);
 
-        m_leftPidController.setTolerance(ShooterConstants.kShooterSpeedTolerance);
-        m_rightPidController.setTolerance(ShooterConstants.kShooterSpeedTolerance);
+        // m_leftPidController.setTolerance(ShooterConstants.kShooterSpeedTolerance);
+        // m_rightPidController.setTolerance(ShooterConstants.kShooterSpeedTolerance);
         
         m_rightShooterMotor.enableVoltageCompensation(12);
         m_leftShooterMotor.enableVoltageCompensation(12);
@@ -76,21 +76,21 @@ public class ShooterSubsystem extends SubsystemBase {
         System.out.println("Setting left shooter speed to " + m_leftTargetVelocity);
         System.out.println("Setting right shooter speed to " + m_rightTargetVelocity);
 
-        // m_rightShooterMotor.getPIDController().setReference(m_rightTargetVelocity, ControlType.kDutyCycle);
-        // m_leftShooterMotor.getPIDController().setReference(m_leftTargetVelocity, ControlType.kDutyCycle);
+        m_rightShooterMotor.getPIDController().setReference(m_rightTargetVelocity, ControlType.kVelocity);
+        m_leftShooterMotor.getPIDController().setReference(m_leftTargetVelocity, ControlType.kVelocity);
 
-        double leftPidOut = m_leftPidController.calculate(m_leftEncoder.getVelocity()/NeoMotorConstants.kFreeSpeedRpm,m_leftTargetVelocity);
-        double rightPidOut = m_rightPidController.calculate(m_rightEncoder.getVelocity()/NeoMotorConstants.kFreeSpeedRpm,m_rightTargetVelocity);
+        // double leftPidOut = m_leftPidController.calculate(m_leftEncoder.getVelocity()/NeoMotorConstants.kFreeSpeedRpm,m_leftTargetVelocity);
+        // double rightPidOut = m_rightPidController.calculate(m_rightEncoder.getVelocity()/NeoMotorConstants.kFreeSpeedRpm,m_rightTargetVelocity);
 
-        double leftFF = m_leftShooterFeedforward.calculate(m_leftTargetVelocity);
-        double rightFF = m_rightShooterFeedforward.calculate(m_rightTargetVelocity);
+        // double leftFF = m_leftShooterFeedforward.calculate(m_leftTargetVelocity);
+        // double rightFF = m_rightShooterFeedforward.calculate(m_rightTargetVelocity);
 
-        SmartDashboard.putNumber("Left Shooter PidOut", leftPidOut);
-        SmartDashboard.putNumber("Right Shooter PidOut", rightPidOut);
-        SmartDashboard.putNumber("Left Shooter FF", leftFF);
-        SmartDashboard.putNumber("Right Shooter FF", rightFF);
-        m_leftShooterMotor.setVoltage(leftFF);
-        m_rightShooterMotor.setVoltage(rightFF);             
+        // SmartDashboard.putNumber("Left Shooter PidOut", leftPidOut);
+        // SmartDashboard.putNumber("Right Shooter PidOut", rightPidOut);
+        // SmartDashboard.putNumber("Left Shooter FF", leftFF);
+        // SmartDashboard.putNumber("Right Shooter FF", rightFF);
+        // m_leftShooterMotor.setVoltage(leftFF);
+        // m_rightShooterMotor.setVoltage(rightFF);             
       }
 
       public void shooterOff() {
@@ -100,8 +100,8 @@ public class ShooterSubsystem extends SubsystemBase {
       }
 
       public boolean isShooterAtSpeed() {
-        // return Math.abs(m_leftEncoder.getVelocity() - ShooterConstants.kLeftShooterSpeedRPM) < ShooterConstants.kLeftShooterSpeedTolerance; 
-        return m_leftPidController.atSetpoint();
+        return Math.abs(m_leftEncoder.getVelocity() - ShooterConstants.kLeftShooterSpeedRPM) < ShooterConstants.kShooterSpeedTolerance; 
+        // return m_leftPidController.atSetpoint();
       } 
       public boolean isBeamBroken(){
         return m_ShooterBeamBreak.get() == false; 
@@ -132,7 +132,8 @@ public class ShooterSubsystem extends SubsystemBase {
       @Override
         public void periodic() {
           // This method will be called once per scheduler run
-          SmartDashboard.putString("Shooter Vel", "" + Math.round(m_leftEncoder.getVelocity()));
+          // SmartDashboard.putString("Shooter Vel", "" + Math.round(m_leftEncoder.getVelocity()));
+          SmartDashboard.putString("Shooter Vel", "" + m_leftEncoder.getVelocity());
           SmartDashboard.putBoolean("ShooterBeamBreak", m_ShooterBeamBreak.get()); 
           SmartDashboard.putBoolean("ShooterAtSpeed", isShooterAtSpeed()); 
         }

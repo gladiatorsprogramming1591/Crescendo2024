@@ -144,9 +144,9 @@ public final class Constants {
     // public static final double kLeftShooterSpeed = 1.0; 
     public static final double kTransferSpeed = 0.25;
     public static final double kTransferSpeedFull = 1.0;
-    public static final double kLeftShooterSpeedRPM = 1.0*NeoMotorConstants.kFreeSpeedRpm; 
+    public static final double kLeftShooterSpeedRPM = 0.95*VortexMotorConstants.kFreeSpeedRpm; 
     public static final double kRightShooterSpeedRPM = 0.6*kLeftShooterSpeedRPM; 
-    public static final double kShooterSpeedTolerance = 0.001; 
+    public static final double kShooterSpeedTolerance = 50.0; 
 
     public static final double kSVolts = 0.05;
     public static final double kVVoltSecondsPerRotation =
@@ -222,5 +222,9 @@ public final class Constants {
 
   public static final class NeoMotorConstants {
     public static final double kFreeSpeedRpm = 5676;
+  }
+
+  public static final class VortexMotorConstants {
+    public static final double kFreeSpeedRpm = 6784;
   }
 }
