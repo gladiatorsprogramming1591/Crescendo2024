@@ -1,10 +1,14 @@
 package frc.robot.subsystems;
 
+import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Constants.NeoMotorConstants;
 import frc.robot.Constants.ShooterConstants;
 
 import com.revrobotics.CANSparkFlex;
@@ -17,15 +21,22 @@ import com.revrobotics.CANSparkBase;
 
 
 public class ShooterSubsystem extends SubsystemBase {
-    CANSparkFlex m_rightShooterMotor; 
-    CANSparkFlex m_leftShooterMotor; 
-    CANSparkMax m_transferMotor;
-    RelativeEncoder m_rightEncoder; 
-    RelativeEncoder m_leftEncoder; 
-    double m_rightTargetVelocity = Constants.ShooterConstants.kRightShooterSpeed; 
-    double m_leftTargetVelocity = Constants.ShooterConstants.kLeftShooterSpeed; 
-    DigitalInput m_ShooterBeamBreak = new DigitalInput(4); 
-
+    private CANSparkFlex m_rightShooterMotor; 
+    private CANSparkFlex m_leftShooterMotor; 
+    private CANSparkMax m_transferMotor;
+    private RelativeEncoder m_rightEncoder; 
+    private RelativeEncoder m_leftEncoder; 
+    private final double m_rightTargetVelocity = Constants.ShooterConstants.kRightShooterSpeedRPM; 
+    private final double m_leftTargetVelocity = Constants.ShooterConstants.kLeftShooterSpeedRPM; 
+    private final DigitalInput m_ShooterBeamBreak = new DigitalInput(4); 
+    private final PIDController m_leftPidController = new PIDController(
+        ShooterConstants.kShooterP, ShooterConstants.kShooterI, ShooterConstants.kShooterD);
+    private final PIDController m_rightPidController = new PIDController(
+        ShooterConstants.kShooterP, ShooterConstants.kShooterI, ShooterConstants.kShooterD);
+    private final SimpleMotorFeedforward m_leftShooterFeedforward =new SimpleMotorFeedforward(
+          ShooterConstants.kSVolts, ShooterConstants.kVVoltSecondsPerRotation);
+    private final SimpleMotorFeedforward m_rightShooterFeedforward =new SimpleMotorFeedforward(
+          ShooterConstants.kSVolts, ShooterConstants.kVVoltSecondsPerRotation);
 
     public ShooterSubsystem(){
         m_rightShooterMotor = new CANSparkFlex(Constants.ShooterConstants.kRightShooterCANId, MotorType.kBrushless);
@@ -37,18 +48,21 @@ public class ShooterSubsystem extends SubsystemBase {
         m_rightShooterMotor.setInverted(false);
         m_leftShooterMotor.setInverted(true);
 
-        m_rightShooterMotor.getPIDController().setP(ShooterConstants.kShooterP);
-        m_rightShooterMotor.getPIDController().setI(ShooterConstants.kShooterI);
-        m_rightShooterMotor.getPIDController().setD(ShooterConstants.kShooterD);
-        m_rightShooterMotor.getPIDController().setFF(ShooterConstants.kShooterFF);
-        m_rightShooterMotor.getPIDController().setReference(0, ControlType.kVoltage);
+        // m_rightShooterMotor.getPIDController().setP(ShooterConstants.kShooterP);
+        // m_rightShooterMotor.getPIDController().setI(ShooterConstants.kShooterI);
+        // m_rightShooterMotor.getPIDController().setD(ShooterConstants.kShooterD);
+        // m_rightShooterMotor.getPIDController().setFF(ShooterConstants.kShooterFF);
+        // m_rightShooterMotor.getPIDController().setReference(0, ControlType.kVoltage);
 
-        m_leftShooterMotor.getPIDController().setP(ShooterConstants.kShooterP);
-        m_leftShooterMotor.getPIDController().setI(ShooterConstants.kShooterI);
-        m_leftShooterMotor.getPIDController().setD(ShooterConstants.kShooterD);
-        m_leftShooterMotor.getPIDController().setFF(ShooterConstants.kShooterFF);
-        m_leftShooterMotor.getPIDController().setReference(0, ControlType.kVoltage);
+        // m_leftShooterMotor.getPIDController().setP(ShooterConstants.kShooterP);
+        // m_leftShooterMotor.getPIDController().setI(ShooterConstants.kShooterI);
+        // m_leftShooterMotor.getPIDController().setD(ShooterConstants.kShooterD);
+        // m_leftShooterMotor.getPIDController().setFF(ShooterConstants.kShooterFF);
+        // m_leftShooterMotor.getPIDController().setReference(0, ControlType.kVoltage);
 
+        m_leftPidController.setTolerance(ShooterConstants.kShooterSpeedTolerance);
+        m_rightPidController.setTolerance(ShooterConstants.kShooterSpeedTolerance);
+        
         m_rightShooterMotor.enableVoltageCompensation(12);
         m_leftShooterMotor.enableVoltageCompensation(12);
 
@@ -58,13 +72,25 @@ public class ShooterSubsystem extends SubsystemBase {
 
 
     public void shooterOn() {
-        //Turns on the shooter motor
-        System.out.println("Turning shooter on");
-        m_rightShooterMotor.getPIDController().setReference(m_rightTargetVelocity, ControlType.kDutyCycle);
-        m_leftShooterMotor.getPIDController().setReference(m_leftTargetVelocity, ControlType.kDutyCycle);
-                  
+        //Turns on the shooter motors
         System.out.println("Setting left shooter speed to " + m_leftTargetVelocity);
         System.out.println("Setting right shooter speed to " + m_rightTargetVelocity);
+
+        // m_rightShooterMotor.getPIDController().setReference(m_rightTargetVelocity, ControlType.kDutyCycle);
+        // m_leftShooterMotor.getPIDController().setReference(m_leftTargetVelocity, ControlType.kDutyCycle);
+
+        double leftPidOut = m_leftPidController.calculate(m_leftEncoder.getVelocity()/NeoMotorConstants.kFreeSpeedRpm,m_leftTargetVelocity);
+        double rightPidOut = m_rightPidController.calculate(m_rightEncoder.getVelocity()/NeoMotorConstants.kFreeSpeedRpm,m_rightTargetVelocity);
+
+        double leftFF = m_leftShooterFeedforward.calculate(m_leftTargetVelocity);
+        double rightFF = m_rightShooterFeedforward.calculate(m_rightTargetVelocity);
+
+        SmartDashboard.putNumber("Left Shooter PidOut", leftPidOut);
+        SmartDashboard.putNumber("Right Shooter PidOut", rightPidOut);
+        SmartDashboard.putNumber("Left Shooter FF", leftFF);
+        SmartDashboard.putNumber("Right Shooter FF", rightFF);
+        m_leftShooterMotor.setVoltage(leftFF);
+        m_rightShooterMotor.setVoltage(rightFF);             
       }
 
       public void shooterOff() {
@@ -74,12 +100,8 @@ public class ShooterSubsystem extends SubsystemBase {
       }
 
       public boolean isShooterAtSpeed() {
-        // return ((m_leftEncoder.getVelocity() >= (m_leftTargetVelocity * 1) - 25)
-        //   && (m_leftEncoder.getVelocity() <= (m_leftTargetVelocity * 1) + 25)
-        //   && (m_rightEncoder.getVelocity() >= (m_rightTargetVelocity * 1) - 25)
-        //   && (m_rightEncoder.getVelocity() <= (m_rightTargetVelocity * 1) + 25)); 
-        return false; //TODO Determine how to get atSpeed. May need to use Roborio PIDcontroller
-          
+        // return Math.abs(m_leftEncoder.getVelocity() - ShooterConstants.kLeftShooterSpeedRPM) < ShooterConstants.kLeftShooterSpeedTolerance; 
+        return m_leftPidController.atSetpoint();
       } 
       public boolean isBeamBroken(){
         return m_ShooterBeamBreak.get() == false; 

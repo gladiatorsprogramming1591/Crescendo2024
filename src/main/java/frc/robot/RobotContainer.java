@@ -116,13 +116,16 @@ public class RobotContainer {
     m_driverController.leftTrigger(OIConstants.kArmDeadband).whileTrue(new RunCommand(() -> 
       m_ArmSubsystem.ArmForward(m_driverController.getLeftTriggerAxis()), m_ArmSubsystem));
     m_driverController.leftTrigger(OIConstants.kArmDeadband).onFalse(new InstantCommand(() -> m_ArmSubsystem.ArmOff(), m_ArmSubsystem));
-    m_driverController.povDown().onTrue(new TurnToAngleProfiled(180, m_robotDrive)); 
-    m_driverController.povLeft().onTrue(new TurnToAngleProfiled(270, m_robotDrive)); 
-    m_driverController.povUp().onTrue(new TurnToAngleProfiled(0, m_robotDrive)); 
-    m_driverController.povRight().onTrue(new TurnToAngleProfiled(90,m_robotDrive)); 
+    // m_driverController.povDown().onTrue(new TurnToAngleProfiled(180, m_robotDrive)); 
+    // m_driverController.povLeft().onTrue(new TurnToAngleProfiled(270, m_robotDrive)); 
+    // m_driverController.povUp().onTrue(new TurnToAngleProfiled(0, m_robotDrive)); 
+    // m_driverController.povRight().onTrue(new TurnToAngleProfiled(90,m_robotDrive)); 
     m_driverController.leftStick().onTrue(new InstantCommand(() -> m_ShooterSubsystem.transferReverse(), m_ShooterSubsystem)); 
+    m_driverController.povDown().onTrue(new ArmToPosition(m_ArmSubsystem, armPositions.MIDLINE)); 
     m_operatorController.rightTrigger().onTrue(new ShootNote(m_ShooterSubsystem, m_ArmSubsystem, armPositions.SUBWOOFER)); 
     m_operatorController.leftTrigger().onTrue(new ShootNote(m_ShooterSubsystem, m_ArmSubsystem, armPositions.PODIUM)); 
+    m_operatorController.b().onTrue(new ShootNote(m_ShooterSubsystem, m_ArmSubsystem, armPositions.MIDLINE)); 
+    m_operatorController.x().onTrue(new ShootNote(m_ShooterSubsystem, m_ArmSubsystem, armPositions.STAGELINE)); 
     m_operatorController.a().onTrue(new IntakeNote(m_ShooterSubsystem, m_ArmSubsystem, m_IntakeSubsystem)); 
     m_operatorController.povDown().onTrue(new ArmToPosition(m_ArmSubsystem, armPositions.TRANSFER)); 
     m_operatorController.povLeft().onTrue(new ArmToPosition(m_ArmSubsystem, armPositions.PODIUM)); 
@@ -143,6 +146,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("ShootSubwoofer", new ShootNote(m_ShooterSubsystem, m_ArmSubsystem, armPositions.SUBWOOFER)); 
     NamedCommands.registerCommand("ShootPodium", new ShootNote(m_ShooterSubsystem, m_ArmSubsystem, armPositions.PODIUM)); 
     NamedCommands.registerCommand("Intake", new IntakeNote(m_ShooterSubsystem, m_ArmSubsystem, m_IntakeSubsystem)); 
+    NamedCommands.registerCommand("ArmStow", new ArmToPosition(m_ArmSubsystem, armPositions.TRANSFER));
   
   }
 }   

@@ -140,10 +140,19 @@ public final class Constants {
     public static final int kRightShooterCANId = 6;
     public static final int kTransferCANId = 7;
 
-    public static final double kRightShooterSpeed = 0.50; 
-    public static final double kLeftShooterSpeed = 0.75; 
+    // public static final double kRightShooterSpeed = 0.55; 
+    // public static final double kLeftShooterSpeed = 1.0; 
     public static final double kTransferSpeed = 0.25;
     public static final double kTransferSpeedFull = 1.0;
+    public static final double kLeftShooterSpeedRPM = 1.0*NeoMotorConstants.kFreeSpeedRpm; 
+    public static final double kRightShooterSpeedRPM = 0.6*kLeftShooterSpeedRPM; 
+    public static final double kShooterSpeedTolerance = 0.001; 
+
+    public static final double kSVolts = 0.05;
+    public static final double kVVoltSecondsPerRotation =
+        // Should have value 12V at free speed...
+        12.0 / NeoMotorConstants.kFreeSpeedRpm;
+
   }
 
   public static final class IntakeConstants{
@@ -157,9 +166,9 @@ public final class Constants {
     public static final int kLeftArmCANId = 8;
     public static final int kRightArmCANId = 2;
 
-    public static final double kArmP = 6.4;
+    public static final double kArmP = 20.0; //6.4
     public static final double kArmI = 0.00;
-    public static final double kArmD = 0.00;
+    public static final double kArmD = 1.00;
     public static final double kArmFF = 0.00;
     //TODO Update min and max heights with measured values
 
@@ -171,19 +180,21 @@ public final class Constants {
     public static final double kTRANSFER = kOffset - 0.01;
     public static final double kSUBWOOFER = kOffset - 0.15;
     public static final double kPODIUM = kOffset - 0.075;
+    public static final double kMIDLINE = kOffset - 0.023;
+    public static final double kSTAGELINE = kOffset - 0.021;
     // public static final double kCLIMBSTART = kOffset + 0.325;
     // public static final double kCLIMBFINISH = kOffset + 0.367;
     public static final double kAMP = kOffset - 0.368;
-    public static final double kAllowedErrAbs = 0.01;
+    public static final double kAllowedErrAbs = 0.001;
     public static final double kMinHeightAbs = kOffset;
     public static final double kMaxHeightAbs = 0.2;
     //TODO Update arm positions with measured values
 
     // Arm Speed
-    public static final double kArmMinOutput = -0.6; //-1.00
-    public static final double kArmMaxOutput = 0.6; //1.00
-    public static final double kPositionTolerance = 0.005; 
-    public static final double kVelocityTolerance = 0.01; 
+    public static final double kArmMinOutput = -1.0; //-1.00
+    public static final double kArmMaxOutput = 1.0; //1.00
+    public static final double kPositionTolerance = 0.001; 
+    public static final double kVelocityTolerance = 0.02; 
   }
 
   public static final class OIConstants {
