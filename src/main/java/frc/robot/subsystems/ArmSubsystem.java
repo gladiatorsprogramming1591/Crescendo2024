@@ -79,6 +79,9 @@ public class ArmSubsystem extends SubsystemBase {
     }
 
     public void ArmToPosition(armPositions position) {
+        m_rightArmMotor.setSmartCurrentLimit(20);
+        m_leftArmMotor.setSmartCurrentLimit(20);
+
         if (((armAbsEncoder.getAbsolutePosition() > ArmConstants.kMinHeightAbs) && (position == armPositions.TRANSFER)) ||
             ((armAbsEncoder.getAbsolutePosition() < ArmConstants.kMaxHeightAbs) && (position == armPositions.AMP))) {
             m_leftArmMotor.set(0);
@@ -99,6 +102,9 @@ public class ArmSubsystem extends SubsystemBase {
 
 
     public void ArmForward(double speed) {
+        m_rightArmMotor.setSmartCurrentLimit(40);
+        m_leftArmMotor.setSmartCurrentLimit(40);
+
         MathUtil.clamp(speed, 0, ArmConstants.kMaxOpenLoopSpeed); 
         //Turns on the Arm motor
         System.out.println("Turning Arm forward");
@@ -110,6 +116,9 @@ public class ArmSubsystem extends SubsystemBase {
       }
     
       public void ArmBackward(double speed) {
+        m_rightArmMotor.setSmartCurrentLimit(40);
+        m_leftArmMotor.setSmartCurrentLimit(40);
+
         MathUtil.clamp(speed, 0, ArmConstants.kMaxOpenLoopSpeed); 
         //Turns on the Arm motor
         System.out.println("Turning Arm backward");
@@ -129,6 +138,7 @@ public class ArmSubsystem extends SubsystemBase {
         double currentEncoderPosition = armAbsEncoder.getAbsolutePosition();
         return (Math.abs(currentEncoderPosition - mapAbs.get(pos)) < Constants.ArmConstants.kAllowedErrAbs);
       }
+
 
       @Override
         public void periodic() {

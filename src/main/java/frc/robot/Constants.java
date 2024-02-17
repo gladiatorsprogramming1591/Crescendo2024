@@ -130,10 +130,10 @@ public final class Constants {
   }
   //Initial values taken from Roberta
   public static final class ShooterConstants{
-    public static final double kShooterP = 0.00075;
-    public static final double kShooterI = 0.0;
-    public static final double kShooterD = 0.02;
-    public static final double kShooterFF = 0.00019;
+    public static final double kShooterP = 0.0003;
+    public static final double kShooterI = 0.000000;
+    public static final double kShooterD = 0.0000;
+    public static final double kShooterFF = 0.00015;
 
     
     public static final int kLeftShooterCANId = 5;
@@ -144,9 +144,10 @@ public final class Constants {
     // public static final double kLeftShooterSpeed = 1.0; 
     public static final double kTransferSpeed = 0.25;
     public static final double kTransferSpeedFull = 1.0;
-    public static final double kLeftShooterSpeedRPM = 0.95*VortexMotorConstants.kFreeSpeedRpm; 
+    public static final double kLeftShooterSpeedRPM = 5000.0;
     public static final double kRightShooterSpeedRPM = 0.6*kLeftShooterSpeedRPM; 
     public static final double kShooterSpeedTolerance = 50.0; 
+    public static final double kMinShooterSpeed = 4900.0; 
 
     public static final double kSVolts = 0.05;
     public static final double kVVoltSecondsPerRotation =
@@ -166,20 +167,20 @@ public final class Constants {
     public static final int kLeftArmCANId = 8;
     public static final int kRightArmCANId = 2;
 
-    public static final double kArmP = 20.0; //6.4
+    public static final double kArmP = 15.0; //6.4
     public static final double kArmI = 0.00;
-    public static final double kArmD = 1.00;
+    public static final double kArmD = 0.00;
     public static final double kArmFF = 0.00;
     //TODO Update min and max heights with measured values
 
-    public static final double kMaxOpenLoopSpeed = 0.2; 
+    public static final double kMaxOpenLoopSpeed = 1.0; 
     
     //TODO make source position to intake note from there. 
     // Arm Positions
     public static final double kOffset = 0.88;
     public static final double kTRANSFER = kOffset - 0.01;
     public static final double kSUBWOOFER = kOffset - 0.15;
-    public static final double kPODIUM = kOffset - 0.075;
+    public static final double kPODIUM = kOffset - 0.065;
     public static final double kMIDLINE = kOffset - 0.023;
     public static final double kSTAGELINE = kOffset - 0.021;
     // public static final double kCLIMBSTART = kOffset + 0.325;

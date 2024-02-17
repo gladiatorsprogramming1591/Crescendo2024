@@ -48,17 +48,17 @@ public class ShooterSubsystem extends SubsystemBase {
         m_rightShooterMotor.setInverted(false);
         m_leftShooterMotor.setInverted(true);
 
-        // m_rightShooterMotor.getPIDController().setP(ShooterConstants.kShooterP);
-        // m_rightShooterMotor.getPIDController().setI(ShooterConstants.kShooterI);
-        // m_rightShooterMotor.getPIDController().setD(ShooterConstants.kShooterD);
-        // m_rightShooterMotor.getPIDController().setFF(ShooterConstants.kShooterFF);
-        // m_rightShooterMotor.getPIDController().setReference(0, ControlType.kVoltage);
+        m_rightShooterMotor.getPIDController().setP(ShooterConstants.kShooterP);
+        m_rightShooterMotor.getPIDController().setI(ShooterConstants.kShooterI);
+        m_rightShooterMotor.getPIDController().setD(ShooterConstants.kShooterD);
+        m_rightShooterMotor.getPIDController().setFF(ShooterConstants.kShooterFF);
+        m_rightShooterMotor.getPIDController().setReference(0, ControlType.kVoltage);
 
-        // m_leftShooterMotor.getPIDController().setP(ShooterConstants.kShooterP);
-        // m_leftShooterMotor.getPIDController().setI(ShooterConstants.kShooterI);
-        // m_leftShooterMotor.getPIDController().setD(ShooterConstants.kShooterD);
-        // m_leftShooterMotor.getPIDController().setFF(ShooterConstants.kShooterFF);
-        // m_leftShooterMotor.getPIDController().setReference(0, ControlType.kVoltage);
+        m_leftShooterMotor.getPIDController().setP(ShooterConstants.kShooterP);
+        m_leftShooterMotor.getPIDController().setI(ShooterConstants.kShooterI);
+        m_leftShooterMotor.getPIDController().setD(ShooterConstants.kShooterD);
+        m_leftShooterMotor.getPIDController().setFF(ShooterConstants.kShooterFF);
+        m_leftShooterMotor.getPIDController().setReference(0, ControlType.kVoltage);
 
         // m_leftPidController.setTolerance(ShooterConstants.kShooterSpeedTolerance);
         // m_rightPidController.setTolerance(ShooterConstants.kShooterSpeedTolerance);
@@ -100,7 +100,7 @@ public class ShooterSubsystem extends SubsystemBase {
       }
 
       public boolean isShooterAtSpeed() {
-        return Math.abs(m_leftEncoder.getVelocity() - ShooterConstants.kLeftShooterSpeedRPM) < ShooterConstants.kShooterSpeedTolerance; 
+        return m_leftEncoder.getVelocity() > ShooterConstants.kMinShooterSpeed; 
         // return m_leftPidController.atSetpoint();
       } 
       public boolean isBeamBroken(){
@@ -133,7 +133,8 @@ public class ShooterSubsystem extends SubsystemBase {
         public void periodic() {
           // This method will be called once per scheduler run
           // SmartDashboard.putString("Shooter Vel", "" + Math.round(m_leftEncoder.getVelocity()));
-          SmartDashboard.putString("Shooter Vel", "" + m_leftEncoder.getVelocity());
+          SmartDashboard.putString("L Shooter Vel", "" + m_leftEncoder.getVelocity());
+          SmartDashboard.putString("R Shooter Vel", "" + m_rightEncoder.getVelocity());
           SmartDashboard.putBoolean("ShooterBeamBreak", m_ShooterBeamBreak.get()); 
           SmartDashboard.putBoolean("ShooterAtSpeed", isShooterAtSpeed()); 
         }
