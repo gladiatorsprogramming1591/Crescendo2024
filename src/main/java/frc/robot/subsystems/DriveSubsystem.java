@@ -4,11 +4,17 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.geometry.Translation3d;
 // import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
@@ -35,6 +41,13 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
+
+import java.util.Optional;
+
+import org.photonvision.EstimatedRobotPose;
+import org.photonvision.PhotonCamera;
+import org.photonvision.PhotonPoseEstimator;
+import org.photonvision.PhotonPoseEstimator.PoseStrategy;
 
 // import java.util.List;
 
@@ -113,6 +126,9 @@ public static final double kTurnToleranceDeg = 1.0;
   private final PIDController m_xVisionPidController = new PIDController(0.033, 0.0, 0.005);
   
 
+  PhotonPoseEstimator[] photonPoseEstimators;
+  SwerveDrivePoseEstimator poseEstimator;
+
   /** Creates a new DriveSubsystem. */
   public DriveSubsystem() {
     final double kWheelBase = 22.5; 
@@ -167,6 +183,51 @@ public static final double kTurnToleranceDeg = 1.0;
 
 
     // Do this in either robot periodic or subsystem periodic
+
+    // Vision Initialization
+
+    poseEstimator = new SwerveDrivePoseEstimator(
+        DriveConstants.kDriveKinematics,
+        Rotation2d.fromDegrees(getHeading()),
+        new SwerveModulePosition[] {
+            m_frontLeft.getPosition(),
+            m_frontRight.getPosition(),
+            m_rearLeft.getPosition(),
+            m_rearRight.getPosition()
+        },
+        new Pose2d(),
+        DriveConstants.odometryStd,
+        DriveConstants.visionStd);
+
+    photonPoseEstimators = new PhotonPoseEstimator[] {
+        new PhotonPoseEstimator(
+            AprilTagFields.k2024Crescendo.loadAprilTagLayoutField(),
+            PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
+            new PhotonCamera("Front"),
+            new Transform3d(
+                new Translation3d(Units.inchesToMeters(10.507), Units.inchesToMeters(5.673),
+                    Units.inchesToMeters(6.789)),
+                new Rotation3d(0.0, Math.toRadians(-20.0), Math.toRadians(0.0)))),
+    };
+    // Future cameras
+    // new PhotonPoseEstimator(
+    // AprilTagFields.k2024Crescendo.loadAprilTagLayoutField(),
+    // PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
+    // new PhotonCamera("Left"),
+    // new Transform3d(
+    // new Translation3d(-0.0, -0.0, 0.0),
+    // new Rotation3d(0.0, Math.toRadians(-30.0), Math.toRadians(170.0))
+    // )
+    // ),
+    // new PhotonPoseEstimator(
+    // AprilTagFields.k2024Crescendo.loadAprilTagLayoutField(),
+    // PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
+    // new PhotonCamera("Right"),
+    // new Transform3d(
+    // new Translation3d(-0.0, -0.0, 0.0),
+    // new Rotation3d(0.0, Math.toRadians(-30.0), Math.toRadians(170.0))
+    // )
+    // ),
   }
 
   public boolean visionDriveAligned(double desiredId, double desiredY, double rotVisionSetpoint) {
@@ -211,6 +272,12 @@ public static final double kTurnToleranceDeg = 1.0;
       SmartDashboard.putNumber("Odometry.y:" , m_odometry.getPoseMeters().getY());
 
       updateAprilTagInfo(5.0);
+
+      for (PhotonPoseEstimator photonPoseEstimator : photonPoseEstimators) {
+        Optional<EstimatedRobotPose> pose = photonPoseEstimator.update();
+        if (pose.isPresent())
+          poseEstimator.addVisionMeasurement(pose.get().estimatedPose.toPose2d(), pose.get().timestampSeconds);
+      }
   }
 
   public void updateAprilTagInfo(double desiredId) {

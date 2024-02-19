@@ -6,8 +6,11 @@ package frc.robot;
 
 import com.revrobotics.CANSparkBase.IdleMode;
 
+import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.Vector;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 
@@ -31,6 +34,9 @@ public final class Constants {
     public static final double kMaxSpeedMetersPerSecond = kMaxModuleMetersPerSecond; // TODO Increase speed when done testing autos at low speed or add speed toggle button
     public static final double kMaxAngularSpeed =  2 * Math.PI; // radians per second
     public static final double kTeleopPercentLimit = 0.75; 
+
+    public static final Vector<N3> odometryStd = VecBuilder.fill(0.03, 0.03, 0.03);
+    public static final Vector<N3> visionStd = VecBuilder.fill(0.1, 0.1, 0.1);
 
     public static final double kDirectionSlewRate = 2.4; // radians per second
     public static final double kMagnitudeSlewRate = 3.6; // percent per second (1 = 100%)
