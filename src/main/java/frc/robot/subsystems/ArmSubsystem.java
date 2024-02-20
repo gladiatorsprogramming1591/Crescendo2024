@@ -41,7 +41,7 @@ public class ArmSubsystem extends SubsystemBase {
       CLIMBSTART,
       CLIMBFINISH,
       AMP,
-      MIDLINE,
+      TRAP,
       STAGELINE
   }
 
@@ -70,7 +70,7 @@ public class ArmSubsystem extends SubsystemBase {
         mapAbs.put(armPositions.TRANSFER, ArmConstants.kTRANSFER);
         mapAbs.put(armPositions.SUBWOOFER, ArmConstants.kSUBWOOFER);
         mapAbs.put(armPositions.PODIUM, ArmConstants.kPODIUM);
-        mapAbs.put(armPositions.MIDLINE, ArmConstants.kMIDLINE);
+        mapAbs.put(armPositions.TRAP, ArmConstants.kTRAP);
         mapAbs.put(armPositions.STAGELINE, ArmConstants.kSTAGELINE);
         // mapAbs.put(armPositions.CLIMBSTART, ArmConstants.kCLIMBSTART);
         // mapAbs.put(armPositions.CLIMBFINISH, ArmConstants.kCLIMBFINISH); // Single Substation

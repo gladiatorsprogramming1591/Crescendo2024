@@ -122,10 +122,9 @@ public class RobotContainer {
     // m_driverController.povUp().onTrue(new TurnToAngleProfiled(0, m_robotDrive)); 
     // m_driverController.povRight().onTrue(new TurnToAngleProfiled(90,m_robotDrive)); 
     m_driverController.leftStick().onTrue(new InstantCommand(() -> m_ShooterSubsystem.transferReverse(), m_ShooterSubsystem)); 
-    m_driverController.povDown().onTrue(new ArmToPosition(m_ArmSubsystem, armPositions.MIDLINE)); 
+    m_driverController.povDown().onTrue(new ArmToPosition(m_ArmSubsystem, armPositions.TRAP)); 
     m_operatorController.rightTrigger().onTrue(new ShootNote(m_ShooterSubsystem, m_ArmSubsystem, armPositions.SUBWOOFER)); 
     m_operatorController.leftTrigger().onTrue(new ShootNote(m_ShooterSubsystem, m_ArmSubsystem, armPositions.PODIUM)); 
-    m_operatorController.b().onTrue(new ShootNote(m_ShooterSubsystem, m_ArmSubsystem, armPositions.PODIUM)); 
     m_operatorController.x().onTrue(new ShootNote(m_ShooterSubsystem, m_ArmSubsystem, armPositions.STAGELINE)); 
     m_operatorController.a().onTrue(new IntakeNote(m_ShooterSubsystem, m_ArmSubsystem, m_IntakeSubsystem)); 
     m_operatorController.povDown().onTrue(new ArmToPosition(m_ArmSubsystem, armPositions.TRANSFER)); 
@@ -146,6 +145,7 @@ public class RobotContainer {
   public void registerNamedCommands(){
     NamedCommands.registerCommand("ShootSubwoofer", new ShootNote(m_ShooterSubsystem, m_ArmSubsystem, armPositions.SUBWOOFER)); 
     NamedCommands.registerCommand("ShootPodium", new ShootNote(m_ShooterSubsystem, m_ArmSubsystem, armPositions.PODIUM)); 
+    NamedCommands.registerCommand("ShootStageLine", new ShootNote(m_ShooterSubsystem, m_ArmSubsystem, armPositions.STAGELINE)); 
     NamedCommands.registerCommand("Intake", new IntakeNote(m_ShooterSubsystem, m_ArmSubsystem, m_IntakeSubsystem)); 
     NamedCommands.registerCommand("ArmStow", new ArmToPositionWithEnd(m_ArmSubsystem, armPositions.TRANSFER));
   
