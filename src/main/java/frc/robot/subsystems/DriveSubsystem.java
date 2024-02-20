@@ -600,7 +600,7 @@ public static final double kTurnToleranceDeg = 1.0;
   public Command driveOnTargetSpeaker(DoubleSupplier x, DoubleSupplier y) {
     return new CommandBuilder(this)
         .onExecute(
-            () -> driveAroundPoint(x.getAsDouble(), y.getAsDouble(), Math.PI, getShotPosition(), m_autoAimRotationPidController));
+            () -> driveAroundPoint(x.getAsDouble(), y.getAsDouble(), 0, getShotPosition(), m_autoAimRotationPidController));
   }
 
       /**
