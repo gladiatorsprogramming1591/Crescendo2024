@@ -78,6 +78,27 @@ public class ArmSubsystem extends SubsystemBase {
         m_AbsPidController.setTolerance(ArmConstants.kPositionTolerance);
     }
 
+    public void ArmToPosition(double setpoint) {
+      m_rightArmMotor.setSmartCurrentLimit(20);
+      m_leftArmMotor.setSmartCurrentLimit(20);
+
+      if (((armAbsEncoder.getAbsolutePosition() > ArmConstants.kMinHeightAbs)
+          && (setpoint > mapAbs.get(armPositions.TRANSFER))) ||
+          ((armAbsEncoder.getAbsolutePosition() < ArmConstants.kMaxHeightAbs)
+              && (setpoint < mapAbs.get(armPositions.AMP)))) {
+        m_leftArmMotor.set(0);
+        return;
+      }
+      double pidOut = MathUtil.clamp(
+          m_AbsPidController.calculate(armAbsEncoder.getAbsolutePosition(), setpoint),
+          Constants.ArmConstants.kArmMinOutput, Constants.ArmConstants.kArmMaxOutput);
+
+      SmartDashboard.putNumber("Arm Position Error", m_AbsPidController.getPositionError());
+      SmartDashboard.putNumber("Arm Abs Target Pos", setpoint);
+      SmartDashboard.putNumber("Arm Abs Speed", pidOut);
+      m_rightArmMotor.set(pidOut);
+    }
+
     public void ArmToPosition(armPositions position) {
         m_rightArmMotor.setSmartCurrentLimit(20);
         m_leftArmMotor.setSmartCurrentLimit(20);

@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import com.pathplanner.lib.util.PIDConstants;
 import com.revrobotics.CANSparkBase.IdleMode;
 
 import edu.wpi.first.math.VecBuilder;
@@ -12,6 +13,7 @@ import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
+import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
@@ -46,6 +48,37 @@ public final class Constants {
         new Translation3d(Units.inchesToMeters(10.507), Units.inchesToMeters(5.673),
             Units.inchesToMeters(6.789)),
         new Rotation3d(0.0, Math.toRadians(-20.0), Math.toRadians(0.0)));
+
+    // Field Positions
+
+    public static final double NOTE_VELOCITY = 20.0;
+
+    public static final Translation2d BLUE_SPEAKER = new Translation2d(0.0381, 5.4477664);
+    public static final Translation2d RED_SPEAKER = new Translation2d(0.0381, 2.756332);
+    public static final Translation2d STAGE = new Translation2d(4.981067, 4.105783);
+
+    public static final PIDConstants AUTO_AIM_ROT_PID_CONSTANTS = new PIDConstants(6.0, 0.0, 0.5);
+
+    // Radians
+    public static final double AUTO_AIM_ROT_TOLERANCE = Math.toRadians(2);
+
+    // Shooter Angle Map
+
+    public static final InterpolatingDoubleTreeMap DISTANCE_TO_ANGLE_MAP = new InterpolatingDoubleTreeMap();
+
+    static {
+      //TODO: Tune these values (yolo)
+      DISTANCE_TO_ANGLE_MAP.put(1.37, ArmConstants.kSUBWOOFER);
+      DISTANCE_TO_ANGLE_MAP.put(1.65, ArmConstants.kOffset - 0.13);
+      DISTANCE_TO_ANGLE_MAP.put(1.97, ArmConstants.kOffset - 0.11);
+      DISTANCE_TO_ANGLE_MAP.put(2.29, ArmConstants.kOffset - 0.09);
+      DISTANCE_TO_ANGLE_MAP.put(2.72, ArmConstants.kOffset - 0.07);
+      DISTANCE_TO_ANGLE_MAP.put(3.17, ArmConstants.kOffset - 0.055);
+      DISTANCE_TO_ANGLE_MAP.put(4.07, ArmConstants.kOffset - 0.04);
+      DISTANCE_TO_ANGLE_MAP.put(4.95, ArmConstants.kOffset - 0.03);
+      DISTANCE_TO_ANGLE_MAP.put(6.46, ArmConstants.kOffset - 0.02);
+    }
+
 
     public static final double kDirectionSlewRate = 2.4; // radians per second
     public static final double kMagnitudeSlewRate = 3.6; // percent per second (1 = 100%)

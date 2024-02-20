@@ -21,6 +21,7 @@ import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.commands.VisionDriveAligned;
+import frc.robot.commands.AlignAndShootNote;
 import frc.robot.commands.IntakeNote;
 import frc.robot.commands.ShootNote;
 import frc.robot.commands.TransferOnWithBeamBreak;
@@ -103,12 +104,14 @@ public class RobotContainer {
    * {@link JoystickButton}.
    */
   private void configureButtonBindings() { 
-    m_driverController.start().onTrue(new InstantCommand(() -> m_robotDrive.zeroHeading()));
+    m_driverController.back().onTrue(new InstantCommand(() -> m_robotDrive.zeroHeading()));
     m_driverController.a().onTrue(new RunCommand(() -> m_ShooterSubsystem.shooterOn(), m_ShooterSubsystem));
     m_driverController.b().onTrue(new InstantCommand(() -> m_ShooterSubsystem.shooterOff(), m_ShooterSubsystem));
     m_driverController.x().onTrue(new TransferOnWithBeamBreak(m_ShooterSubsystem));
     m_driverController.y().onTrue(new InstantCommand(() -> m_ShooterSubsystem.transferOff(), m_ShooterSubsystem));
-    m_driverController.back().onTrue(new InstantCommand(() -> m_ShooterSubsystem.transferOn(false), m_ShooterSubsystem));
+    // m_driverController.back().onTrue(new InstantCommand(() -> m_ShooterSubsystem.transferOn(false), m_ShooterSubsystem));
+    m_driverController.start().whileTrue(new AlignAndShootNote(m_ShooterSubsystem, m_ArmSubsystem,
+        () -> m_driverController.getLeftX(), () -> m_driverController.getLeftY(), m_robotDrive));
     m_driverController.leftBumper().onTrue(new InstantCommand(() -> m_IntakeSubsystem.intakeOn(), m_IntakeSubsystem));
     m_driverController.rightBumper().onTrue(new InstantCommand(() -> m_IntakeSubsystem.intakeOff(), m_IntakeSubsystem));
     m_driverController.rightTrigger(OIConstants.kArmDeadband).whileTrue(new RunCommand(() -> 

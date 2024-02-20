@@ -6,36 +6,33 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Rotation3d;
-import edu.wpi.first.math.geometry.Transform3d;
-import edu.wpi.first.math.geometry.Translation3d;
+import edu.wpi.first.math.geometry.Translation2d;
 // import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.math.trajectory.TrajectoryConfig;
-import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.math.trajectory.Trajectory; 
 import edu.wpi.first.util.WPIUtilJNI;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 // import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 import frc.robot.Constants.DriveConstants;
+import frc.utils.CommandBuilder;
 import frc.utils.SwerveUtils;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
@@ -43,6 +40,8 @@ import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
 
 import java.util.Optional;
+import java.util.function.DoubleSupplier;
+import java.util.function.Supplier;
 
 import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
@@ -127,6 +126,13 @@ public static final double kTurnToleranceDeg = 1.0;
   private final PIDController m_xVisionPidController = new PIDController(0.033, 0.0, 0.005);
   
 
+  // Auto-Aim Vision PID Controller
+  private final PIDController m_autoAimRotationPidController = new PIDController(
+      DriveConstants.AUTO_AIM_ROT_PID_CONSTANTS.kP, DriveConstants.AUTO_AIM_ROT_PID_CONSTANTS.kI,
+      DriveConstants.AUTO_AIM_ROT_PID_CONSTANTS.kD);
+
+  
+
   PhotonPoseEstimator[] m_photonPoseEstimators;
   SwerveDrivePoseEstimator m_poseEstimator;
 
@@ -139,6 +145,10 @@ public static final double kTurnToleranceDeg = 1.0;
     m_rotVisionPidController.setTolerance(0.5);
     m_yVisionPidController.setTolerance(0.5);
     m_xVisionPidController.setTolerance(0.5);
+
+    m_autoAimRotationPidController.enableContinuousInput(-Math.PI, Math.PI);
+    m_autoAimRotationPidController.setTolerance(DriveConstants.AUTO_AIM_ROT_TOLERANCE);
+
          // Configure AutoBuilder last
 
         AutoBuilder.configureHolonomic(
@@ -424,6 +434,8 @@ public static final double kTurnToleranceDeg = 1.0;
     m_frontRight.setDesiredState(swerveModuleStates[1]);
     m_rearLeft.setDesiredState(swerveModuleStates[2]);
     m_rearRight.setDesiredState(swerveModuleStates[3]);
+
+
   }
 
   /**
@@ -510,6 +522,99 @@ public static final double kTurnToleranceDeg = 1.0;
     setModuleStates(targetStates);
   }
 
+  /**
+   * Gets the robot's position.
+   */
+  protected Pose2d getPosition() {
+    return m_poseEstimator.getEstimatedPosition();
+  }
+
+  protected void driveAroundPoint(double x, double y, double angleOffset, Translation2d point,
+      PIDController controller) {
+    driveAroundPointVelocity(x * DriveConstants.kMaxModuleMetersPerSecond, y * DriveConstants.kMaxModuleMetersPerSecond,
+        angleOffset, point, controller);
+  }
+
+  /**
+   * Drives the robot using velocity while locked pointing at a position on the
+   * field.
+   * 
+   * @param xV          The desired {@code x} velocity in meters/second.
+   * @param yV          The desired {@code y} velocity in meters/second.
+   * @param angleOffset The offset to use when determining which side of the robot
+   *                    should face the point. (value in radians)
+   * @param point       The desired field relative position to point at (axis
+   *                    values in meters).
+   * @param controller  A PID controller to use for translating to and
+   *                    maintaining the angle to the desired point.
+   */
+  protected void driveAroundPointVelocity(
+      double xV,
+      double yV,
+      double angleOffset,
+      Translation2d point,
+      PIDController controller) {
+    Translation2d robotPoint = getPosition().getTranslation();
+    double angle = MathUtil.angleModulus(point.minus(robotPoint).getAngle().getRadians() + angleOffset);
+    driveAngleVelocity(xV, yV, angle, controller);
+  }
+
+  /**
+   * Drives the robot using velocity while locked at a field relative angle.
+   * 
+   * @param xV         The desired {@code x} velocity in meters/second.
+   * @param yV         The desired {@code y} velocity in meters/second.
+   * @param angle      The desired field relative angle to point at in radians.
+   * @param controller A PID controller to use for translating to and
+   *                   maintaining the angle.
+   */
+  protected void driveAngleVelocity(double xV, double yV, double angle, PIDController controller) {
+    Rotation2d yaw = Rotation2d.fromDegrees(getHeading());
+    ChassisSpeeds chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
+        xV,
+        yV,
+        controller.calculate(MathUtil.angleModulus(yaw.getRadians()), angle),
+        yaw);
+
+    drive(chassisSpeeds.vxMetersPerSecond, chassisSpeeds.vyMetersPerSecond, chassisSpeeds.omegaRadiansPerSecond, false,
+        false);
+  }
+
+  public Translation2d getShotPosition() {
+    boolean isBlueAlliance = DriverStation.getAlliance().orElse(Alliance.Blue).equals(Alliance.Blue);
+    Translation2d goalPose = isBlueAlliance ? DriveConstants.BLUE_SPEAKER : DriveConstants.RED_SPEAKER;
+    ChassisSpeeds robotVel = getSpeeds();
+    double distanceToSpeaker = getPosition().getTranslation().getDistance(goalPose);
+    double x = goalPose.getX() - (robotVel.vxMetersPerSecond * (distanceToSpeaker / DriveConstants.NOTE_VELOCITY));
+    double y = goalPose.getY() - (robotVel.vyMetersPerSecond * (distanceToSpeaker / DriveConstants.NOTE_VELOCITY));
+    return new Translation2d(x, y);
+  }
+
+  /**
+   * This command allows the driver to keep driving, but forces the robot to face
+   * the speaker.
+   * 
+   * @param x The desired {@code x} speed from {@code -1.0} to {@code 1.0}.
+   * @param y The desired {@code y} speed from {@code -1.0} to {@code 1.0}.
+   */
+  public Command driveOnTargetSpeaker(DoubleSupplier x, DoubleSupplier y) {
+    return new CommandBuilder(this)
+        .onExecute(
+            () -> driveAroundPoint(x.getAsDouble(), y.getAsDouble(), Math.PI, getShotPosition(), m_autoAimRotationPidController));
+  }
+
+      /**
+     * This command gets the distance to the speaker of the current alliance.
+     * @return The distance.
+     */
+    public double getDistanceToSpeaker() {
+      return getPosition().getTranslation().getDistance(getShotPosition());
+  }
+
+
+  public boolean getIsOnTargetSpeaker() {
+    return m_autoAimRotationPidController.atSetpoint();
+  }
 
 }
 
