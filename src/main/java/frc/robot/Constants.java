@@ -225,11 +225,11 @@ public final class Constants {
     
     //TODO make source position to intake note from there. 
     // Arm Positions
-    public static final double kOffset = 0.88;
+    public static final double kOffset = 0.852;
     public static final double kTRANSFER = kOffset - 0.01;
     public static final double kSUBWOOFER = kOffset - 0.15;
     public static final double kPODIUM = kOffset - 0.065;
-    public static final double kMIDLINE = kOffset - 0.023;
+    public static final double kTRAP = kOffset - 0.023;
     public static final double kSTAGELINE = kOffset - 0.021;
     // public static final double kCLIMBSTART = kOffset + 0.325;
     // public static final double kCLIMBFINISH = kOffset + 0.367;
