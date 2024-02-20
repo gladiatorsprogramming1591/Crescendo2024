@@ -8,7 +8,10 @@ import com.revrobotics.CANSparkBase.IdleMode;
 
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.Vector;
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
@@ -37,6 +40,12 @@ public final class Constants {
 
     public static final Vector<N3> odometryStd = VecBuilder.fill(0.03, 0.03, 0.03);
     public static final Vector<N3> visionStd = VecBuilder.fill(0.1, 0.1, 0.1);
+
+    // Camera Positions
+    public static final Transform3d kFrontCameraLocation = new Transform3d(
+        new Translation3d(Units.inchesToMeters(10.507), Units.inchesToMeters(5.673),
+            Units.inchesToMeters(6.789)),
+        new Rotation3d(0.0, Math.toRadians(-20.0), Math.toRadians(0.0)));
 
     public static final double kDirectionSlewRate = 2.4; // radians per second
     public static final double kMagnitudeSlewRate = 3.6; // percent per second (1 = 100%)
