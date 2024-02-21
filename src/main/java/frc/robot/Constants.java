@@ -55,7 +55,7 @@ public final class Constants {
     public static final double FIELD_LENGTH = 16.5417;
     public static final double FIELD_WIDTH = 8.0136;
 
-    public static final double NOTE_VELOCITY = 20.0;
+    public static final double NOTE_VELOCITY = 10.0;
 
     public static final Translation2d BLUE_SPEAKER = new Translation2d(0.0241, 5.547868);
     public static final Translation2d RED_SPEAKER = new Translation2d(FIELD_LENGTH - BLUE_SPEAKER.getX(), BLUE_SPEAKER.getY());
@@ -69,7 +69,7 @@ public final class Constants {
     public static final double AMP_X = 1.9;
 
 
-    public static final PIDConstants AUTO_AIM_ROT_PID_CONSTANTS = new PIDConstants(0.5, 0.0, 0.05);
+    public static final PIDConstants AUTO_AIM_ROT_PID_CONSTANTS = new PIDConstants(12.0, 0.0, 0.5);
 
     public static final double VISION_REJECT_DISTANCE = 2.3;
 
@@ -77,7 +77,7 @@ public final class Constants {
     public static final double SPIN_COMPENSATION_Y = 0.06;
 
     // Radians
-    public static final double AUTO_AIM_ROT_TOLERANCE = Math.toRadians(1);
+    public static final double AUTO_AIM_ROT_TOLERANCE = Math.toRadians(1.5);
 
     // Shooter Angle Map
 
@@ -85,10 +85,10 @@ public final class Constants {
 
     static {
       DISTANCE_TO_ANGLE_MAP.put(1.25, ArmConstants.kSUBWOOFER);
-      DISTANCE_TO_ANGLE_MAP.put(2.2, ArmConstants.kOffset - 0.075);
-      DISTANCE_TO_ANGLE_MAP.put(3.0, ArmConstants.kOffset - 0.049);
-      DISTANCE_TO_ANGLE_MAP.put(4.1, ArmConstants.kOffset - 0.035);
-      DISTANCE_TO_ANGLE_MAP.put(4.9, ArmConstants.kOffset - 0.033);
+      DISTANCE_TO_ANGLE_MAP.put(2.2, ArmConstants.kOffset - 0.072);
+      DISTANCE_TO_ANGLE_MAP.put(3.0, ArmConstants.kOffset - 0.044);
+      DISTANCE_TO_ANGLE_MAP.put(4.1, ArmConstants.kOffset - 0.031);
+      DISTANCE_TO_ANGLE_MAP.put(4.9, ArmConstants.kOffset - 0.025);
     }
 
 
@@ -237,9 +237,9 @@ public final class Constants {
     
     //TODO make source position to intake note from there. 
     // Arm Positions
-    public static final double kOffset = 0.797;
-    public static final double kTRANSFER = kOffset - 0.01;
-    public static final double kSUBWOOFER = kOffset - 0.14;
+    public static final double kOffset = 0.8;
+    public static final double kTRANSFER = kOffset - 0.015;
+    public static final double kSUBWOOFER = kOffset - 0.12;
     public static final double kPODIUM = kOffset - 0.065;
     public static final double kTRAP = kOffset - 0.023;
     public static final double kSTAGELINE = kOffset - 0.021;

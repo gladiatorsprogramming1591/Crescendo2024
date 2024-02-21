@@ -15,6 +15,7 @@ import frc.robot.Constants.DriveConstants;
 import frc.robot.commands.armCommands.ArmToPositionWithEnd;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ArmSubsystem.armPositions;
 import frc.robot.subsystems.ShooterSubsystem;
 
@@ -27,18 +28,17 @@ public class AlignAndShootNote extends SequentialCommandGroup {
       ArmSubsystem armSubsystem,
       DoubleSupplier x,
       DoubleSupplier y,
-      DriveSubsystem driveSubsystem) {
+      DriveSubsystem driveSubsystem, IntakeSubsystem intakeSubsystem) {
     addRequirements(driveSubsystem);
 
     addCommands(
+        new InstantCommand(() -> intakeSubsystem.intakeOff(), intakeSubsystem),
         new ParallelDeadlineGroup(
-           new WarmUpAndAutoShoot(driveSubsystem, shooterSubsystem),
-            new RunCommand(() -> armSubsystem
-                .ArmToPosition(DriveConstants.DISTANCE_TO_ANGLE_MAP.get(driveSubsystem.getSpeakerDistance())),
-                armSubsystem),
+            new WarmUpAndAutoShoot(driveSubsystem, shooterSubsystem, armSubsystem),
             new RunCommand(() -> driveSubsystem.driveOnTargetSpeaker(x, y), driveSubsystem)),
         new InstantCommand(() -> shooterSubsystem.shooterOff(), shooterSubsystem),
-        new InstantCommand(() -> shooterSubsystem.transferOff(), shooterSubsystem)
+        new InstantCommand(() -> shooterSubsystem.transferOff(), shooterSubsystem),
+        new InstantCommand(() -> armSubsystem.ArmOff(), armSubsystem)
 
     );
   }

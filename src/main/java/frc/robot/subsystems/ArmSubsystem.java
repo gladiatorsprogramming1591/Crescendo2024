@@ -97,7 +97,7 @@ public class ArmSubsystem extends SubsystemBase {
       SmartDashboard.putNumber("Arm Abs Target Pos", setpoint);
       SmartDashboard.putNumber("Arm Abs Speed", pidOut);
 
-      if(setpoint <= ArmConstants.kOffset){
+      if(setpoint >= ArmConstants.kOffset){
         m_rightArmMotor.set(0);
         return;
       }

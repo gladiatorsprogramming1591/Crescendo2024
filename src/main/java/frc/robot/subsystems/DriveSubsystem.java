@@ -289,8 +289,7 @@ public static final double kTurnToleranceDeg = 1.0;
       for (PhotonPoseEstimator photonPoseEstimator : m_photonPoseEstimators) {
         Optional<EstimatedRobotPose> pose = photonPoseEstimator.update();
         if (pose.isPresent())
-          m_poseEstimator.addVisionMeasurement(pose.get().estimatedPose.toPose2d(), pose.get().timestampSeconds,
-              DriveConstants.visionStd.times(getSpeakerDistance()));
+          m_poseEstimator.addVisionMeasurement(pose.get().estimatedPose.toPose2d(), pose.get().timestampSeconds);
       }
       m_poseEstimator.update(Rotation2d.fromDegrees(getHeading()), new SwerveModulePosition[] {
           m_frontLeft.getPosition(),
@@ -578,10 +577,11 @@ public static final double kTurnToleranceDeg = 1.0;
    */
   protected void driveAngleVelocity(double xV, double yV, double angle, PIDController controller, boolean useIMU) {
     Rotation2d yaw = useIMU ? Rotation2d.fromDegrees(getHeading()) : getPosition().getRotation();
+    SmartDashboard.putNumber("Gyro Yaw Rad", yaw.getRadians());
     ChassisSpeeds chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
-        xV,
-        yV,
-        controller.calculate(MathUtil.angleModulus(yaw.getRadians()), angle),
+        xV * 0.4,
+        yV * 0.4,
+        MathUtil.clamp(controller.calculate(MathUtil.angleModulus(yaw.getRadians()), angle), -3.5, 3.5),
         yaw);
 
     SwerveModuleState[] swerveModuleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(chassisSpeeds);
@@ -615,14 +615,20 @@ public static final double kTurnToleranceDeg = 1.0;
     Translation2d robotPoint = getPosition().getTranslation();
     Rotation2d shotRot = speakerPosition.minus(robotPoint).getAngle();
 
-    Translation2d targetPosition = new Translation2d(
-        speakerPosition.getX() + shotRot.getSin() * DriveConstants.SPIN_COMPENSATION_X * speakerDistance,
-        speakerPosition.getY() + shotRot.getCos() * DriveConstants.SPIN_COMPENSATION_Y * speakerDistance);
+    // Translation2d targetPosition = new Translation2d(
+    //     speakerPosition.getX() + shotRot.getSin() * speakerDistance,
+    //     speakerPosition.getY() + shotRot.getCos() * speakerDistance);
 
     // Pose3d speakerRotTarget = new Pose3d(targetPosition.getX(),
     // targetPosition.getY(), DriveConstants.SPEAKER_HEIGHT, new Rotation3d());
+    // SmartDashboard.putNumber("Angle To Speaker", targetPosition.minus(robotPoint).getAngle().getRadians()); 
+    // SmartDashboard.putNumber("Target Position X", targetPosition.getX()); 
+    // SmartDashboard.putNumber("Target Position Y", targetPosition.getY()); 
 
-    return MathUtil.angleModulus(targetPosition.minus(robotPoint).getAngle().getRadians()); 
+    double angleToSpeaker = MathUtil.angleModulus(speakerPosition.minus(robotPoint).getAngle().getRadians());
+    SmartDashboard.putNumber("Angle To Speaker", angleToSpeaker); 
+
+    return MathUtil.angleModulus(angleToSpeaker); 
   }
 
   /**
@@ -633,7 +639,7 @@ public static final double kTurnToleranceDeg = 1.0;
    * @param y The desired {@code y} speed from {@code -1.0} to {@code 1.0}.
    */
   public void driveOnTargetSpeaker(DoubleSupplier x, DoubleSupplier y) {
-    driveAngle(x.getAsDouble(), y.getAsDouble(), getSpeakerAngle(), m_rotVisionPidController, false);
+    driveAngle(-y.getAsDouble(), -x.getAsDouble(), getSpeakerAngle(), m_autoAimRotationPidController, false);
   }
 
   /**
