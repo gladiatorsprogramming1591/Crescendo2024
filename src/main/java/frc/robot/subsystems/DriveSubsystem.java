@@ -608,7 +608,7 @@ public static final double kTurnToleranceDeg = 1.0;
    * @param y The desired {@code y} speed from {@code -1.0} to {@code 1.0}.
    */
   public void driveOnTargetSpeaker(DoubleSupplier x, DoubleSupplier y) {
-    driveAroundPoint(y.getAsDouble(), x.getAsDouble(),30, getShotPosition(), m_autoAimRotationPidController);
+    driveAroundPoint(y.getAsDouble(), x.getAsDouble(), Math.toRadians(0), getShotPosition(), m_autoAimRotationPidController);
   }
 
       /**

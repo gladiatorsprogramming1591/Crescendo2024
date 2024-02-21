@@ -217,7 +217,7 @@ public final class Constants {
     public static final double kArmFF = 0.00;
     //TODO Update min and max heights with measured values
 
-    public static final double kMaxOpenLoopSpeed = 1.0; 
+    public static final double kMaxOpenLoopSpeed = 0.5; 
     
     //TODO make source position to intake note from there. 
     // Arm Positions

@@ -123,8 +123,8 @@ public class ArmSubsystem extends SubsystemBase {
 
 
     public void ArmForward(double speed) {
-        m_rightArmMotor.setSmartCurrentLimit(40);
-        m_leftArmMotor.setSmartCurrentLimit(40);
+        m_rightArmMotor.setSmartCurrentLimit(10);
+        m_leftArmMotor.setSmartCurrentLimit(10);
 
         MathUtil.clamp(speed, 0, ArmConstants.kMaxOpenLoopSpeed); 
         //Turns on the Arm motor
@@ -137,8 +137,8 @@ public class ArmSubsystem extends SubsystemBase {
       }
     
       public void ArmBackward(double speed) {
-        m_rightArmMotor.setSmartCurrentLimit(40);
-        m_leftArmMotor.setSmartCurrentLimit(40);
+        m_rightArmMotor.setSmartCurrentLimit(10);
+        m_leftArmMotor.setSmartCurrentLimit(10);
 
         MathUtil.clamp(speed, 0, ArmConstants.kMaxOpenLoopSpeed); 
         //Turns on the Arm motor
