@@ -38,7 +38,7 @@ public final class Constants {
     public static final double kMaxModuleMetersPerSecond = 5.66; // TODO Increase speed when done testing autos at low speed or add speed toggle button
     public static final double kMaxSpeedMetersPerSecond = kMaxModuleMetersPerSecond; // TODO Increase speed when done testing autos at low speed or add speed toggle button
     public static final double kMaxAngularSpeed =  2 * Math.PI; // radians per second
-    public static final double kTeleopPercentLimit = 0.75; 
+    public static final double kTeleopPercentLimit = .95; 
 
     public static final Vector<N3> odometryStd = VecBuilder.fill(0.03, 0.03, 0.03);
     public static final Vector<N3> visionStd = VecBuilder.fill(0.1, 0.1, 0.1);
@@ -54,13 +54,13 @@ public final class Constants {
     public static final double NOTE_VELOCITY = 20.0;
 
     public static final Translation2d BLUE_SPEAKER = new Translation2d(0.0381, 5.4477664);
-    public static final Translation2d RED_SPEAKER = new Translation2d(0.0381, 2.756332);
+    public static final Translation2d RED_SPEAKER = new Translation2d(0.035, 2.44);
     public static final Translation2d STAGE = new Translation2d(4.981067, 4.105783);
 
-    public static final PIDConstants AUTO_AIM_ROT_PID_CONSTANTS = new PIDConstants(6.0, 0.0, 0.5);
+    public static final PIDConstants AUTO_AIM_ROT_PID_CONSTANTS = new PIDConstants(0.5, 0.0, 0.05);
 
     // Radians
-    public static final double AUTO_AIM_ROT_TOLERANCE = Math.toRadians(2);
+    public static final double AUTO_AIM_ROT_TOLERANCE = Math.toRadians(1);
 
     // Shooter Angle Map
 
@@ -68,15 +68,11 @@ public final class Constants {
 
     static {
       //TODO: Tune these values (yolo)
-      DISTANCE_TO_ANGLE_MAP.put(1.37, ArmConstants.kSUBWOOFER);
-      DISTANCE_TO_ANGLE_MAP.put(1.65, ArmConstants.kOffset - 0.13);
-      DISTANCE_TO_ANGLE_MAP.put(1.97, ArmConstants.kOffset - 0.11);
-      DISTANCE_TO_ANGLE_MAP.put(2.29, ArmConstants.kOffset - 0.09);
-      DISTANCE_TO_ANGLE_MAP.put(2.72, ArmConstants.kOffset - 0.07);
-      DISTANCE_TO_ANGLE_MAP.put(3.17, ArmConstants.kOffset - 0.055);
-      DISTANCE_TO_ANGLE_MAP.put(4.07, ArmConstants.kOffset - 0.04);
-      DISTANCE_TO_ANGLE_MAP.put(4.95, ArmConstants.kOffset - 0.03);
-      DISTANCE_TO_ANGLE_MAP.put(6.46, ArmConstants.kOffset - 0.02);
+      DISTANCE_TO_ANGLE_MAP.put(1.25, ArmConstants.kSUBWOOFER);
+      DISTANCE_TO_ANGLE_MAP.put(2.2, ArmConstants.kOffset - 0.075);
+      DISTANCE_TO_ANGLE_MAP.put(3.0, ArmConstants.kOffset - 0.049);
+      DISTANCE_TO_ANGLE_MAP.put(4.1, ArmConstants.kOffset - 0.035);
+      DISTANCE_TO_ANGLE_MAP.put(4.9, ArmConstants.kOffset - 0.033);
     }
 
 
@@ -195,7 +191,7 @@ public final class Constants {
     public static final double kLeftShooterSpeedRPM = 5000.0;
     public static final double kRightShooterSpeedRPM = 0.6*kLeftShooterSpeedRPM; 
     public static final double kShooterSpeedTolerance = 50.0; 
-    public static final double kMinShooterSpeed = 4900.0; 
+    public static final double kMinShooterSpeed = 4800.0; 
 
     public static final double kSVolts = 0.05;
     public static final double kVVoltSecondsPerRotation =
@@ -225,9 +221,9 @@ public final class Constants {
     
     //TODO make source position to intake note from there. 
     // Arm Positions
-    public static final double kOffset = 0.852;
+    public static final double kOffset = 0.797;
     public static final double kTRANSFER = kOffset - 0.01;
-    public static final double kSUBWOOFER = kOffset - 0.15;
+    public static final double kSUBWOOFER = kOffset - 0.14;
     public static final double kPODIUM = kOffset - 0.065;
     public static final double kTRAP = kOffset - 0.023;
     public static final double kSTAGELINE = kOffset - 0.021;

@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 2.0,
-      "y": 4.51
+      "x": 1.2,
+      "y": 5.55
     },
-    "rotation": 150.0
+    "rotation": 180.0
   },
   "command": {
     "type": "sequential",
@@ -14,7 +14,7 @@
         {
           "type": "named",
           "data": {
-            "name": "ShootPodium"
+            "name": "ShootSubwoofer"
           }
         },
         {

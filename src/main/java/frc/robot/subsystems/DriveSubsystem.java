@@ -281,13 +281,21 @@ public static final double kTurnToleranceDeg = 1.0;
       SmartDashboard.putNumber("Odometry.x:" , m_odometry.getPoseMeters().getX());
       SmartDashboard.putNumber("Odometry.y:" , m_odometry.getPoseMeters().getY());
 
-      updateAprilTagInfo(5.0);
+      // updateAprilTagInfo(5.0);
 
       for (PhotonPoseEstimator photonPoseEstimator : m_photonPoseEstimators) {
         Optional<EstimatedRobotPose> pose = photonPoseEstimator.update();
         if (pose.isPresent())
           m_poseEstimator.addVisionMeasurement(pose.get().estimatedPose.toPose2d(), pose.get().timestampSeconds);
       }
+      m_poseEstimator.update(Rotation2d.fromDegrees(getHeading()), new SwerveModulePosition[] {
+          m_frontLeft.getPosition(),
+          m_frontRight.getPosition(),
+          m_rearLeft.getPosition(),
+          m_rearRight.getPosition()
+      });
+
+      SmartDashboard.putNumber("Distance to Speaker", getDistanceToSpeaker());
   }
 
   public void updateAprilTagInfo(double desiredId) {
@@ -531,7 +539,7 @@ public static final double kTurnToleranceDeg = 1.0;
 
   protected void driveAroundPoint(double x, double y, double angleOffset, Translation2d point,
       PIDController controller) {
-    driveAroundPointVelocity(x * DriveConstants.kMaxModuleMetersPerSecond, y * DriveConstants.kMaxModuleMetersPerSecond,
+    driveAroundPointVelocity(x, y,
         angleOffset, point, controller);
   }
 
@@ -575,8 +583,10 @@ public static final double kTurnToleranceDeg = 1.0;
         yV,
         controller.calculate(MathUtil.angleModulus(yaw.getRadians()), angle),
         yaw);
-
-    drive(chassisSpeeds.vxMetersPerSecond, chassisSpeeds.vyMetersPerSecond, chassisSpeeds.omegaRadiansPerSecond, false,
+    System.out.println(chassisSpeeds.vxMetersPerSecond);
+    System.out.println(chassisSpeeds.vyMetersPerSecond);
+    System.out.println(chassisSpeeds.omegaRadiansPerSecond);
+    drive(chassisSpeeds.vxMetersPerSecond, chassisSpeeds.vyMetersPerSecond, chassisSpeeds.omegaRadiansPerSecond, true,
         false);
   }
 
@@ -597,10 +607,8 @@ public static final double kTurnToleranceDeg = 1.0;
    * @param x The desired {@code x} speed from {@code -1.0} to {@code 1.0}.
    * @param y The desired {@code y} speed from {@code -1.0} to {@code 1.0}.
    */
-  public Command driveOnTargetSpeaker(DoubleSupplier x, DoubleSupplier y) {
-    return new CommandBuilder(this)
-        .onExecute(
-            () -> driveAroundPoint(x.getAsDouble(), y.getAsDouble(), 0, getShotPosition(), m_autoAimRotationPidController));
+  public void driveOnTargetSpeaker(DoubleSupplier x, DoubleSupplier y) {
+    driveAroundPoint(y.getAsDouble(), x.getAsDouble(),30, getShotPosition(), m_autoAimRotationPidController);
   }
 
       /**
