@@ -10,7 +10,8 @@ import frc.robot.subsystems.ShooterSubsystem;
 
 public class WarmUpAndAutoShoot extends Command {
 
-  int count;
+  int transferCount;
+  int onTargetCount;
   /**
    * Creates a new RunTransferIfOnTarget.
    * Finishes once the shooter has released the note after running the transfer
@@ -32,25 +33,27 @@ public class WarmUpAndAutoShoot extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    count = 0;
+    onTargetCount = 0;
+    transferCount = 0;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     m_shooter.shooterOn();
-    if (m_drive.getIsOnTargetSpeaker()) {
-      count++;
-      if (count > 10 && m_shooter.isShooterAtSpeed()) { // 10 * 20 ms = 200 ms of being on target
+    if (m_drive.getIsOnTargetSpeaker() && m_shooter.isShooterAtSpeed()) {
+      onTargetCount++;
+      if (onTargetCount > 10) { // 10 * 20 ms = 200 ms of being on target & at speed
         m_shooter.transferOn(false);
-        count = 1000;
-        if (count > 1010) { // 1010 - 1000 = 10 * 20 ms = 200 ms to run transfer before finishing command
+        transferCount++;
+        if (transferCount > 10) { // 1010 - 1000 = 10 * 20 ms = 200 ms to run transfer before finishing command
           m_end = true;
         }
       }
     } else {
-      count = 0;
-      m_shooter.transferOn(false);
+      onTargetCount = 0;
+      transferCount = 0;
+      m_shooter.transferOff();
     }
   }
 

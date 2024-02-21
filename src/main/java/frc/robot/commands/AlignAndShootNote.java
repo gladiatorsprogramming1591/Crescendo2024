@@ -34,7 +34,7 @@ public class AlignAndShootNote extends SequentialCommandGroup {
         new ParallelDeadlineGroup(
            new WarmUpAndAutoShoot(driveSubsystem, shooterSubsystem),
             new RunCommand(() -> armSubsystem
-                .ArmToPosition(DriveConstants.DISTANCE_TO_ANGLE_MAP.get(driveSubsystem.getDistanceToSpeaker())),
+                .ArmToPosition(DriveConstants.DISTANCE_TO_ANGLE_MAP.get(driveSubsystem.getSpeakerDistance())),
                 armSubsystem),
             new RunCommand(() -> driveSubsystem.driveOnTargetSpeaker(x, y), driveSubsystem)),
         new InstantCommand(() -> shooterSubsystem.shooterOff(), shooterSubsystem),

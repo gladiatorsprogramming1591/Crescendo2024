@@ -7,10 +7,13 @@ package frc.robot.subsystems;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Translation2d;
 // import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -295,7 +298,7 @@ public static final double kTurnToleranceDeg = 1.0;
           m_rearRight.getPosition()
       });
 
-      SmartDashboard.putNumber("Distance to Speaker", getDistanceToSpeaker());
+      SmartDashboard.putNumber("Distance to Speaker", getSpeakerDistance());
   }
 
   public void updateAprilTagInfo(double desiredId) {
@@ -523,6 +526,11 @@ public static final double kTurnToleranceDeg = 1.0;
     return Constants.DriveConstants.kDriveKinematics.toChassisSpeeds(getModuleStates());
   }
 
+  public ChassisSpeeds getFieldRelativeSpeeds() {
+    return ChassisSpeeds.fromFieldRelativeSpeeds(DriveConstants.kDriveKinematics.toChassisSpeeds(getModuleStates()),
+        Rotation2d.fromDegrees(getHeading()));
+  }
+
   public void driveRobotRelative(ChassisSpeeds robotRelativeSpeeds) {
     ChassisSpeeds targetSpeeds = ChassisSpeeds.discretize(robotRelativeSpeeds, 0.02);
 
@@ -537,34 +545,23 @@ public static final double kTurnToleranceDeg = 1.0;
     return m_poseEstimator.getEstimatedPosition();
   }
 
-  protected void driveAroundPoint(double x, double y, double angleOffset, Translation2d point,
-      PIDController controller) {
-    driveAroundPointVelocity(x, y,
-        angleOffset, point, controller);
-  }
-
   /**
-   * Drives the robot using velocity while locked pointing at a position on the
-   * field.
+   * Drives the robot using percents of its calculated max velocity while locked
+   * at a field relative angle.
    * 
-   * @param xV          The desired {@code x} velocity in meters/second.
-   * @param yV          The desired {@code y} velocity in meters/second.
-   * @param angleOffset The offset to use when determining which side of the robot
-   *                    should face the point. (value in radians)
-   * @param point       The desired field relative position to point at (axis
-   *                    values in meters).
-   * @param controller  A PID controller to use for translating to and
-   *                    maintaining the angle to the desired point.
+   * @param x          The desired {@code x} speed from {@code -1.0} to
+   *                   {@code 1.0}.
+   * @param y          The desired {@code y} speed from {@code -1.0} to
+   *                   {@code 1.0}.
+   * @param angle      The desired field relative angle to point at in radians.
+   * @param controller A profiled PID controller to use for translating to and
+   *                   maintaining the angle.
+   * @param useIMU     If the IMU should be used for determining the robot's
+   *                   angle. If {@code false}, the pose estimator is used.
    */
-  protected void driveAroundPointVelocity(
-      double xV,
-      double yV,
-      double angleOffset,
-      Translation2d point,
-      PIDController controller) {
-    Translation2d robotPoint = getPosition().getTranslation();
-    double angle = MathUtil.angleModulus(point.minus(robotPoint).getAngle().getRadians() + angleOffset);
-    driveAngleVelocity(xV, yV, angle, controller);
+  protected void driveAngle(double x, double y, double angle, PIDController controller, boolean useIMU) {
+    driveAngleVelocity(x * DriveConstants.kMaxModuleMetersPerSecond, y * DriveConstants.kMaxModuleMetersPerSecond,
+        angle, controller, useIMU);
   }
 
   /**
@@ -573,31 +570,58 @@ public static final double kTurnToleranceDeg = 1.0;
    * @param xV         The desired {@code x} velocity in meters/second.
    * @param yV         The desired {@code y} velocity in meters/second.
    * @param angle      The desired field relative angle to point at in radians.
-   * @param controller A PID controller to use for translating to and
+   * @param controller A profiled PID controller to use for translating to and
    *                   maintaining the angle.
+   * @param useIMU     If the IMU should be used for determining the robot's
+   *                   angle. If {@code false}, the pose estimator is used.
    */
-  protected void driveAngleVelocity(double xV, double yV, double angle, PIDController controller) {
-    Rotation2d yaw = Rotation2d.fromDegrees(getHeading());
+  protected void driveAngleVelocity(double xV, double yV, double angle, PIDController controller, boolean useIMU) {
+    Rotation2d yaw = useIMU ? Rotation2d.fromDegrees(getHeading()) : getPosition().getRotation();
     ChassisSpeeds chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
         xV,
         yV,
         controller.calculate(MathUtil.angleModulus(yaw.getRadians()), angle),
         yaw);
-    System.out.println(chassisSpeeds.vxMetersPerSecond);
-    System.out.println(chassisSpeeds.vyMetersPerSecond);
-    System.out.println(chassisSpeeds.omegaRadiansPerSecond);
-    drive(chassisSpeeds.vxMetersPerSecond, chassisSpeeds.vyMetersPerSecond, chassisSpeeds.omegaRadiansPerSecond, true,
-        false);
+
+    SwerveModuleState[] swerveModuleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(chassisSpeeds);
+    setModuleStates(swerveModuleStates);
   }
 
-  public Translation2d getShotPosition() {
-    boolean isBlueAlliance = DriverStation.getAlliance().orElse(Alliance.Blue).equals(Alliance.Blue);
-    Translation2d goalPose = isBlueAlliance ? DriveConstants.BLUE_SPEAKER : DriveConstants.RED_SPEAKER;
-    ChassisSpeeds robotVel = getSpeeds();
+  /**
+   * Gets a field-relative position for the shot to the speaker the robot should
+   * take.
+   * 
+   * @return A {@link Translation2d} representing a field relative position in
+   *         meters.
+   */
+  public Translation2d getSpeakerPosition() {
+    boolean isBlue = DriverStation.getAlliance().orElse(DriverStation.Alliance.Blue)
+        .equals(DriverStation.Alliance.Blue);
+    Translation2d goalPose = isBlue ? DriveConstants.BLUE_SPEAKER : DriveConstants.RED_SPEAKER;
+    ChassisSpeeds robotVel = getFieldRelativeSpeeds();
     double distanceToSpeaker = getPosition().getTranslation().getDistance(goalPose);
     double x = goalPose.getX() - (robotVel.vxMetersPerSecond * (distanceToSpeaker / DriveConstants.NOTE_VELOCITY));
     double y = goalPose.getY() - (robotVel.vyMetersPerSecond * (distanceToSpeaker / DriveConstants.NOTE_VELOCITY));
     return new Translation2d(x, y);
+  }
+
+  /**
+   * Gets the angle for the robot to face to score in the speaker, in radians.
+   */
+  private double getSpeakerAngle() {
+    Translation2d speakerPosition = getSpeakerPosition();
+    double speakerDistance = getSpeakerDistance();
+    Translation2d robotPoint = getPosition().getTranslation();
+    Rotation2d shotRot = speakerPosition.minus(robotPoint).getAngle();
+
+    Translation2d targetPosition = new Translation2d(
+        speakerPosition.getX() + shotRot.getSin() * DriveConstants.SPIN_COMPENSATION_X * speakerDistance,
+        speakerPosition.getY() + shotRot.getCos() * DriveConstants.SPIN_COMPENSATION_Y * speakerDistance);
+
+    // Pose3d speakerRotTarget = new Pose3d(targetPosition.getX(),
+    // targetPosition.getY(), DriveConstants.SPEAKER_HEIGHT, new Rotation3d());
+
+    return MathUtil.angleModulus(targetPosition.minus(robotPoint).getAngle().getRadians() + Math.PI);
   }
 
   /**
@@ -608,15 +632,16 @@ public static final double kTurnToleranceDeg = 1.0;
    * @param y The desired {@code y} speed from {@code -1.0} to {@code 1.0}.
    */
   public void driveOnTargetSpeaker(DoubleSupplier x, DoubleSupplier y) {
-    driveAroundPoint(y.getAsDouble(), x.getAsDouble(), Math.toRadians(0), getShotPosition(), m_autoAimRotationPidController);
+    driveAngle(x.getAsDouble(), y.getAsDouble(), getSpeakerAngle(), m_rotVisionPidController, false);
   }
 
-      /**
-     * This command gets the distance to the speaker of the current alliance.
-     * @return The distance.
-     */
-    public double getDistanceToSpeaker() {
-      return getPosition().getTranslation().getDistance(getShotPosition());
+  /**
+   * This command gets the distance of the current shot to the speaker.
+   * 
+   * @return The distance in meters.
+   */
+  public double getSpeakerDistance() {
+    return getPosition().getTranslation().getDistance(getSpeakerPosition());
   }
 
 

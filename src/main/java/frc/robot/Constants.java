@@ -9,6 +9,7 @@ import com.revrobotics.CANSparkBase.IdleMode;
 
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.Vector;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -51,13 +52,29 @@ public final class Constants {
 
     // Field Positions
 
+    public static final double FIELD_LENGTH = 16.5417;
+    public static final double FIELD_WIDTH = 8.0136;
+
     public static final double NOTE_VELOCITY = 20.0;
 
-    public static final Translation2d BLUE_SPEAKER = new Translation2d(0.0381, 5.4477664);
-    public static final Translation2d RED_SPEAKER = new Translation2d(0.035, 2.44);
+    public static final Translation2d BLUE_SPEAKER = new Translation2d(0.0241, 5.547868);
+    public static final Translation2d RED_SPEAKER = new Translation2d(FIELD_LENGTH - BLUE_SPEAKER.getX(), BLUE_SPEAKER.getY());
     public static final Translation2d STAGE = new Translation2d(4.981067, 4.105783);
 
+    public static final double SPEAKER_HEIGHT = 2.08;
+    public static final Pose3d BLUE_SPEAKER_3D = new Pose3d(BLUE_SPEAKER.getX(), BLUE_SPEAKER.getY(), SPEAKER_HEIGHT, new Rotation3d());
+    public static final Pose3d RED_SPEAKER_3D = new Pose3d(RED_SPEAKER.getX(), RED_SPEAKER.getY(), SPEAKER_HEIGHT, new Rotation3d());
+
+    public static final double OPPONENT_WING_LINE = 10.66;
+    public static final double AMP_X = 1.9;
+
+
     public static final PIDConstants AUTO_AIM_ROT_PID_CONSTANTS = new PIDConstants(0.5, 0.0, 0.05);
+
+    public static final double VISION_REJECT_DISTANCE = 2.3;
+
+    public static final double SPIN_COMPENSATION_X = 0.0075;
+    public static final double SPIN_COMPENSATION_Y = 0.06;
 
     // Radians
     public static final double AUTO_AIM_ROT_TOLERANCE = Math.toRadians(1);
@@ -67,7 +84,6 @@ public final class Constants {
     public static final InterpolatingDoubleTreeMap DISTANCE_TO_ANGLE_MAP = new InterpolatingDoubleTreeMap();
 
     static {
-      //TODO: Tune these values (yolo)
       DISTANCE_TO_ANGLE_MAP.put(1.25, ArmConstants.kSUBWOOFER);
       DISTANCE_TO_ANGLE_MAP.put(2.2, ArmConstants.kOffset - 0.075);
       DISTANCE_TO_ANGLE_MAP.put(3.0, ArmConstants.kOffset - 0.049);
