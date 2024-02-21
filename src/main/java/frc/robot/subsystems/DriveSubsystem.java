@@ -289,7 +289,8 @@ public static final double kTurnToleranceDeg = 1.0;
       for (PhotonPoseEstimator photonPoseEstimator : m_photonPoseEstimators) {
         Optional<EstimatedRobotPose> pose = photonPoseEstimator.update();
         if (pose.isPresent())
-          m_poseEstimator.addVisionMeasurement(pose.get().estimatedPose.toPose2d(), pose.get().timestampSeconds);
+          m_poseEstimator.addVisionMeasurement(pose.get().estimatedPose.toPose2d(), pose.get().timestampSeconds,
+              DriveConstants.visionStd.times(getSpeakerDistance()));
       }
       m_poseEstimator.update(Rotation2d.fromDegrees(getHeading()), new SwerveModulePosition[] {
           m_frontLeft.getPosition(),

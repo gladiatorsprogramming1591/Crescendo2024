@@ -41,8 +41,8 @@ public final class Constants {
     public static final double kMaxAngularSpeed =  2 * Math.PI; // radians per second
     public static final double kTeleopPercentLimit = .95; 
 
-    public static final Vector<N3> odometryStd = VecBuilder.fill(0.03, 0.03, 0.03);
-    public static final Vector<N3> visionStd = VecBuilder.fill(0.1, 0.1, 0.1);
+    public static final Vector<N3> odometryStd = VecBuilder.fill(0.03, 0.03, 0.01);
+    public static final Vector<N3> visionStd = VecBuilder.fill(0.3, 0.3, 0.3);
 
     // Camera Positions
     public static final Transform3d kFrontCameraLocation = new Transform3d(
