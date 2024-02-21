@@ -622,7 +622,7 @@ public static final double kTurnToleranceDeg = 1.0;
     // Pose3d speakerRotTarget = new Pose3d(targetPosition.getX(),
     // targetPosition.getY(), DriveConstants.SPEAKER_HEIGHT, new Rotation3d());
 
-    return MathUtil.angleModulus(targetPosition.minus(robotPoint).getAngle().getRadians() + Math.PI);
+    return MathUtil.angleModulus(targetPosition.minus(robotPoint).getAngle().getRadians()); 
   }
 
   /**
