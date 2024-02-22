@@ -69,7 +69,7 @@ public final class Constants {
     public static final double AMP_X = 1.9;
 
 
-    public static final PIDConstants AUTO_AIM_ROT_PID_CONSTANTS = new PIDConstants(12.0, 0.0, 0.5);
+    public static final PIDConstants AUTO_AIM_ROT_PID_CONSTANTS = new PIDConstants(16.0, 0.0, 0.5);
 
     public static final double VISION_REJECT_DISTANCE = 2.3;
 
@@ -77,7 +77,7 @@ public final class Constants {
     public static final double SPIN_COMPENSATION_Y = 0.06;
 
     // Radians
-    public static final double AUTO_AIM_ROT_TOLERANCE = Math.toRadians(1.5);
+    public static final double AUTO_AIM_ROT_TOLERANCE = Math.toRadians(2);
 
     // Shooter Angle Map
 
@@ -86,7 +86,7 @@ public final class Constants {
     static {
       DISTANCE_TO_ANGLE_MAP.put(1.25, ArmConstants.kSUBWOOFER);
       DISTANCE_TO_ANGLE_MAP.put(2.2, ArmConstants.kOffset - 0.072);
-      DISTANCE_TO_ANGLE_MAP.put(3.0, ArmConstants.kOffset - 0.044);
+      DISTANCE_TO_ANGLE_MAP.put(3.0, ArmConstants.kOffset - 0.048);
       DISTANCE_TO_ANGLE_MAP.put(4.1, ArmConstants.kOffset - 0.031);
       DISTANCE_TO_ANGLE_MAP.put(4.9, ArmConstants.kOffset - 0.025);
     }
@@ -206,6 +206,8 @@ public final class Constants {
     public static final double kTransferSpeedFull = 1.0;
     public static final double kLeftShooterSpeedRPM = 5000.0;
     public static final double kRightShooterSpeedRPM = 0.6*kLeftShooterSpeedRPM; 
+    public static final double kLeftShooterTrapSpeedRPM = 2000.0;
+    public static final double kRightShooterTrapSpeedRPM = 0.6*kLeftShooterTrapSpeedRPM;
     public static final double kShooterSpeedTolerance = 50.0; 
     public static final double kMinShooterSpeed = 4800.0; 
 
@@ -238,14 +240,14 @@ public final class Constants {
     //TODO make source position to intake note from there. 
     // Arm Positions
     public static final double kOffset = 0.8;
-    public static final double kTRANSFER = kOffset - 0.015;
+    public static final double kTRANSFER = kOffset - 0.011;
     public static final double kSUBWOOFER = kOffset - 0.12;
-    public static final double kPODIUM = kOffset - 0.065;
-    public static final double kTRAP = kOffset - 0.023;
+    public static final double kPODIUM = kOffset - 0.05;
+    public static final double kTRAP = kOffset - 0.3;
     public static final double kSTAGELINE = kOffset - 0.021;
     // public static final double kCLIMBSTART = kOffset + 0.325;
     // public static final double kCLIMBFINISH = kOffset + 0.367;
-    public static final double kAMP = kOffset - 0.368;
+    public static final double kAMP = kOffset - 0.375;
     public static final double kAllowedErrAbs = 0.001;
     public static final double kMinHeightAbs = kOffset;
     public static final double kMaxHeightAbs = 0.2;
@@ -254,7 +256,7 @@ public final class Constants {
     // Arm Speed
     public static final double kArmMinOutput = -1.0; //-1.00
     public static final double kArmMaxOutput = 1.0; //1.00
-    public static final double kPositionTolerance = 0.001; 
+    public static final double kPositionTolerance = 0.0035; 
     public static final double kVelocityTolerance = 0.02; 
   }
 

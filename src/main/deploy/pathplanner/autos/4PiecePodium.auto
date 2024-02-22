@@ -32,6 +32,12 @@
         {
           "type": "named",
           "data": {
+            "name": "Intake.25"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
             "name": "ShootPodium"
           }
         },
@@ -44,6 +50,12 @@
         {
           "type": "named",
           "data": {
+            "name": "Intake.25"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
             "name": "ShootPodium"
           }
         },
@@ -51,6 +63,12 @@
           "type": "path",
           "data": {
             "pathName": "MiddleToThird"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Intake.25"
           }
         },
         {

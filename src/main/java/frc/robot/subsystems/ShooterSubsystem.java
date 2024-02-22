@@ -70,6 +70,14 @@ public class ShooterSubsystem extends SubsystemBase {
         m_transferMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
     }
 
+    public void shooterOnTrap() {
+        //Turns on the shooter motors
+        System.out.println("Setting left shooter speed to " + ShooterConstants.kLeftShooterTrapSpeedRPM);
+        System.out.println("Setting right shooter speed to " + ShooterConstants.kRightShooterTrapSpeedRPM);
+
+        m_rightShooterMotor.getPIDController().setReference(ShooterConstants.kRightShooterTrapSpeedRPM, ControlType.kVelocity);
+        m_leftShooterMotor.getPIDController().setReference(ShooterConstants.kLeftShooterTrapSpeedRPM, ControlType.kVelocity);
+    }
 
     public void shooterOn() {
         //Turns on the shooter motors
@@ -126,7 +134,7 @@ public class ShooterSubsystem extends SubsystemBase {
       }
 
       public void transferReverse(){
-        m_transferMotor.set(-0.5);
+        m_transferMotor.set(-0.35);
       }
 
       @Override
