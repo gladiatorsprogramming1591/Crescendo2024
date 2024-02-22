@@ -4,11 +4,17 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.geometry.Translation3d;
 // import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
@@ -35,6 +41,13 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
+
+import java.util.Optional;
+
+import org.photonvision.EstimatedRobotPose;
+import org.photonvision.PhotonCamera;
+import org.photonvision.PhotonPoseEstimator;
+import org.photonvision.PhotonPoseEstimator.PoseStrategy;
 
 // import java.util.List;
 
@@ -84,6 +97,7 @@ public static final double kTurnToleranceDeg = 1.0;
   private double a = 0;
 
   private final Field2d m_field = new Field2d();
+  private final Field2d m_poseEstimatorField = new Field2d();
   // private final Trajectory m_trajectory; 
 
   // Odometry class for tracking robot pose
@@ -112,6 +126,9 @@ public static final double kTurnToleranceDeg = 1.0;
   private final PIDController m_yVisionPidController = new PIDController(0.033, 0.0, 0.005);
   private final PIDController m_xVisionPidController = new PIDController(0.033, 0.0, 0.005);
   
+
+  PhotonPoseEstimator[] m_photonPoseEstimators;
+  SwerveDrivePoseEstimator m_poseEstimator;
 
   /** Creates a new DriveSubsystem. */
   public DriveSubsystem() {
@@ -161,12 +178,55 @@ public static final double kTurnToleranceDeg = 1.0;
     //         new TrajectoryConfig(Units.feetToMeters(3.0), Units.feetToMeters(3.0)));
 
     // Do this in either robot or subsystem init
-    SmartDashboard.putData("Field", m_field);
+    SmartDashboard.putData("Raw Odometry Field", m_field);
+    SmartDashboard.putData("Pose Estimator Field", m_poseEstimatorField);
     // Push the trajectory to Field2d.
     // m_field.getObject("traj").setTrajectory(m_trajectory);
 
 
     // Do this in either robot periodic or subsystem periodic
+
+    // Vision Initialization
+
+    m_poseEstimator = new SwerveDrivePoseEstimator(
+        DriveConstants.kDriveKinematics,
+        Rotation2d.fromDegrees(getHeading()),
+        new SwerveModulePosition[] {
+            m_frontLeft.getPosition(),
+            m_frontRight.getPosition(),
+            m_rearLeft.getPosition(),
+            m_rearRight.getPosition()
+        },
+        new Pose2d(),
+        DriveConstants.odometryStd,
+        DriveConstants.visionStd);
+
+    m_photonPoseEstimators = new PhotonPoseEstimator[] {
+        new PhotonPoseEstimator(
+            AprilTagFields.k2024Crescendo.loadAprilTagLayoutField(),
+            PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
+            new PhotonCamera("Front"),
+            DriveConstants.kFrontCameraLocation),
+    };
+    // Future cameras
+    // new PhotonPoseEstimator(
+    // AprilTagFields.k2024Crescendo.loadAprilTagLayoutField(),
+    // PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
+    // new PhotonCamera("Left"),
+    // new Transform3d(
+    // new Translation3d(-0.0, -0.0, 0.0),
+    // new Rotation3d(0.0, Math.toRadians(-30.0), Math.toRadians(170.0))
+    // )
+    // ),
+    // new PhotonPoseEstimator(
+    // AprilTagFields.k2024Crescendo.loadAprilTagLayoutField(),
+    // PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
+    // new PhotonCamera("Right"),
+    // new Transform3d(
+    // new Translation3d(-0.0, -0.0, 0.0),
+    // new Rotation3d(0.0, Math.toRadians(-30.0), Math.toRadians(170.0))
+    // )
+    // ),
   }
 
   public boolean visionDriveAligned(double desiredId, double desiredY, double rotVisionSetpoint) {
@@ -204,6 +264,7 @@ public static final double kTurnToleranceDeg = 1.0;
             m_rearRight.getPosition()
         });
         m_field.setRobotPose(m_odometry.getPoseMeters());
+        m_poseEstimatorField.setRobotPose(m_poseEstimator.getEstimatedPosition());
 
       SmartDashboard.putNumber("gyroAngle:", gyroAngle);
       SmartDashboard.putNumber("gyroYaw:", gyroYaw);
@@ -211,6 +272,12 @@ public static final double kTurnToleranceDeg = 1.0;
       SmartDashboard.putNumber("Odometry.y:" , m_odometry.getPoseMeters().getY());
 
       updateAprilTagInfo(5.0);
+
+      for (PhotonPoseEstimator photonPoseEstimator : m_photonPoseEstimators) {
+        Optional<EstimatedRobotPose> pose = photonPoseEstimator.update();
+        if (pose.isPresent())
+          m_poseEstimator.addVisionMeasurement(pose.get().estimatedPose.toPose2d(), pose.get().timestampSeconds);
+      }
   }
 
   public void updateAprilTagInfo(double desiredId) {
