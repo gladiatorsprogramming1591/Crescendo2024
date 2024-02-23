@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 2.0,
-      "y": 4.51
+      "x": 1.22,
+      "y": 5.55
     },
-    "rotation": 150.0
+    "rotation": 180.0
   },
   "command": {
     "type": "sequential",
@@ -14,19 +14,19 @@
         {
           "type": "named",
           "data": {
-            "name": "ShootPodium"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "ArmStow"
+            "name": "ShootSubwoofer"
           }
         },
         {
           "type": "path",
           "data": {
             "pathName": "NearPodiumToPodium"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Intake.25"
           }
         },
         {
@@ -56,7 +56,13 @@
         {
           "type": "named",
           "data": {
-            "name": "ShootPodium"
+            "name": "Intake.25"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ShootFourthNote"
           }
         },
         {
@@ -68,7 +74,19 @@
         {
           "type": "named",
           "data": {
-            "name": "ShootStageline"
+            "name": "AlignAndShootNote"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "StagelineFourth "
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AlignAndShootNote"
           }
         }
       ]

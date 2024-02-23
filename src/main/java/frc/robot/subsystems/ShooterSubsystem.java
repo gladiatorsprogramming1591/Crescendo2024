@@ -28,6 +28,7 @@ public class ShooterSubsystem extends SubsystemBase {
     private RelativeEncoder m_leftEncoder; 
     private final double m_rightTargetVelocity = Constants.ShooterConstants.kRightShooterSpeedRPM; 
     private final double m_leftTargetVelocity = Constants.ShooterConstants.kLeftShooterSpeedRPM; 
+    private double m_leftSetpoint = Constants.ShooterConstants.kLeftShooterSpeedRPM; 
     private final DigitalInput m_ShooterBeamBreak = new DigitalInput(4); 
     // private final PIDController m_leftPidController = new PIDController(
     //     ShooterConstants.kShooterP, ShooterConstants.kShooterI, ShooterConstants.kShooterD);
@@ -59,9 +60,6 @@ public class ShooterSubsystem extends SubsystemBase {
         m_leftShooterMotor.getPIDController().setD(ShooterConstants.kShooterD);
         m_leftShooterMotor.getPIDController().setFF(ShooterConstants.kShooterFF);
         m_leftShooterMotor.getPIDController().setReference(0, ControlType.kVoltage);
-
-        // m_leftPidController.setTolerance(ShooterConstants.kShooterSpeedTolerance);
-        // m_rightPidController.setTolerance(ShooterConstants.kShooterSpeedTolerance);
         
         m_rightShooterMotor.enableVoltageCompensation(12);
         m_leftShooterMotor.enableVoltageCompensation(12);
@@ -84,6 +82,7 @@ public class ShooterSubsystem extends SubsystemBase {
         System.out.println("Setting left shooter speed to " + m_leftTargetVelocity);
         System.out.println("Setting right shooter speed to " + m_rightTargetVelocity);
 
+        m_leftSetpoint = m_leftTargetVelocity; 
         m_rightShooterMotor.getPIDController().setReference(m_rightTargetVelocity, ControlType.kVelocity);
         m_leftShooterMotor.getPIDController().setReference(m_leftTargetVelocity, ControlType.kVelocity);
 
@@ -101,6 +100,18 @@ public class ShooterSubsystem extends SubsystemBase {
         // m_rightShooterMotor.setVoltage(rightFF);             
       }
 
+      public void shooterOn(boolean farShot) {
+        if (farShot) {
+          m_leftSetpoint = ShooterConstants.kLeftShooterFarSpeed; 
+          m_rightShooterMotor.getPIDController().setReference(ShooterConstants.kRightShooterFarSpeed,
+              ControlType.kVelocity);
+          m_leftShooterMotor.getPIDController().setReference(ShooterConstants.kLeftShooterFarSpeed,
+              ControlType.kVelocity);
+        }
+        else{
+          shooterOn();
+        }
+      }
       public void shooterOff() {
         System.out.println("Turning shooter off");
         m_rightShooterMotor.set(0);
@@ -108,8 +119,7 @@ public class ShooterSubsystem extends SubsystemBase {
       }
 
       public boolean isShooterAtSpeed() {
-        return m_leftEncoder.getVelocity() > ShooterConstants.kMinShooterSpeed; 
-        // return m_leftPidController.atSetpoint();
+        return m_leftEncoder.getVelocity() > m_leftSetpoint - ShooterConstants.kShooterRPMTolerance; 
       } 
       public boolean isBeamBroken(){
         return m_ShooterBeamBreak.get() == false; 

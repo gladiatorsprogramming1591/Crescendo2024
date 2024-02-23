@@ -43,6 +43,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.function.DoubleSupplier;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
@@ -151,8 +152,11 @@ public class RobotContainer {
     NamedCommands.registerCommand("ShootPodium", new ShootNote(m_ShooterSubsystem, m_ArmSubsystem, armPositions.PODIUM)); 
     NamedCommands.registerCommand("ShootStageLine", new ShootNote(m_ShooterSubsystem, m_ArmSubsystem, armPositions.STAGELINE)); 
     NamedCommands.registerCommand("Intake", new IntakeNote(m_ShooterSubsystem, m_ArmSubsystem, m_IntakeSubsystem)); 
-    NamedCommands.registerCommand("Intake.25", new IntakeNote(m_ShooterSubsystem, m_ArmSubsystem, m_IntakeSubsystem).withTimeout(0.45)); 
+    NamedCommands.registerCommand("Intake.25", new IntakeNote(m_ShooterSubsystem, m_ArmSubsystem, m_IntakeSubsystem).withTimeout(0.20)); 
     NamedCommands.registerCommand("ArmStow", new ArmToPositionWithEnd(m_ArmSubsystem, armPositions.TRANSFER));
+    NamedCommands.registerCommand("AlignAndShootNote",new AlignAndShootNote(m_ShooterSubsystem, m_ArmSubsystem, () -> 0, () -> 0, m_robotDrive, m_IntakeSubsystem));
+    NamedCommands.registerCommand("ShootFourthNote", new ShootNote(m_ShooterSubsystem, m_ArmSubsystem, armPositions.FOURTHNOTE));
   
   }
 }   
+

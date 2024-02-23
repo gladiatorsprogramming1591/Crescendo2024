@@ -160,7 +160,7 @@ public static final double kTurnToleranceDeg = 1.0;
                 this::getSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
                 this::driveRobotRelative, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
                 new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
-                        new PIDConstants(1.9, 1.2, 0.7), // Translation PID constants
+                        new PIDConstants(3.5, 0.01, 0.1), // Translation PID constants
                         new PIDConstants(1.5, 0.0, 0.0), // Rotation PID constants
                         DriveConstants.kMaxModuleMetersPerSecond, // Max module speed, in m/s
                         radius, // Drive base radius in meters. Distance from robot center to furthest module.
@@ -200,7 +200,7 @@ public static final double kTurnToleranceDeg = 1.0;
     // Do this in either robot periodic or subsystem periodic
 
     // Vision Initialization
-
+    if (!DriverStation.isAutonomousEnabled()) {
     m_poseEstimator = new SwerveDrivePoseEstimator(
         DriveConstants.kDriveKinematics,
         Rotation2d.fromDegrees(getHeading()),
@@ -221,6 +221,7 @@ public static final double kTurnToleranceDeg = 1.0;
             new PhotonCamera("Front"),
             DriveConstants.kFrontCameraLocation),
     };
+  }
     // Future cameras
     // new PhotonPoseEstimator(
     // AprilTagFields.k2024Crescendo.loadAprilTagLayoutField(),

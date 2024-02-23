@@ -46,13 +46,13 @@ public class WarmUpAndAutoShoot extends Command {
   @Override
   public void execute() {
     m_arm.ArmToPosition(DriveConstants.DISTANCE_TO_ANGLE_MAP.get(m_drive.getSpeakerDistance()));
-    m_shooter.shooterOn();
+    m_shooter.shooterOn(m_drive.getSpeakerDistance() > 5.0);
     if (m_drive.getIsOnTargetSpeaker() && m_shooter.isShooterAtSpeed()) {
       onTargetCount++;
-      if (onTargetCount > 10) { // 10 * 20 ms = 200 ms of being on target & at speed
+      if (onTargetCount > 3) { // 10 * 20 ms = 200 ms of being on target & at speed
         m_shooter.transferOn(false);
         transferCount++;
-        if (transferCount > 20) { // 1010 - 1000 = 10 * 20 ms = 200 ms to run transfer before finishing command
+        if (transferCount > 10) { // 1010 - 1000 = 10 * 20 ms = 200 ms to run transfer before finishing command
           m_end = true;
         }
       }

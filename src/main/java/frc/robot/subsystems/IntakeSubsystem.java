@@ -31,7 +31,8 @@ public class IntakeSubsystem extends SubsystemBase {
         m_leftIntakeMotor.setIdleMode(CANSparkMax.IdleMode.kCoast);
 
         m_leftIntakeMotor.follow(m_rightIntakeMotor, true);
-
+        m_rightIntakeMotor.setSmartCurrentLimit(40);
+        m_leftIntakeMotor.setSmartCurrentLimit(40);
         // m_rightShooterMotor.getPIDController().setP(ShooterConstants.kShooterP);
         // m_rightShooterMotor.getPIDController().setI(ShooterConstants.kShooterI);
         // m_rightShooterMotor.getPIDController().setD(ShooterConstants.kShooterD);
