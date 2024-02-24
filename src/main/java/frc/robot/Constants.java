@@ -77,7 +77,7 @@ public final class Constants {
     public static final double SPIN_COMPENSATION_Y = 0.06;
 
     // Radians
-    public static final double AUTO_AIM_ROT_TOLERANCE = Math.toRadians(1.7);
+    public static final double AUTO_AIM_ROT_TOLERANCE = Math.toRadians(1.0);
 
     // Shooter Angle Map
 
@@ -90,9 +90,9 @@ public final class Constants {
       DISTANCE_TO_ANGLE_MAP.put(1.25, ArmConstants.kSUBWOOFER);
       DISTANCE_TO_ANGLE_MAP.put(2.2, ArmConstants.kOffset - 0.072);
       DISTANCE_TO_ANGLE_MAP.put(3.0, ArmConstants.kOffset - 0.048);
-      DISTANCE_TO_ANGLE_MAP.put(4.1, ArmConstants.kOffset - 0.031);
-      DISTANCE_TO_ANGLE_MAP.put(4.9, ArmConstants.kOffset - 0.027);
-      DISTANCE_TO_ANGLE_MAP.put(5.5, ArmConstants.kOffset - 0.025);
+      DISTANCE_TO_ANGLE_MAP.put(4.1, ArmConstants.kOffset - 0.033);
+      DISTANCE_TO_ANGLE_MAP.put(4.9, ArmConstants.kOffset - 0.028);
+      DISTANCE_TO_ANGLE_MAP.put(5.5, ArmConstants.kOffset - 0.026);
     }
 
 
@@ -246,7 +246,7 @@ public final class Constants {
     
     //TODO make source position to intake note from there. 
     // Arm Positions
-    public static final double kOffset = 0.82;
+    public static final double kOffset = 0.66;
     public static final double kTRANSFER = kOffset - 0.011;
     public static final double kSUBWOOFER = kOffset - 0.12;
     public static final double kPODIUM = kOffset - 0.055;

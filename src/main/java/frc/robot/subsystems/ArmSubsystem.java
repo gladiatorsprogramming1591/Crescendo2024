@@ -75,8 +75,8 @@ public class ArmSubsystem extends SubsystemBase {
         mapAbs.put(armPositions.TRAP, ArmConstants.kTRAP);
         mapAbs.put(armPositions.STAGELINE, ArmConstants.kSTAGELINE);
         mapAbs.put(armPositions.FOURTHNOTE, ArmConstants.kFOURTHNOTE);
-        // mapAbs.put(armPositions.CLIMBSTART, ArmConstants.kCLIMBSTART);
-        // mapAbs.put(armPositions.CLIMBFINISH, ArmConstants.kCLIMBFINISH); // Single Substation
+        mapAbs.put(armPositions.CLIMBSTART, ArmConstants.kCLIMBSTART);
+        mapAbs.put(armPositions.CLIMBFINISH, ArmConstants.kCLIMBFINISH); // Single Substation
         mapAbs.put(armPositions.AMP, ArmConstants.kAMP); //At hard stop:
         m_AbsPidController.setTolerance(ArmConstants.kPositionTolerance);
     }
