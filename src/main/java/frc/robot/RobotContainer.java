@@ -117,6 +117,9 @@ public class RobotContainer {
     m_driverController.y().onTrue(new InstantCommand(() -> m_ShooterSubsystem.transferOff(), m_ShooterSubsystem));
     m_driverController.start().whileTrue(new AlignAndShootNote(m_ShooterSubsystem, m_ArmSubsystem,
     () -> m_driverController.getLeftX(), () -> m_driverController.getLeftY(), m_robotDrive, m_IntakeSubsystem));
+    // m_driverController.rightBumper().whileTrue(new RunCommand(
+    //     () -> m_robotDrive.driveOnTargetNote(() -> m_driverController.getLeftX(), () -> m_driverController.getLeftY()),
+    //     m_robotDrive).alongWith(new IntakeNote(m_ShooterSubsystem, m_ArmSubsystem, m_IntakeSubsystem)));
     m_driverController.leftBumper().onTrue(new InstantCommand(() -> m_IntakeSubsystem.intakeOn(), m_IntakeSubsystem));
     // m_driverController.rightTrigger(OIConstants.kArmDeadband).whileTrue(new
     // RunCommand(() ->
@@ -161,7 +164,7 @@ public class RobotContainer {
   //  *
   //  * @return the command to run in autonomous
    
-  public Command getAutonomousCommand() { //TODO use pathplanner auto 
+  public Command getAutonomousCommand() { 
     return m_autoChooser.getSelected(); 
   }
 

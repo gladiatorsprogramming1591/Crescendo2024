@@ -25,9 +25,6 @@ public class ShootNote extends SequentialCommandGroup {
             new RunCommand(()-> shooterSubsystem.transferOn(false), shooterSubsystem).withTimeout(0.15),
             new InstantCommand(()-> shooterSubsystem.shooterOff(), shooterSubsystem),
             new InstantCommand(()-> shooterSubsystem.transferOff(), shooterSubsystem)
-            
-            // new ArmToPositionWithEnd(armSubsystem, armPositions.TRANSFER) //TODO This might need to be moved out for autos
-
         ); 
     }
 }

@@ -50,6 +50,7 @@ import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.PhotonPoseEstimator.PoseStrategy;
+import org.photonvision.targeting.PhotonTrackedTarget;
 
 // import java.util.List;
 
@@ -123,7 +124,6 @@ public static final double kTurnToleranceDeg = 1.0;
   private int invalidCount = 9999; //initialized to value that represents invalid 
   private int maxinvalidCount = 0;
 
-  //TODO Add tolerances to PID Controllers
   private final PIDController m_rotVisionPidController = new PIDController(0.020, 0.0, 0.002);
   private final PIDController m_yVisionPidController = new PIDController(0.033, 0.0, 0.005);
   private final PIDController m_xVisionPidController = new PIDController(0.033, 0.0, 0.005);
@@ -138,6 +138,7 @@ public static final double kTurnToleranceDeg = 1.0;
 
   PhotonPoseEstimator[] m_photonPoseEstimators;
   SwerveDrivePoseEstimator m_poseEstimator;
+  PhotonCamera m_noteCamera;
 
   /** Creates a new DriveSubsystem. */
   public DriveSubsystem() {
@@ -151,6 +152,8 @@ public static final double kTurnToleranceDeg = 1.0;
 
     m_autoAimRotationPidController.enableContinuousInput(-Math.PI, Math.PI);
     m_autoAimRotationPidController.setTolerance(DriveConstants.AUTO_AIM_ROT_TOLERANCE);
+
+    m_noteCamera = new PhotonCamera("Note");
 
          // Configure AutoBuilder last
 
@@ -300,6 +303,7 @@ public static final double kTurnToleranceDeg = 1.0;
       });
 
       SmartDashboard.putNumber("Distance to Speaker", getSpeakerDistance());
+      SmartDashboard.putNumber("Note Angle", getNoteAngle());
 
       double driveCurrent = m_frontLeft.getDriveCurrent() + m_frontRight.getDriveCurrent() + m_rearLeft.getDriveCurrent() + m_rearRight.getDriveCurrent();
       SmartDashboard.putNumber("Drive Motors Current", driveCurrent);
@@ -653,6 +657,32 @@ public static final double kTurnToleranceDeg = 1.0;
         .equals(DriverStation.Alliance.Blue);
     double directionFlip = isBlue ? -1.0 : 1.0;
     driveAngle(directionFlip*y.getAsDouble(), directionFlip*x.getAsDouble(), getSpeakerAngle(), m_autoAimRotationPidController, false);
+  }
+
+  // gets robot relative note angle from 0 (Center)
+  public double getNoteAngle() {
+    var result = m_noteCamera.getLatestResult();
+    if (result != null && result.getBestTarget() != null) {
+      return result.getBestTarget().getYaw();
+    } else {
+      return 0;
+    }
+
+  }
+
+  public void driveRobotRelativeToObject(DoubleSupplier x, DoubleSupplier y) {
+    drive(x.getAsDouble() * DriveConstants.TRANSLATION_SPEED_SCALAR_AUTO_AIM,
+        -y.getAsDouble() * DriveConstants.TRANSLATION_SPEED_SCALAR_AUTO_AIM, -getNoteAngle() * 0.005,
+        false, false);
+  }
+
+  public void driveOnTargetNote(DoubleSupplier x, DoubleSupplier y) {
+    boolean isBlue = DriverStation.getAlliance().orElse(DriverStation.Alliance.Blue)
+        .equals(DriverStation.Alliance.Blue);
+    double directionFlip = isBlue ? -1.0 : 1.0;
+    driveAngle(directionFlip * y.getAsDouble(), directionFlip * x.getAsDouble(), getNoteAngle(),
+        m_autoAimRotationPidController,
+        true);
   }
 
   /**

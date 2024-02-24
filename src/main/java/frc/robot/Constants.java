@@ -36,8 +36,8 @@ public final class Constants {
   public static final class DriveConstants {
     // Driving Parameters - Note that these are not the maximum capable speeds of
     // the robot, rather the allowed maximum speeds
-    public static final double kMaxModuleMetersPerSecond = 5.66; // TODO Increase speed when done testing autos at low speed or add speed toggle button
-    public static final double kMaxSpeedMetersPerSecond = kMaxModuleMetersPerSecond; // TODO Increase speed when done testing autos at low speed or add speed toggle button
+    public static final double kMaxModuleMetersPerSecond = 5.66; 
+    public static final double kMaxSpeedMetersPerSecond = kMaxModuleMetersPerSecond; 
     public static final double kMaxAngularSpeed =  2 * Math.PI; // radians per second
     public static final double kTeleopPercentLimit = .95; 
 
@@ -185,7 +185,7 @@ public final class Constants {
     public static final IdleMode kDrivingMotorIdleMode = IdleMode.kBrake;
     public static final IdleMode kTurningMotorIdleMode = IdleMode.kBrake;
 
-    public static final int kDrivingMotorCurrentLimit = 35; // TODO Increase for competition
+    public static final int kDrivingMotorCurrentLimit = 35; // amps
     public static final int kTurningMotorCurrentLimit = 15; // amps
 
     public static final double kExampleTurningP = 0.01; 
@@ -245,11 +245,9 @@ public final class Constants {
     public static final double kArmI = 0.00;
     public static final double kArmD = 0.00;
     public static final double kArmFF = 0.00;
-    //TODO Update min and max heights with measured values
 
     public static final double kMaxOpenLoopSpeed = 0.5; 
     
-    //TODO make source position to intake note from there. 
     // Arm Positions
     public static final double kOffset = 0.66;
     public static final double kTRANSFER = kOffset - 0.011;
@@ -264,7 +262,6 @@ public final class Constants {
     public static final double kAllowedErrAbs = 0.001;
     public static final double kMinHeightAbs = kOffset;
     public static final double kMaxHeightAbs = 0.2;
-    //TODO Update arm positions with measured values
 
     // Arm Speed
     public static final double kArmMinOutput = -1.0; //-1.00
