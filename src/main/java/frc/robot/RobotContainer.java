@@ -17,10 +17,12 @@ import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Constants.ArmConstants;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.commands.VisionDriveAligned;
+import frc.robot.commands.WarmUpShooter;
 import frc.robot.commands.AlignAndShootNote;
 import frc.robot.commands.IntakeNote;
 import frc.robot.commands.ShootNote;
@@ -106,36 +108,51 @@ public class RobotContainer {
    */
   private void configureButtonBindings() { 
     m_driverController.back().onTrue(new InstantCommand(() -> m_robotDrive.zeroHeading()));
-    m_driverController.a().onTrue(new RunCommand(() -> m_ShooterSubsystem.shooterOn(), m_ShooterSubsystem));
+    // m_driverController.a().onTrue(new RunCommand(() ->
+    // m_ShooterSubsystem.shooterOn(), m_ShooterSubsystem));
+    m_driverController.a().whileTrue(new RunCommand(() -> m_ShooterSubsystem.transferOn(false), m_ShooterSubsystem)
+        .finallyDo(() -> m_ShooterSubsystem.transferOff()));
     m_driverController.b().onTrue(new InstantCommand(() -> m_ShooterSubsystem.shooterOff(), m_ShooterSubsystem));
     m_driverController.x().onTrue(new TransferOnWithBeamBreak(m_ShooterSubsystem));
     m_driverController.y().onTrue(new InstantCommand(() -> m_ShooterSubsystem.transferOff(), m_ShooterSubsystem));
     m_driverController.start().whileTrue(new AlignAndShootNote(m_ShooterSubsystem, m_ArmSubsystem,
     () -> m_driverController.getLeftX(), () -> m_driverController.getLeftY(), m_robotDrive, m_IntakeSubsystem));
     m_driverController.leftBumper().onTrue(new InstantCommand(() -> m_IntakeSubsystem.intakeOn(), m_IntakeSubsystem));
-    m_driverController.rightBumper().onTrue(new InstantCommand(() -> m_IntakeSubsystem.intakeOff(), m_IntakeSubsystem));
-    m_driverController.rightTrigger(OIConstants.kArmDeadband).whileTrue(new RunCommand(() -> 
-      m_ArmSubsystem.ArmBackward(m_driverController.getRightTriggerAxis()), m_ArmSubsystem));
-    m_driverController.rightTrigger(OIConstants.kArmDeadband).onFalse(new InstantCommand(() -> m_ArmSubsystem.ArmOff(), m_ArmSubsystem));
-    m_driverController.leftTrigger(OIConstants.kArmDeadband).whileTrue(new RunCommand(() -> 
-      m_ArmSubsystem.ArmForward(m_driverController.getLeftTriggerAxis()), m_ArmSubsystem));
-    m_driverController.leftTrigger(OIConstants.kArmDeadband).onFalse(new InstantCommand(() -> m_ArmSubsystem.ArmOff(), m_ArmSubsystem));
+    // m_driverController.rightTrigger(OIConstants.kArmDeadband).whileTrue(new
+    // RunCommand(() ->
+    // m_ArmSubsystem.ArmBackward(m_driverController.getRightTriggerAxis()),
+    // m_ArmSubsystem));
+    // m_driverController.rightTrigger(OIConstants.kArmDeadband).onFalse(new
+    // InstantCommand(() -> m_ArmSubsystem.ArmOff(), m_ArmSubsystem));
+    // m_driverController.leftTrigger(OIConstants.kArmDeadband).whileTrue(new
+    // RunCommand(() ->
+    // m_ArmSubsystem.ArmForward(m_driverController.getLeftTriggerAxis()),
+    // m_ArmSubsystem));
+    // m_driverController.leftTrigger(OIConstants.kArmDeadband).onFalse(new
+    // InstantCommand(() -> m_ArmSubsystem.ArmOff(), m_ArmSubsystem));
     // m_driverController.povDown().onTrue(new TurnToAngleProfiled(180, m_robotDrive)); 
     // m_driverController.povLeft().onTrue(new TurnToAngleProfiled(270, m_robotDrive)); 
     // m_driverController.povUp().onTrue(new TurnToAngleProfiled(0, m_robotDrive)); 
     // m_driverController.povRight().onTrue(new TurnToAngleProfiled(90,m_robotDrive)); 
     m_driverController.leftStick().onTrue(new InstantCommand(() -> m_ShooterSubsystem.transferReverse(), m_ShooterSubsystem)); 
     m_driverController.povDown().onTrue(new ArmToPosition(m_ArmSubsystem, armPositions.TRAP)); 
-    m_operatorController.back().onTrue(new InstantCommand(() -> m_ShooterSubsystem.transferOn(false), m_ShooterSubsystem));
+    m_operatorController.rightStick()
+        .onTrue(new InstantCommand(() -> m_ShooterSubsystem.transferOn(false), m_ShooterSubsystem));
     m_operatorController.rightTrigger().onTrue(new ShootNote(m_ShooterSubsystem, m_ArmSubsystem, armPositions.SUBWOOFER)); 
     m_operatorController.leftTrigger().onTrue(new ShootNote(m_ShooterSubsystem, m_ArmSubsystem, armPositions.PODIUM)); 
-    m_operatorController.x().onTrue(new ShootNote(m_ShooterSubsystem, m_ArmSubsystem, armPositions.STAGELINE)); 
+    // m_operatorController.x().onTrue(new ShootNote(m_ShooterSubsystem,
+    // m_ArmSubsystem, armPositions.STAGELINE));
+    m_operatorController.b().onTrue(new InstantCommand(() -> m_IntakeSubsystem.intakeOff(), m_IntakeSubsystem));
     m_operatorController.a().onTrue(new IntakeNote(m_ShooterSubsystem, m_ArmSubsystem, m_IntakeSubsystem)); 
     m_operatorController.povDown().onTrue(new ArmToPosition(m_ArmSubsystem, armPositions.TRANSFER)); 
     m_operatorController.povLeft().onTrue(new ArmToPosition(m_ArmSubsystem, armPositions.PODIUM)); 
     m_operatorController.povUp().onTrue(new ArmToPosition(m_ArmSubsystem, armPositions.SUBWOOFER)); 
     m_operatorController.povRight().onTrue(new ArmToPosition(m_ArmSubsystem, armPositions.AMP)); 
-    m_operatorController.rightBumper().onTrue(new ShootNote(m_ShooterSubsystem, m_ArmSubsystem, armPositions.TRAP));
+    m_operatorController.rightBumper().onTrue(
+        new ArmToPosition(m_ArmSubsystem, armPositions.TRAP).alongWith(new WarmUpShooter(m_ShooterSubsystem, true)));
+    m_operatorController.back().onTrue(new ArmToPosition(m_ArmSubsystem, armPositions.CLIMBSTART));
+    m_operatorController.start()
+        .onTrue(new ArmToPosition(m_ArmSubsystem, armPositions.CLIMBFINISH, ArmConstants.kCurrentLimitClimbing));
     //TODO change the rotation to be the letter buttons 
   }
 

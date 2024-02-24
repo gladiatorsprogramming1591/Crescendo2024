@@ -580,9 +580,10 @@ public static final double kTurnToleranceDeg = 1.0;
     Rotation2d yaw = useIMU ? Rotation2d.fromDegrees(getHeading()) : getPosition().getRotation();
     SmartDashboard.putNumber("Gyro Yaw Rad", yaw.getRadians());
     ChassisSpeeds chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
-        xV * 0.4,
-        yV * 0.4,
-        MathUtil.clamp(controller.calculate(MathUtil.angleModulus(yaw.getRadians()), angle), -3.5, 3.5),
+        xV * DriveConstants.TRANSLATION_SPEED_SCALAR_AUTO_AIM,
+        yV * DriveConstants.TRANSLATION_SPEED_SCALAR_AUTO_AIM,
+        MathUtil.clamp(controller.calculate(MathUtil.angleModulus(yaw.getRadians()), angle),
+            -DriveConstants.MAX_ROTATION_SPEED_AUTO_AIM, DriveConstants.MAX_ROTATION_SPEED_AUTO_AIM),
         yaw);
 
     SwerveModuleState[] swerveModuleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(chassisSpeeds);

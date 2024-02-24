@@ -1,6 +1,7 @@
 package frc.robot.commands.armCommands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants.ArmConstants;
 import frc.robot.subsystems.ArmSubsystem;
 
 public class ArmToPosition extends Command {
@@ -9,6 +10,7 @@ public class ArmToPosition extends Command {
     private double m_armSetpoint;
     private boolean m_keepRunning;
     private boolean m_customSetpoint = false;
+    private int m_currentLimit = ArmConstants.kCurrentLimitDefault;
 
     public ArmToPosition(ArmSubsystem arm, ArmSubsystem.armPositions pos){
         m_arm = arm;
@@ -31,9 +33,17 @@ public class ArmToPosition extends Command {
         addRequirements(m_arm);
     }
 
+    public ArmToPosition(ArmSubsystem arm, ArmSubsystem.armPositions pos, int currentLimit) {
+        m_arm = arm;
+        m_targetPos = pos;
+        m_keepRunning = false;
+        addRequirements(m_arm);
+        m_currentLimit = currentLimit;
+    }
+
     @Override
     public void execute(){
-        m_arm.ArmToPosition(m_targetPos);
+        m_arm.ArmToPosition(m_targetPos, m_currentLimit);
     }
 
     @Override

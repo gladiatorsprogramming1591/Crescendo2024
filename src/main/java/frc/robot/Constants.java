@@ -83,6 +83,9 @@ public final class Constants {
 
     public static final InterpolatingDoubleTreeMap DISTANCE_TO_ANGLE_MAP = new InterpolatingDoubleTreeMap();
 
+    public static final double MAX_ROTATION_SPEED_AUTO_AIM = 5.0;
+    public static final double TRANSLATION_SPEED_SCALAR_AUTO_AIM = 0.5;
+
     static {
       DISTANCE_TO_ANGLE_MAP.put(1.25, ArmConstants.kSUBWOOFER);
       DISTANCE_TO_ANGLE_MAP.put(2.2, ArmConstants.kOffset - 0.072);
@@ -205,13 +208,13 @@ public final class Constants {
     // public static final double kLeftShooterSpeed = 1.0; 
     public static final double kTransferSpeed = 0.25;
     public static final double kTransferSpeedFull = 1.0;
-    public static final double kLeftShooterSpeedRPM = 5000.0;
-    public static final double kRightShooterSpeedRPM = 0.6*kLeftShooterSpeedRPM; 
-    public static final double kLeftShooterTrapSpeedRPM = 2000.0;
-    public static final double kRightShooterTrapSpeedRPM = 0.6*kLeftShooterTrapSpeedRPM;
+    public static final double kRightShooterSpeedRPM = 5000.0;
+    public static final double kLeftShooterSpeedRPM = 0.6*kRightShooterSpeedRPM; 
+    public static final double kRightShooterTrapSpeedRPM = 2000.0;
+    public static final double kLeftShooterTrapSpeedRPM = 0.6*kRightShooterTrapSpeedRPM;
     public static final double kMinShooterSpeed = 4800.0; 
-    public static final double kLeftShooterFarSpeed = 5250.0; 
-    public static final double kRightShooterFarSpeed = 0.65 *kLeftShooterFarSpeed; 
+    public static final double kRightShooterFarSpeed = 5250.0; 
+    public static final double kLeftShooterFarSpeed = 0.6 *kRightShooterFarSpeed; 
     public static final double kShooterRPMTolerance = 200.0;
     public static final double kSVolts = 0.05;
     public static final double kVVoltSecondsPerRotation =
@@ -223,6 +226,8 @@ public final class Constants {
   public static final class IntakeConstants{
     public static final int kLeftIntakeCANId = 3;
     public static final int kRightIntakeCANId = 4; 
+
+    public static final int kCurrentLimit = 45;
 
     public static final double kIntakeSpeed = -0.95;
   }
@@ -248,8 +253,8 @@ public final class Constants {
     public static final double kTRAP = kOffset - 0.3;
     public static final double kSTAGELINE = kOffset - 0.021;
     public static final double kFOURTHNOTE = kOffset - 0.05; 
-    // public static final double kCLIMBSTART = kOffset + 0.325;
-    // public static final double kCLIMBFINISH = kOffset + 0.367;
+    public static final double kCLIMBSTART = kTRAP;
+    public static final double kCLIMBFINISH = kPODIUM;
     public static final double kAMP = kOffset - 0.375;
     public static final double kAllowedErrAbs = 0.001;
     public static final double kMinHeightAbs = kOffset;
@@ -261,6 +266,11 @@ public final class Constants {
     public static final double kArmMaxOutput = 1.0; //1.00
     public static final double kPositionTolerance = 0.05; 
     public static final double kVelocityTolerance = 0.02; 
+
+    // Arm Current Limits
+    public static final int kCurrentLimitDefault = 20;
+    public static final int kCurrentLimitManual = 10;
+    public static final int kCurrentLimitClimbing = 40;
   }
 
   public static final class OIConstants {
