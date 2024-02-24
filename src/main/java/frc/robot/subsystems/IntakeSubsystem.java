@@ -31,8 +31,8 @@ public class IntakeSubsystem extends SubsystemBase {
         m_leftIntakeMotor.setIdleMode(CANSparkMax.IdleMode.kCoast);
 
         m_leftIntakeMotor.follow(m_rightIntakeMotor, true);
-        m_rightIntakeMotor.setSmartCurrentLimit(IntakeConstants.kCurrentLimit);
-        m_leftIntakeMotor.setSmartCurrentLimit(IntakeConstants.kCurrentLimit);
+        m_rightIntakeMotor.setSmartCurrentLimit(2*IntakeConstants.kCurrentLimit, IntakeConstants.kCurrentLimit);
+        m_leftIntakeMotor.setSmartCurrentLimit(2*IntakeConstants.kCurrentLimit, IntakeConstants.kCurrentLimit);
         // m_rightShooterMotor.getPIDController().setP(ShooterConstants.kShooterP);
         // m_rightShooterMotor.getPIDController().setI(ShooterConstants.kShooterI);
         // m_rightShooterMotor.getPIDController().setD(ShooterConstants.kShooterD);
@@ -49,7 +49,6 @@ public class IntakeSubsystem extends SubsystemBase {
         m_leftIntakeMotor.enableVoltageCompensation(12);
     }
 
-
     public void intakeOn() {
         //Turns on the intake motor
         System.out.println("Turning intake on");
@@ -64,9 +63,14 @@ public class IntakeSubsystem extends SubsystemBase {
         m_leftIntakeMotor.set(0);
       }
 
+      public void intakeReverse() {
+        m_rightIntakeMotor.set(Constants.IntakeConstants.kIntakeReverseSpeed);
+      }
+
       @Override
         public void periodic() {
           // This method will be called once per scheduler run
+          SmartDashboard.putNumber("Intake Current", m_leftIntakeMotor.getOutputCurrent() + m_rightIntakeMotor.getOutputCurrent());
         }
       
 

@@ -41,8 +41,8 @@ public final class Constants {
     public static final double kMaxAngularSpeed =  2 * Math.PI; // radians per second
     public static final double kTeleopPercentLimit = .95; 
 
-    public static final Vector<N3> odometryStd = VecBuilder.fill(0.03, 0.03, 0.01);
-    public static final Vector<N3> visionStd = VecBuilder.fill(0.3, 0.3, 0.3);
+    public static final Vector<N3> odometryStd = VecBuilder.fill(0.06, 0.06, 0.01);
+    public static final Vector<N3> visionStd = VecBuilder.fill(0.35, 0.35, 0.4);
 
     // Camera Positions
     public static final Transform3d kFrontCameraLocation = new Transform3d(
@@ -69,7 +69,7 @@ public final class Constants {
     public static final double AMP_X = 1.9;
 
 
-    public static final PIDConstants AUTO_AIM_ROT_PID_CONSTANTS = new PIDConstants(16.0, 0.0, 1.4);
+    public static final PIDConstants AUTO_AIM_ROT_PID_CONSTANTS = new PIDConstants(9.0, 0.02, 1.0);
 
     public static final double VISION_REJECT_DISTANCE = 2.3;
 
@@ -77,7 +77,7 @@ public final class Constants {
     public static final double SPIN_COMPENSATION_Y = 0.06;
 
     // Radians
-    public static final double AUTO_AIM_ROT_TOLERANCE = Math.toRadians(1.0);
+    public static final double AUTO_AIM_ROT_TOLERANCE = Math.toRadians(1.2);
 
     // Shooter Angle Map
 
@@ -88,11 +88,11 @@ public final class Constants {
 
     static {
       DISTANCE_TO_ANGLE_MAP.put(1.25, ArmConstants.kSUBWOOFER);
-      DISTANCE_TO_ANGLE_MAP.put(2.2, ArmConstants.kOffset - 0.072);
-      DISTANCE_TO_ANGLE_MAP.put(3.0, ArmConstants.kOffset - 0.048);
-      DISTANCE_TO_ANGLE_MAP.put(4.1, ArmConstants.kOffset - 0.033);
-      DISTANCE_TO_ANGLE_MAP.put(4.9, ArmConstants.kOffset - 0.028);
-      DISTANCE_TO_ANGLE_MAP.put(5.5, ArmConstants.kOffset - 0.026);
+      DISTANCE_TO_ANGLE_MAP.put(2.2, ArmConstants.kOffset - 0.075);
+      DISTANCE_TO_ANGLE_MAP.put(3.0, ArmConstants.kOffset - 0.058);
+      DISTANCE_TO_ANGLE_MAP.put(4.1, ArmConstants.kOffset - 0.037);
+      DISTANCE_TO_ANGLE_MAP.put(4.9, ArmConstants.kOffset - 0.0295);
+      DISTANCE_TO_ANGLE_MAP.put(5.5, ArmConstants.kOffset - 0.028);
     }
 
 
@@ -185,8 +185,8 @@ public final class Constants {
     public static final IdleMode kDrivingMotorIdleMode = IdleMode.kBrake;
     public static final IdleMode kTurningMotorIdleMode = IdleMode.kBrake;
 
-    public static final int kDrivingMotorCurrentLimit = 40; // TODO Increase for competition
-    public static final int kTurningMotorCurrentLimit = 20; // amps
+    public static final int kDrivingMotorCurrentLimit = 35; // TODO Increase for competition
+    public static final int kTurningMotorCurrentLimit = 15; // amps
 
     public static final double kExampleTurningP = 0.01; 
     public static final double kExampleTurningI = 0; 
@@ -221,15 +221,20 @@ public final class Constants {
         // Should have value 12V at free speed...
         12.0 / NeoMotorConstants.kFreeSpeedRpm;
 
+    //Current limits
+    public static final int kShooterStallLimit = 80; 
+    public static final int kShooterFreeLimit = 40; 
+
   }
 
   public static final class IntakeConstants{
     public static final int kLeftIntakeCANId = 3;
     public static final int kRightIntakeCANId = 4; 
 
-    public static final int kCurrentLimit = 45;
+    public static final int kCurrentLimit = 30;
 
     public static final double kIntakeSpeed = -0.95;
+    public static final double kIntakeReverseSpeed = 0.75;
   }
 
   public static final class ArmConstants{

@@ -143,6 +143,7 @@ public class RobotContainer {
     // m_operatorController.x().onTrue(new ShootNote(m_ShooterSubsystem,
     // m_ArmSubsystem, armPositions.STAGELINE));
     m_operatorController.b().onTrue(new InstantCommand(() -> m_IntakeSubsystem.intakeOff(), m_IntakeSubsystem));
+    m_operatorController.y().whileTrue(new RunCommand(() -> m_IntakeSubsystem.intakeReverse(),m_IntakeSubsystem)); 
     m_operatorController.a().onTrue(new IntakeNote(m_ShooterSubsystem, m_ArmSubsystem, m_IntakeSubsystem)); 
     m_operatorController.povDown().onTrue(new ArmToPosition(m_ArmSubsystem, armPositions.TRANSFER)); 
     m_operatorController.povLeft().onTrue(new ArmToPosition(m_ArmSubsystem, armPositions.PODIUM)); 

@@ -64,6 +64,11 @@ public class ShooterSubsystem extends SubsystemBase {
         m_rightShooterMotor.enableVoltageCompensation(12);
         m_leftShooterMotor.enableVoltageCompensation(12);
 
+        m_leftShooterMotor.setSmartCurrentLimit(Constants.ShooterConstants.kShooterStallLimit, 
+          Constants.ShooterConstants.kShooterFreeLimit);
+        m_rightShooterMotor.setSmartCurrentLimit(Constants.ShooterConstants.kShooterStallLimit, 
+          Constants.ShooterConstants.kShooterFreeLimit);
+
         m_transferMotor = new CANSparkMax(Constants.ShooterConstants.kTransferCANId, MotorType.kBrushless);
         m_transferMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
     }
@@ -155,6 +160,8 @@ public class ShooterSubsystem extends SubsystemBase {
           SmartDashboard.putString("R Shooter Vel", "" + m_rightEncoder.getVelocity());
           SmartDashboard.putBoolean("ShooterBeamBreak", m_ShooterBeamBreak.get()); 
           SmartDashboard.putBoolean("ShooterAtSpeed", isShooterAtSpeed()); 
+
+          SmartDashboard.putNumber("Shooter Current", m_leftShooterMotor.getOutputCurrent() + m_rightShooterMotor.getOutputCurrent());
         }
 
 

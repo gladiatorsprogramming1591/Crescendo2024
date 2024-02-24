@@ -300,6 +300,12 @@ public static final double kTurnToleranceDeg = 1.0;
       });
 
       SmartDashboard.putNumber("Distance to Speaker", getSpeakerDistance());
+
+      double driveCurrent = m_frontLeft.getDriveCurrent() + m_frontRight.getDriveCurrent() + m_rearLeft.getDriveCurrent() + m_rearRight.getDriveCurrent();
+      SmartDashboard.putNumber("Drive Motors Current", driveCurrent);
+
+      double steerCurrent = m_frontLeft.getSteerCurrent() + m_frontRight.getSteerCurrent() + m_rearLeft.getSteerCurrent() + m_rearRight.getSteerCurrent();
+      SmartDashboard.putNumber("Steer Motors Current", steerCurrent);
   }
 
   public void updateAprilTagInfo(double desiredId) {
@@ -603,8 +609,10 @@ public static final double kTurnToleranceDeg = 1.0;
     Translation2d goalPose = isBlue ? DriveConstants.BLUE_SPEAKER : DriveConstants.RED_SPEAKER;
     ChassisSpeeds robotVel = getFieldRelativeSpeeds();
     double distanceToSpeaker = getPosition().getTranslation().getDistance(goalPose);
-    double x = goalPose.getX() - (robotVel.vxMetersPerSecond * (distanceToSpeaker / DriveConstants.NOTE_VELOCITY));
-    double y = goalPose.getY() - (robotVel.vyMetersPerSecond * (distanceToSpeaker / DriveConstants.NOTE_VELOCITY));
+    
+    double directionFlip = isBlue ? 1.0 : -1.0;
+    double x = goalPose.getX() - (directionFlip*robotVel.vxMetersPerSecond * (distanceToSpeaker / DriveConstants.NOTE_VELOCITY));
+    double y = goalPose.getY() - (directionFlip*robotVel.vyMetersPerSecond * (distanceToSpeaker / DriveConstants.NOTE_VELOCITY));
     return new Translation2d(x, y);
   }
 
@@ -641,7 +649,10 @@ public static final double kTurnToleranceDeg = 1.0;
    * @param y The desired {@code y} speed from {@code -1.0} to {@code 1.0}.
    */
   public void driveOnTargetSpeaker(DoubleSupplier x, DoubleSupplier y) {
-    driveAngle(-y.getAsDouble(), -x.getAsDouble(), getSpeakerAngle(), m_autoAimRotationPidController, false);
+    boolean isBlue = DriverStation.getAlliance().orElse(DriverStation.Alliance.Blue)
+        .equals(DriverStation.Alliance.Blue);
+    double directionFlip = isBlue ? -1.0 : 1.0;
+    driveAngle(directionFlip*y.getAsDouble(), directionFlip*x.getAsDouble(), getSpeakerAngle(), m_autoAimRotationPidController, false);
   }
 
   /**
