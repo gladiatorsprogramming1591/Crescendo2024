@@ -2,7 +2,7 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.22,
+      "x": 1.2,
       "y": 5.55
     },
     "rotation": 180.0
@@ -20,13 +20,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "NearPodiumToPodium"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Intake.25"
+            "pathName": "SubwooferToMiddle"
           }
         },
         {
@@ -38,55 +32,37 @@
         {
           "type": "path",
           "data": {
-            "pathName": "PodiumToMiddle"
+            "pathName": "MiddleToStageleftWNote3"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "ShootPodium"
+            "name": "ShootStageline"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "MiddleToThird"
+            "pathName": "StageleftToStageleftWNote4"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Intake.25"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "ShootFourthNote"
+            "name": "ShootStageline"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "ThirdToStageline"
+            "pathName": "StageleftToStageleftWNote5"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "AlignAndShootNote"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "StagelineFourth "
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "AlignAndShootNote"
+            "name": "ShootStageline"
           }
         }
       ]
