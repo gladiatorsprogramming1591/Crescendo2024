@@ -1,0 +1,91 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 0.6465019492093177,
+      "y": 6.593200975274989
+    },
+    "rotation": -120.25999999999999
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "ShootSubwoofer"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "SideToThird"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Intake.25"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ShootPodium"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "ThirdToStagelineAutoIntake"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AlignAndIntake"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "ThirdToShoot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AlignAndShootNote"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "StagelineFourth "
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AlignAndIntake"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "FourthToShoot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AlignAndShootNote"
+          }
+        }
+      ]
+    }
+  },
+  "folder": null,
+  "choreoAuto": false
+}
