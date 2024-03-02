@@ -1,5 +1,6 @@
 package frc.robot.commands.armCommands;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.ArmSubsystem;
 
@@ -20,6 +21,8 @@ public class ArmToPositionWithEnd extends Command {
 
     @Override
     public boolean isFinished(){
+        SmartDashboard.putString("Arm at pos", "" + m_arm.atPosition(m_targetPos));
+
         return m_arm.atPosition(m_targetPos);   // Needs additional testing
     }
 

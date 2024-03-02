@@ -1,0 +1,73 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 1.2,
+      "y": 5.55
+    },
+    "rotation": 180.0
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "ShootSubwoofer"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "SubwooferToMiddle"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ShootPodium"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "MiddleToStageleftWNote3"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ShootStageline"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "StageleftToStageleftWNote4"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ShootStageline"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "StageleftToStageleftWNote5"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ShootStageline"
+          }
+        }
+      ]
+    }
+  },
+  "folder": null,
+  "choreoAuto": false
+}

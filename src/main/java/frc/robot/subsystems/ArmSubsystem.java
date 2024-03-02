@@ -40,7 +40,11 @@ public class ArmSubsystem extends SubsystemBase {
       PODIUM,
       CLIMBSTART,
       CLIMBFINISH,
-      AMP
+      AMP,
+      TRAP,
+      STAGELINE,
+      FOURTHNOTE
+
   }
 
 
@@ -62,49 +66,66 @@ public class ArmSubsystem extends SubsystemBase {
         m_rightArmMotor.enableVoltageCompensation(12);
         m_leftArmMotor.enableVoltageCompensation(12);
 
-        m_rightArmMotor.setSmartCurrentLimit(10);
-        m_leftArmMotor.setSmartCurrentLimit(10);
+        m_rightArmMotor.setSmartCurrentLimit(ArmConstants.kCurrentLimitDefault);
+        m_leftArmMotor.setSmartCurrentLimit(ArmConstants.kCurrentLimitDefault);
 
         mapAbs.put(armPositions.TRANSFER, ArmConstants.kTRANSFER);
         mapAbs.put(armPositions.SUBWOOFER, ArmConstants.kSUBWOOFER);
         mapAbs.put(armPositions.PODIUM, ArmConstants.kPODIUM);
-        // mapAbs.put(armPositions.CLIMBSTART, ArmConstants.kCLIMBSTART);
-        // mapAbs.put(armPositions.CLIMBFINISH, ArmConstants.kCLIMBFINISH); // Single Substation
+        mapAbs.put(armPositions.TRAP, ArmConstants.kTRAP);
+        mapAbs.put(armPositions.STAGELINE, ArmConstants.kSTAGELINE);
+        mapAbs.put(armPositions.FOURTHNOTE, ArmConstants.kFOURTHNOTE);
+        mapAbs.put(armPositions.CLIMBSTART, ArmConstants.kCLIMBSTART);
+        mapAbs.put(armPositions.CLIMBFINISH, ArmConstants.kCLIMBFINISH); // Single Substation
         mapAbs.put(armPositions.AMP, ArmConstants.kAMP); //At hard stop:
+        m_AbsPidController.setTolerance(ArmConstants.kPositionTolerance);
+    }
+
+    public void ArmToPosition(double setpoint, int currentLimit) {
+      m_rightArmMotor.setSmartCurrentLimit(currentLimit);
+      m_leftArmMotor.setSmartCurrentLimit(currentLimit);
+
+        if (((armAbsEncoder.getAbsolutePosition() > ArmConstants.kMinHeightAbs)
+            && (setpoint > mapAbs.get(armPositions.TRANSFER))) ||
+            ((armAbsEncoder.getAbsolutePosition() < ArmConstants.kMaxHeightAbs)
+                && (setpoint < mapAbs.get(armPositions.AMP)))) {
+          m_leftArmMotor.set(0);
+          return;
+      }
+      double pidOut = MathUtil.clamp(
+          m_AbsPidController.calculate(armAbsEncoder.getAbsolutePosition(), setpoint),
+          Constants.ArmConstants.kArmMinOutput, Constants.ArmConstants.kArmMaxOutput);
+
+      SmartDashboard.putNumber("Arm Position Error", m_AbsPidController.getPositionError());
+      SmartDashboard.putNumber("Arm Abs Target Pos", setpoint);
+      SmartDashboard.putNumber("Arm Abs Speed", pidOut);
+
+      if(setpoint >= ArmConstants.kOffset){
+        m_rightArmMotor.set(0);
+        return;
+      }
+      m_rightArmMotor.set(pidOut);
     }
 
     public void ArmToPosition(armPositions position) {
-        if (((armAbsEncoder.getAbsolutePosition() > ArmConstants.kMinHeightAbs) && (position == armPositions.TRANSFER)) ||
-            ((armAbsEncoder.getAbsolutePosition() < ArmConstants.kMaxHeightAbs) && (position == armPositions.AMP))) {
-            m_leftArmMotor.set(0);
-            return;
-        }
+      double ref = mapAbs.get(position);
+      ArmToPosition(ref, ArmConstants.kCurrentLimitDefault);
+    }
 
-        // switch (position) {
-        //     case SUBWOOFER:
-        //     case CLIMBSTART:
-        //     case CLIMBFINISH://TODO Finish probably needs its own p
-        //         m_AbsPidController.setP(11.0);
-        //         break;
-        //     case TRANSFER:
-        //     case PODIUM:
-        //     default:
-        //         m_AbsPidController.setP(9.0);
-        //         break;
-        // }
-        double ref = mapAbs.get(position);
+    public void ArmToPosition(armPositions position, int currentLimit) {
+      double ref = mapAbs.get(position);
+      ArmToPosition(ref, currentLimit);
+    }
 
-        double pidOut = MathUtil.clamp(
-            m_AbsPidController.calculate(armAbsEncoder.getAbsolutePosition(),ref),
-            Constants.ArmConstants.kArmMinOutput, Constants.ArmConstants.kArmMaxOutput);
-            
-        SmartDashboard.putNumber("Arm Abs Target Pos", ref);
-        SmartDashboard.putNumber("Arm Abs Speed", pidOut);
-        m_rightArmMotor.set(pidOut);
+    public void ArmToPosition(double position) {
+      ArmToPosition(position, ArmConstants.kCurrentLimitDefault);
     }
 
 
     public void ArmForward(double speed) {
+      m_rightArmMotor.setSmartCurrentLimit(ArmConstants.kCurrentLimitManual);
+      m_leftArmMotor.setSmartCurrentLimit(ArmConstants.kCurrentLimitManual);
+
         MathUtil.clamp(speed, 0, ArmConstants.kMaxOpenLoopSpeed); 
         //Turns on the Arm motor
         System.out.println("Turning Arm forward");
@@ -116,6 +137,9 @@ public class ArmSubsystem extends SubsystemBase {
       }
     
       public void ArmBackward(double speed) {
+        m_rightArmMotor.setSmartCurrentLimit(ArmConstants.kCurrentLimitManual);
+        m_leftArmMotor.setSmartCurrentLimit(ArmConstants.kCurrentLimitManual);
+
         MathUtil.clamp(speed, 0, ArmConstants.kMaxOpenLoopSpeed); 
         //Turns on the Arm motor
         System.out.println("Turning Arm backward");
@@ -135,6 +159,7 @@ public class ArmSubsystem extends SubsystemBase {
         double currentEncoderPosition = armAbsEncoder.getAbsolutePosition();
         return (Math.abs(currentEncoderPosition - mapAbs.get(pos)) < Constants.ArmConstants.kAllowedErrAbs);
       }
+
 
       @Override
         public void periodic() {

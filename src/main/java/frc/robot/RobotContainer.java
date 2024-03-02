@@ -15,17 +15,28 @@ import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.PS4Controller.Button;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Constants.ArmConstants;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
+import frc.robot.commands.VisionDriveAligned;
+import frc.robot.commands.WarmUpShooter;
+import frc.robot.commands.AlignAndShootNote;
+import frc.robot.commands.IntakeNote;
+import frc.robot.commands.ShootNote;
+import frc.robot.commands.TransferOnWithBeamBreak;
+import frc.robot.commands.TurnToAngleProfiled;
 import frc.robot.commands.armCommands.ArmToPosition;
+import frc.robot.commands.armCommands.ArmToPositionWithEnd;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.ArmSubsystem.armPositions;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
@@ -34,6 +45,12 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.function.DoubleSupplier;
+
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.commands.PathPlannerAuto;
+import com.pathplanner.lib.path.PathPlannerPath;
 
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -41,20 +58,28 @@ import java.util.List;
  * periodic methods (other than the scheduler calls).  Instead, the structure of the robot
  * (including subsystems, commands, and button mappings) should be declared here.
  */
-public class RobotContainer {
+public class RobotContainer {  
+  
   // The robot's subsystems
-  private final DriveSubsystem m_robotDrive = new DriveSubsystem();
+  public final DriveSubsystem m_robotDrive = new DriveSubsystem();
   private final ShooterSubsystem m_ShooterSubsystem = new ShooterSubsystem();
   private final IntakeSubsystem m_IntakeSubsystem = new IntakeSubsystem();
   private final ArmSubsystem m_ArmSubsystem = new ArmSubsystem();
+  private SendableChooser<Command> m_autoChooser; 
 
   // The driver's controller
   CommandXboxController m_driverController = new CommandXboxController(OIConstants.kDriverControllerPort);
+  CommandXboxController m_operatorController = new CommandXboxController(OIConstants.kOperatorControllerPort);
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
+    //Register Named Commands 
+    registerNamedCommands();
+
+    m_autoChooser = AutoBuilder.buildAutoChooser(); 
+    SmartDashboard.putData("Auto Mode", m_autoChooser);
     // Configure the button bindings
     configureButtonBindings();
 
@@ -64,12 +89,13 @@ public class RobotContainer {
         // Turning is controlled by the X axis of the right stick.
         new RunCommand(
             () -> m_robotDrive.drive(
-                -MathUtil.applyDeadband(m_driverController.getLeftY(), OIConstants.kDriveDeadband),
-                -MathUtil.applyDeadband(m_driverController.getLeftX(), OIConstants.kDriveDeadband),
-                -MathUtil.applyDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband),
-                true, true),
+                -MathUtil.applyDeadband(m_driverController.getLeftY() * DriveConstants.kTeleopPercentLimit, OIConstants.kDriveDeadband),
+                -MathUtil.applyDeadband(m_driverController.getLeftX() * DriveConstants.kTeleopPercentLimit, OIConstants.kDriveDeadband),
+                -MathUtil.applyDeadband(m_driverController.getRightX() * DriveConstants.kTeleopPercentLimit, OIConstants.kDriveDeadband),
+                true, false),
             m_robotDrive));
   }
+
 
   /**
    * Use this method to define your button->command mappings. Buttons can be
@@ -80,71 +106,78 @@ public class RobotContainer {
    * passing it to a
    * {@link JoystickButton}.
    */
-  private void configureButtonBindings() {
-    m_driverController.a().onTrue(new InstantCommand(() -> m_ShooterSubsystem.shooterOn(), m_ShooterSubsystem));
+  private void configureButtonBindings() { 
+    m_driverController.back().onTrue(new InstantCommand(() -> m_robotDrive.zeroHeading()));
+    // m_driverController.a().onTrue(new RunCommand(() ->
+    // m_ShooterSubsystem.shooterOn(), m_ShooterSubsystem));
+    m_driverController.a().whileTrue(new RunCommand(() -> m_ShooterSubsystem.transferOn(false), m_ShooterSubsystem)
+        .finallyDo(() -> m_ShooterSubsystem.transferOff()));
     m_driverController.b().onTrue(new InstantCommand(() -> m_ShooterSubsystem.shooterOff(), m_ShooterSubsystem));
-    m_driverController.x().onTrue(new RunCommand(() -> m_ShooterSubsystem.transferOn(true), m_ShooterSubsystem));
+    m_driverController.x().onTrue(new TransferOnWithBeamBreak(m_ShooterSubsystem));
     m_driverController.y().onTrue(new InstantCommand(() -> m_ShooterSubsystem.transferOff(), m_ShooterSubsystem));
-    m_driverController.back().onTrue(new InstantCommand(() -> m_ShooterSubsystem.transferOn(false), m_ShooterSubsystem));
+    m_driverController.start().whileTrue(new AlignAndShootNote(m_ShooterSubsystem, m_ArmSubsystem,
+    () -> m_driverController.getLeftX(), () -> m_driverController.getLeftY(), m_robotDrive, m_IntakeSubsystem));
+    // m_driverController.rightBumper().whileTrue(new RunCommand(
+    //     () -> m_robotDrive.driveOnTargetNote(() -> m_driverController.getLeftX(), () -> m_driverController.getLeftY()),
+    //     m_robotDrive).alongWith(new IntakeNote(m_ShooterSubsystem, m_ArmSubsystem, m_IntakeSubsystem)));
     m_driverController.leftBumper().onTrue(new InstantCommand(() -> m_IntakeSubsystem.intakeOn(), m_IntakeSubsystem));
-    m_driverController.rightBumper().onTrue(new InstantCommand(() -> m_IntakeSubsystem.intakeOff(), m_IntakeSubsystem));
-    m_driverController.rightTrigger(OIConstants.kArmDeadband).whileTrue(new RunCommand(() -> 
-      m_ArmSubsystem.ArmBackward(m_driverController.getRightTriggerAxis()), m_ArmSubsystem));
-    m_driverController.rightTrigger(OIConstants.kArmDeadband).onFalse(new InstantCommand(() -> m_ArmSubsystem.ArmOff(), m_ArmSubsystem));
-    m_driverController.leftTrigger(OIConstants.kArmDeadband).whileTrue(new RunCommand(() -> 
-      m_ArmSubsystem.ArmForward(m_driverController.getLeftTriggerAxis()), m_ArmSubsystem));
-    m_driverController.leftTrigger(OIConstants.kArmDeadband).onFalse(new InstantCommand(() -> m_ArmSubsystem.ArmOff(), m_ArmSubsystem));
-    m_driverController.povDown().onTrue(new ArmToPosition(m_ArmSubsystem, armPositions.TRANSFER)); 
-    m_driverController.povLeft().onTrue(new ArmToPosition(m_ArmSubsystem, armPositions.PODIUM)); 
-    m_driverController.povUp().onTrue(new ArmToPosition(m_ArmSubsystem, armPositions.SUBWOOFER)); 
-    m_driverController.povRight().onTrue(new ArmToPosition(m_ArmSubsystem, armPositions.AMP)); 
+    // m_driverController.rightTrigger(OIConstants.kArmDeadband).whileTrue(new
+    // RunCommand(() ->
+    // m_ArmSubsystem.ArmBackward(m_driverController.getRightTriggerAxis()),
+    // m_ArmSubsystem));
+    // m_driverController.rightTrigger(OIConstants.kArmDeadband).onFalse(new
+    // InstantCommand(() -> m_ArmSubsystem.ArmOff(), m_ArmSubsystem));
+    // m_driverController.leftTrigger(OIConstants.kArmDeadband).whileTrue(new
+    // RunCommand(() ->
+    // m_ArmSubsystem.ArmForward(m_driverController.getLeftTriggerAxis()),
+    // m_ArmSubsystem));
+    // m_driverController.leftTrigger(OIConstants.kArmDeadband).onFalse(new
+    // InstantCommand(() -> m_ArmSubsystem.ArmOff(), m_ArmSubsystem));
+    // m_driverController.povDown().onTrue(new TurnToAngleProfiled(180, m_robotDrive)); 
+    // m_driverController.povLeft().onTrue(new TurnToAngleProfiled(270, m_robotDrive)); 
+    // m_driverController.povUp().onTrue(new TurnToAngleProfiled(0, m_robotDrive)); 
+    // m_driverController.povRight().onTrue(new TurnToAngleProfiled(90,m_robotDrive)); 
     m_driverController.leftStick().onTrue(new InstantCommand(() -> m_ShooterSubsystem.transferReverse(), m_ShooterSubsystem)); 
+    m_driverController.povDown().onTrue(new ArmToPosition(m_ArmSubsystem, armPositions.TRAP)); 
+    m_operatorController.rightStick()
+        .onTrue(new InstantCommand(() -> m_ShooterSubsystem.transferOn(false), m_ShooterSubsystem));
+    m_operatorController.rightTrigger().onTrue(new ShootNote(m_ShooterSubsystem, m_ArmSubsystem, armPositions.SUBWOOFER)); 
+    m_operatorController.leftTrigger().onTrue(new ShootNote(m_ShooterSubsystem, m_ArmSubsystem, armPositions.PODIUM)); 
+    // m_operatorController.x().onTrue(new ShootNote(m_ShooterSubsystem,
+    // m_ArmSubsystem, armPositions.STAGELINE));
+    m_operatorController.b().onTrue(new InstantCommand(() -> m_IntakeSubsystem.intakeOff(), m_IntakeSubsystem));
+    m_operatorController.y().whileTrue(new RunCommand(() -> m_IntakeSubsystem.intakeReverse(),m_IntakeSubsystem)); 
+    m_operatorController.a().onTrue(new IntakeNote(m_ShooterSubsystem, m_ArmSubsystem, m_IntakeSubsystem)); 
+    m_operatorController.povDown().onTrue(new ArmToPosition(m_ArmSubsystem, armPositions.TRANSFER)); 
+    m_operatorController.povLeft().onTrue(new ArmToPosition(m_ArmSubsystem, armPositions.PODIUM)); 
+    m_operatorController.povUp().onTrue(new ArmToPosition(m_ArmSubsystem, armPositions.SUBWOOFER)); 
+    m_operatorController.povRight().onTrue(new ArmToPosition(m_ArmSubsystem, armPositions.AMP)); 
+    m_operatorController.rightBumper().onTrue(
+        new ArmToPosition(m_ArmSubsystem, armPositions.TRAP).alongWith(new WarmUpShooter(m_ShooterSubsystem, true)));
+    m_operatorController.back().onTrue(new ArmToPosition(m_ArmSubsystem, armPositions.CLIMBSTART));
+    m_operatorController.start()
+        .onTrue(new ArmToPosition(m_ArmSubsystem, armPositions.CLIMBFINISH, ArmConstants.kCurrentLimitClimbing));
+    //TODO change the rotation to be the letter buttons 
   }
 
-
-  /**
-   * Use this to pass the autonomous command to the main {@link Robot} class.
-   *
-   * @return the command to run in autonomous
-   */
-  public Command getAutonomousCommand() {
-    // Create config for trajectory
-    TrajectoryConfig config = new TrajectoryConfig(
-        AutoConstants.kMaxSpeedMetersPerSecond,
-        AutoConstants.kMaxAccelerationMetersPerSecondSquared)
-        // Add kinematics to ensure max speed is actually obeyed
-        .setKinematics(DriveConstants.kDriveKinematics);
-
-    // An example trajectory to follow. All units in meters.
-    Trajectory exampleTrajectory = TrajectoryGenerator.generateTrajectory(
-        // Start at the origin facing the +X direction
-        new Pose2d(0, 0, new Rotation2d(0)),
-        // Pass through these two interior waypoints, making an 's' curve path
-        List.of(new Translation2d(1, 1), new Translation2d(2, -1)),
-        // End 3 meters straight ahead of where we started, facing forward
-        new Pose2d(3, 0, new Rotation2d(0)),
-        config);
-
-    var thetaController = new ProfiledPIDController(
-        AutoConstants.kPThetaController, 0, 0, AutoConstants.kThetaControllerConstraints);
-    thetaController.enableContinuousInput(-Math.PI, Math.PI);
-
-    SwerveControllerCommand swerveControllerCommand = new SwerveControllerCommand(
-        exampleTrajectory,
-        m_robotDrive::getPose, // Functional interface to feed supplier
-        DriveConstants.kDriveKinematics,
-
-        // Position controllers
-        new PIDController(AutoConstants.kPXController, 0, 0),
-        new PIDController(AutoConstants.kPYController, 0, 0),
-        thetaController,
-        m_robotDrive::setModuleStates,
-        m_robotDrive);
-
-    // Reset odometry to the starting pose of the trajectory.
-    m_robotDrive.resetOdometry(exampleTrajectory.getInitialPose());
-
-    // Run path following command, then stop at the end.
-    return swerveControllerCommand.andThen(() -> m_robotDrive.drive(0, 0, 0, false, false));
+  //  * Use this to pass the autonomous command to the main {@link Robot} class.
+  //  *
+  //  * @return the command to run in autonomous
+   
+  public Command getAutonomousCommand() { 
+    return m_autoChooser.getSelected(); 
   }
-}
+
+  public void registerNamedCommands(){
+    NamedCommands.registerCommand("ShootSubwoofer", new ShootNote(m_ShooterSubsystem, m_ArmSubsystem, armPositions.SUBWOOFER)); 
+    NamedCommands.registerCommand("ShootPodium", new ShootNote(m_ShooterSubsystem, m_ArmSubsystem, armPositions.PODIUM)); 
+    NamedCommands.registerCommand("ShootStageLine", new ShootNote(m_ShooterSubsystem, m_ArmSubsystem, armPositions.STAGELINE)); 
+    NamedCommands.registerCommand("Intake", new IntakeNote(m_ShooterSubsystem, m_ArmSubsystem, m_IntakeSubsystem)); 
+    NamedCommands.registerCommand("Intake.25", new IntakeNote(m_ShooterSubsystem, m_ArmSubsystem, m_IntakeSubsystem).withTimeout(0.20)); 
+    NamedCommands.registerCommand("ArmStow", new ArmToPositionWithEnd(m_ArmSubsystem, armPositions.TRANSFER));
+    NamedCommands.registerCommand("AlignAndShootNote",new AlignAndShootNote(m_ShooterSubsystem, m_ArmSubsystem, () -> 0, () -> 0, m_robotDrive, m_IntakeSubsystem));
+    NamedCommands.registerCommand("ShootFourthNote", new ShootNote(m_ShooterSubsystem, m_ArmSubsystem, armPositions.FOURTHNOTE));
+  
+  }
+}   
+

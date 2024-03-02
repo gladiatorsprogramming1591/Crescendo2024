@@ -1,0 +1,79 @@
+{
+  "NetworkTables": {
+    "Retained Values": {
+      "open": false
+    },
+    "retained": {
+      "SmartDashboard": {
+        "open": true
+      },
+      "limelight": {
+        "double[]##v_/limelight/botpose": {
+          "open": true
+        },
+        "open": true
+      }
+    },
+    "transitory": {
+      "LiveWindow": {
+        ".status": {
+          "open": true
+        }
+      },
+      "Shuffleboard": {
+        ".recording": {
+          "open": true
+        }
+      },
+      "SmartDashboard": {
+        "open": true
+      }
+    },
+    "types": {
+      "/FMSInfo": "FMSInfo",
+      "/SmartDashboard/Auto Mode": "String Chooser",
+      "/SmartDashboard/Field": "Field2d"
+    },
+    "windows": {
+      "/FMSInfo": {
+        "window": {
+          "visible": true
+        }
+      },
+      "/SmartDashboard/Field": {
+        "bottom": 544,
+        "builtin": "2024 Crescendo",
+        "height": 8.013679504394531,
+        "left": 46,
+        "right": 1088,
+        "top": 36,
+        "width": 16.541748046875,
+        "window": {
+          "visible": true
+        }
+      }
+    }
+  },
+  "NetworkTables Info": {
+    "Clients": {
+      "open": true
+    },
+    "Dashboard@1": {
+      "Publishers": {
+        "open": true
+      },
+      "Subscribers": {
+        "open": true
+      },
+      "open": true
+    },
+    "visible": true
+  },
+  "NetworkTables Log": {
+    "visible": true
+  },
+  "NetworkTables Settings": {
+    "mode": "Client (NT4)",
+    "serverTeam": "1591"
+  }
+}
