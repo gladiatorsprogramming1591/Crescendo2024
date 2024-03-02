@@ -22,9 +22,11 @@ import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.commands.VisionDriveAligned;
+import frc.robot.commands.WarmUpAndAutoShoot;
 import frc.robot.commands.WarmUpShooter;
 import frc.robot.commands.AlignAndIntake;
 import frc.robot.commands.AlignAndShootNote;
+import frc.robot.commands.AlignShooterOnly;
 import frc.robot.commands.AmpScore;
 import frc.robot.commands.IntakeNote;
 import frc.robot.commands.IntakeSourcePartOne;
@@ -208,6 +210,15 @@ public class RobotContainer {
         NamedCommands.registerCommand("AlignAndIntake",
                 new AlignAndIntake(m_ShooterSubsystem, m_ArmSubsystem, m_IntakeSubsystem, m_robotDrive)
                         .withTimeout(1.5));
+        NamedCommands.registerCommand("AlignShooterOnly",
+                new AlignShooterOnly(m_ShooterSubsystem, m_ArmSubsystem, m_robotDrive, m_IntakeSubsystem));
+        NamedCommands.registerCommand("ShootNoteAfterAlign",
+                new WarmUpAndAutoShoot(m_robotDrive, m_ShooterSubsystem, m_ArmSubsystem, false, true)
+                        .beforeStarting(() -> m_IntakeSubsystem.intakeOff()));
+        NamedCommands.registerCommand("BeginAutoAlignTheta",
+                new InstantCommand(() -> m_robotDrive.isAutoAiming = true));
+        NamedCommands.registerCommand("EndAutoAlignTheta", new InstantCommand(() -> m_robotDrive.isAutoAiming = false));
 
     }
+
 }

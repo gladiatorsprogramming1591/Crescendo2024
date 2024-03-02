@@ -2,6 +2,7 @@ package frc.robot.commands;
 
 import java.util.function.DoubleSupplier;
 
+import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
@@ -17,26 +18,27 @@ import frc.robot.subsystems.IntakeSubsystem;
 
 public class AlignAndIntake extends SequentialCommandGroup {
 
-        public AlignAndIntake(ShooterSubsystem shooterSubsystem,
-                        ArmSubsystem armSubsystem,
-                        IntakeSubsystem intakeSubsystem,
-                        DriveSubsystem driveSubsystem) {
-                addRequirements(shooterSubsystem, armSubsystem, intakeSubsystem, driveSubsystem);
-                addCommands(
-                                new ParallelRaceGroup(
-                                                new RunCommand(() -> driveSubsystem.driveRobotRelativeToObject(),
-                                                                driveSubsystem),
-                                                new SequentialCommandGroup(
-                                                                new ArmToPositionWithEnd(armSubsystem,
-                                                                                armPositions.TRANSFER),
-                                                                new ParallelDeadlineGroup(
-                                                                                new TransferOnWithBeamBreak(
-                                                                                                shooterSubsystem),
-                                                                                new RunCommand(() -> intakeSubsystem
-                                                                                                .intakeOn(),
-                                                                                                intakeSubsystem)),
-                                                                new InstantCommand(
-                                                                                () -> intakeSubsystem.intakeOff()))));
+    public AlignAndIntake(ShooterSubsystem shooterSubsystem,
+            ArmSubsystem armSubsystem,
+            IntakeSubsystem intakeSubsystem,
+            DriveSubsystem driveSubsystem) {
+        addRequirements(shooterSubsystem, armSubsystem, intakeSubsystem, driveSubsystem);
+        addCommands(
+                new ParallelRaceGroup(
+                        new FinishWhenBeamBroken(shooterSubsystem),
+                        new RunCommand(() -> driveSubsystem.driveRobotRelativeToObject(),
+                                driveSubsystem),
+                        new SequentialCommandGroup(
+                                new ArmToPositionWithEnd(armSubsystem,
+                                        armPositions.TRANSFER),
+                                new ParallelDeadlineGroup(
+                                        new TransferOnWithBeamBreak(
+                                                shooterSubsystem),
+                                        new RunCommand(() -> intakeSubsystem
+                                                .intakeOn(),
+                                                intakeSubsystem)),
+                                new InstantCommand(
+                                        () -> intakeSubsystem.intakeOff()))));
 
-        }
+    }
 }

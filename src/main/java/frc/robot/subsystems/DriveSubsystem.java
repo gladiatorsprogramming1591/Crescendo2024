@@ -57,6 +57,7 @@ import org.photonvision.targeting.PhotonTrackedTarget;
 import com.ctre.phoenix6.hardware.Pigeon2;
 
 public class DriveSubsystem extends SubsystemBase {
+  public boolean isAutoAiming = false;
   public static final double kTurnRateToleranceDegPerS = 5.0;
 
   public static final double kTurnToleranceDeg = 1.0;
@@ -364,6 +365,7 @@ public class DriveSubsystem extends SubsystemBase {
    * @param initialpose
    */
   public void resetOdometry(Pose2d initialpose) {
+    setPoseEstimatorPose(initialpose);
     m_odometry.resetPosition(
         Rotation2d.fromDegrees(getHeading()),
         new SwerveModulePosition[] {
@@ -545,7 +547,11 @@ public class DriveSubsystem extends SubsystemBase {
 
   public void driveRobotRelative(ChassisSpeeds robotRelativeSpeeds) {
     ChassisSpeeds targetSpeeds = ChassisSpeeds.discretize(robotRelativeSpeeds, 0.02);
-
+    if (isAutoAiming) {
+      targetSpeeds.omegaRadiansPerSecond = MathUtil.clamp(
+          m_autoAimRotationPidController.calculate(getPosition().getRotation().getRadians(), getSpeakerAngle()),
+          -DriveConstants.MAX_ROTATION_SPEED_AUTO_AIM, DriveConstants.MAX_ROTATION_SPEED_AUTO_AIM);
+    }
     SwerveModuleState[] targetStates = Constants.DriveConstants.kDriveKinematics.toSwerveModuleStates(targetSpeeds);
     setModuleStates(targetStates);
   }
@@ -719,4 +725,14 @@ public class DriveSubsystem extends SubsystemBase {
     return m_autoAimRotationPidController.atSetpoint();
   }
 
+  public void setPoseEstimatorPose(Pose2d pose) {
+    m_poseEstimator.resetPosition(
+        Rotation2d.fromDegrees(getHeading()),
+        new SwerveModulePosition[] {
+            m_frontLeft.getPosition(),
+            m_frontRight.getPosition(),
+            m_rearLeft.getPosition(),
+            m_rearRight.getPosition()
+        }, pose);
+  }
 }

@@ -25,14 +25,18 @@ public class WarmUpAndAutoShoot extends Command {
   ShooterSubsystem m_shooter;
   ArmSubsystem m_arm;
   boolean m_end = false;
+  boolean m_autoShoot = true;
+  boolean m_shootImmediately = false;
 
   public WarmUpAndAutoShoot(DriveSubsystem driveSubsystem, ShooterSubsystem shooterSubsystem,
-      ArmSubsystem armSubsystem) {
+      ArmSubsystem armSubsystem, boolean autoShoot, boolean shootImmediately) {
     m_drive = driveSubsystem;
     m_shooter = shooterSubsystem;
     m_arm = armSubsystem;
+    m_autoShoot = autoShoot;
+    m_shootImmediately = shootImmediately;
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(shooterSubsystem);
+    addRequirements(shooterSubsystem, armSubsystem);
   }
 
   // Called when the command is initially scheduled.
@@ -46,9 +50,16 @@ public class WarmUpAndAutoShoot extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    if (m_shootImmediately) {
+      m_shooter.transferOn(false);
+      transferCount++;
+      if (transferCount > 5) { // 1010 - 1000 = 10 * 20 ms = 200 ms to run transfer before finishing command
+        m_end = true;
+      }
+    }
     m_arm.ArmToPosition(DriveConstants.DISTANCE_TO_ANGLE_MAP.get(m_drive.getSpeakerDistance()));
     m_shooter.shooterOn(m_drive.getSpeakerDistance() > 5.0);
-    if (m_drive.getIsOnTargetSpeaker() && m_shooter.isShooterAtSpeed()) {
+    if (m_drive.getIsOnTargetSpeaker() && m_shooter.isShooterAtSpeed() && m_autoShoot) {
       onTargetCount++;
       if (onTargetCount > 2) { // 10 * 20 ms = 200 ms of being on target & at speed
         m_shooter.transferOn(false);
@@ -66,9 +77,11 @@ public class WarmUpAndAutoShoot extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_shooter.shooterOff();
+    if (m_autoShoot || m_shootImmediately) {
+      m_shooter.shooterOff();
+      m_arm.ArmOff();
+    }
     m_shooter.transferOff();
-    m_arm.ArmOff();
   }
 
   // Returns true when the command should end.

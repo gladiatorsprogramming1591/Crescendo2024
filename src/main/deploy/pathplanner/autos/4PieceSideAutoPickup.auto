@@ -20,25 +20,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "SideToThird"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Intake.25"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "ShootPodium"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "ThirdToStagelineAutoIntake"
+            "pathName": "FirstToMidline"
           }
         },
         {
@@ -51,12 +33,6 @@
           "type": "path",
           "data": {
             "pathName": "ThirdToShoot"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "AlignAndShootNote"
           }
         },
         {
@@ -75,12 +51,6 @@
           "type": "path",
           "data": {
             "pathName": "FourthToShoot"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "AlignAndShootNote"
           }
         }
       ]

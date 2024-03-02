@@ -55,7 +55,7 @@ public final class Constants {
     public static final double FIELD_LENGTH = 16.5417;
     public static final double FIELD_WIDTH = 8.0136;
 
-    public static final double NOTE_VELOCITY = 8.5;
+    public static final double NOTE_VELOCITY = 10.0;
 
     public static final Translation2d BLUE_SPEAKER = new Translation2d(0.0241, 5.547868);
     public static final Translation2d RED_SPEAKER = new Translation2d(FIELD_LENGTH - BLUE_SPEAKER.getX(),
@@ -262,7 +262,7 @@ public final class Constants {
     public static final double kSTAGELINE = kOffset - 0.021;
     public static final double kFOURTHNOTE = kOffset - 0.05;
     public static final double kCLIMBSTART = kTRAP;
-    public static final double kCLIMBFINISH = kOffset - .025;
+    public static final double kCLIMBFINISH = kOffset - .005;
     public static final double kAMP = kOffset - 0.375;
     public static final double kSOURCE = kOffset - 0.375; // Change while testing manually
     public static final double kAllowedErrAbs = 0.001;
@@ -278,7 +278,7 @@ public final class Constants {
     // Arm Current Limits
     public static final int kCurrentLimitDefault = 20;
     public static final int kCurrentLimitManual = 10;
-    public static final int kCurrentLimitClimbing = 50;
+    public static final int kCurrentLimitClimbing = 70;
   }
 
   public static final class OIConstants {
