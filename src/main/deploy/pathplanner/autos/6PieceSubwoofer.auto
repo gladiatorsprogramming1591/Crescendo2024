@@ -1,0 +1,103 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 1.22,
+      "y": 5.55
+    },
+    "rotation": 180.0
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "ShootSubwoofer"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "NearPodiumToPodium"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Intake.25"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ShootPodium"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "PodiumToMiddle"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ShootPodium"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "MiddleToThird"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Intake.25"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ShootFourthNote"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "ThirdToStagelineAutoIntake"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AlignAndShootNote"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "StagelineFourth "
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AlignAndShootNote"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "FourthToShoot"
+          }
+        }
+      ]
+    }
+  },
+  "folder": null,
+  "choreoAuto": false
+}

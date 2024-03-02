@@ -26,7 +26,8 @@ public class WarmUpAndAutoShoot extends Command {
   ArmSubsystem m_arm;
   boolean m_end = false;
 
-  public WarmUpAndAutoShoot(DriveSubsystem driveSubsystem, ShooterSubsystem shooterSubsystem, ArmSubsystem armSubsystem) {
+  public WarmUpAndAutoShoot(DriveSubsystem driveSubsystem, ShooterSubsystem shooterSubsystem,
+      ArmSubsystem armSubsystem) {
     m_drive = driveSubsystem;
     m_shooter = shooterSubsystem;
     m_arm = armSubsystem;
@@ -47,9 +48,9 @@ public class WarmUpAndAutoShoot extends Command {
   public void execute() {
     m_arm.ArmToPosition(DriveConstants.DISTANCE_TO_ANGLE_MAP.get(m_drive.getSpeakerDistance()));
     m_shooter.shooterOn(m_drive.getSpeakerDistance() > 5.0);
-    if (m_drive.getIsOnTargetSpeaker() && m_shooter.isShooterAtSpeed()){
+    if (m_drive.getIsOnTargetSpeaker() && m_shooter.isShooterAtSpeed()) {
       onTargetCount++;
-      if (onTargetCount > 3) { // 10 * 20 ms = 200 ms of being on target & at speed
+      if (onTargetCount > 2) { // 10 * 20 ms = 200 ms of being on target & at speed
         m_shooter.transferOn(false);
         transferCount++;
         if (transferCount > 10) { // 1010 - 1000 = 10 * 20 ms = 200 ms to run transfer before finishing command
@@ -58,8 +59,6 @@ public class WarmUpAndAutoShoot extends Command {
       }
     } else {
       m_end = false;
-      onTargetCount = 0;
-      transferCount = 0;
       m_shooter.transferOff();
     }
   }
