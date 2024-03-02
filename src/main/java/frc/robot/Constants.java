@@ -92,8 +92,8 @@ public final class Constants {
       DISTANCE_TO_ANGLE_MAP.put(1.25, ArmConstants.kSUBWOOFER);
       DISTANCE_TO_ANGLE_MAP.put(2.2, ArmConstants.kOffset - 0.075);
       DISTANCE_TO_ANGLE_MAP.put(3.0, ArmConstants.kOffset - 0.058);
-      DISTANCE_TO_ANGLE_MAP.put(4.1, ArmConstants.kOffset - 0.037);
-      DISTANCE_TO_ANGLE_MAP.put(4.9, ArmConstants.kOffset - 0.0295);
+      DISTANCE_TO_ANGLE_MAP.put(4.1, ArmConstants.kOffset - 0.038);
+      DISTANCE_TO_ANGLE_MAP.put(4.9, ArmConstants.kOffset - 0.035);
       DISTANCE_TO_ANGLE_MAP.put(5.5, ArmConstants.kOffset - 0.028);
     }
 
@@ -254,7 +254,7 @@ public final class Constants {
     public static final double kMaxOpenLoopSpeed = 0.5;
 
     // Arm Positions
-    public static final double kOffset = 0.66;
+    public static final double kOffset = 0.635;
     public static final double kTRANSFER = kOffset - 0.011;
     public static final double kSUBWOOFER = kOffset - 0.12;
     public static final double kPODIUM = kOffset - 0.055;
@@ -262,8 +262,9 @@ public final class Constants {
     public static final double kSTAGELINE = kOffset - 0.021;
     public static final double kFOURTHNOTE = kOffset - 0.05;
     public static final double kCLIMBSTART = kTRAP;
-    public static final double kCLIMBFINISH = kPODIUM;
+    public static final double kCLIMBFINISH = kOffset - .025;
     public static final double kAMP = kOffset - 0.375;
+    public static final double kSOURCE = kOffset - 0.375; // Change while testing manually
     public static final double kAllowedErrAbs = 0.001;
     public static final double kMinHeightAbs = kOffset;
     public static final double kMaxHeightAbs = 0.2;
@@ -277,7 +278,7 @@ public final class Constants {
     // Arm Current Limits
     public static final int kCurrentLimitDefault = 20;
     public static final int kCurrentLimitManual = 10;
-    public static final int kCurrentLimitClimbing = 40;
+    public static final int kCurrentLimitClimbing = 50;
   }
 
   public static final class OIConstants {
