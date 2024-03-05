@@ -164,7 +164,7 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   public void transferReverse() {
-    m_transferMotor.set(-0.35);
+    m_transferMotor.set(-0.55);
   }
 
   public void transferReverse(boolean slow) {

@@ -1,0 +1,28 @@
+package frc.robot.commands;
+
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.commands.armCommands.ArmToPositionWithEnd;
+import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.subsystems.ArmSubsystem.armPositions;
+
+public class ShootFast extends SequentialCommandGroup {
+
+    public ShootFast(ShooterSubsystem shooterSubsystem,
+            ArmSubsystem armSubsystem,
+            armPositions position) {
+
+        addCommands(
+                new ParallelCommandGroup(
+                        new ArmToPositionWithEnd(armSubsystem, position),
+                        // new RunCommand(() -> shooterSubsystem.shooterOn(),
+                        // shooterSubsystem).withTimeout(1.0)
+                        new WarmUpShooter(shooterSubsystem, false)).withTimeout(0.45),
+                new RunCommand(() -> shooterSubsystem.transferOn(false), shooterSubsystem).withTimeout(0.10),
+                new InstantCommand(() -> shooterSubsystem.shooterOff(), shooterSubsystem),
+                new InstantCommand(() -> shooterSubsystem.transferOff(), shooterSubsystem));
+    }
+}

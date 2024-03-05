@@ -287,6 +287,8 @@ public class DriveSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("gyroYaw:", gyroYaw);
     SmartDashboard.putNumber("Odometry.x:", m_odometry.getPoseMeters().getX());
     SmartDashboard.putNumber("Odometry.y:", m_odometry.getPoseMeters().getY());
+    SmartDashboard.putNumber("Note Pipeline", m_noteCamera.getPipelineIndex());
+    SmartDashboard.putBoolean("IsAiming", isAutoAiming);
 
     // updateAprilTagInfo(5.0);
 
@@ -447,10 +449,14 @@ public class DriveSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("RotSpeed", rotDelivered);
     SmartDashboard.putNumber("Rot", m_currentRotation);
 
+    boolean isBlue = DriverStation.getAlliance().orElse(DriverStation.Alliance.Blue)
+        .equals(DriverStation.Alliance.Blue);
+
+    Rotation2d heading = isBlue ? m_odometry.getPoseMeters().getRotation()
+        : m_odometry.getPoseMeters().getRotation().plus(new Rotation2d(Math.PI));
     var swerveModuleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(
         fieldRelative
-            ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered,
-                Rotation2d.fromDegrees(getHeading()))
+            ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered, heading)
             : new ChassisSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered));
     SwerveDriveKinematics.desaturateWheelSpeeds(
         swerveModuleStates, DriveConstants.kMaxSpeedMetersPerSecond);
@@ -505,7 +511,29 @@ public class DriveSubsystem extends SubsystemBase {
 
   /** Zeroes the heading of the robot. */
   public void zeroHeading() {
-    m_gyro.reset();
+    boolean isBlue = DriverStation.getAlliance().orElse(DriverStation.Alliance.Blue)
+        .equals(DriverStation.Alliance.Blue);
+    Rotation2d heading = isBlue ? new Rotation2d() : new Rotation2d(Math.PI);
+    // m_gyro.reset();
+    m_odometry.resetPosition(
+        Rotation2d.fromDegrees(getHeading()),
+        new SwerveModulePosition[] {
+            m_frontLeft.getPosition(),
+            m_frontRight.getPosition(),
+            m_rearLeft.getPosition(),
+            m_rearRight.getPosition()
+        }, new Pose2d(m_odometry.getPoseMeters().getX(), m_odometry.getPoseMeters().getY(), heading));
+
+    m_poseEstimator.resetPosition(
+        Rotation2d.fromDegrees(getHeading()),
+        new SwerveModulePosition[] {
+            m_frontLeft.getPosition(),
+            m_frontRight.getPosition(),
+            m_rearLeft.getPosition(),
+            m_rearRight.getPosition()
+        },
+        new Pose2d(m_poseEstimator.getEstimatedPosition().getX(), m_poseEstimator.getEstimatedPosition().getY(),
+            heading));
   }
 
   /**
@@ -595,13 +623,16 @@ public class DriveSubsystem extends SubsystemBase {
    */
   protected void driveAngleVelocity(double xV, double yV, double angle, PIDController controller, boolean useIMU) {
     Rotation2d yaw = useIMU ? Rotation2d.fromDegrees(getHeading()) : getPosition().getRotation();
+    boolean isBlue = DriverStation.getAlliance().orElse(DriverStation.Alliance.Blue)
+        .equals(DriverStation.Alliance.Blue);
+    Rotation2d yawChassisSpeeds = isBlue ? yaw.plus(Rotation2d.fromRadians(Math.PI)) : yaw;
     SmartDashboard.putNumber("Gyro Yaw Rad", yaw.getRadians());
     ChassisSpeeds chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
         xV * DriveConstants.TRANSLATION_SPEED_SCALAR_AUTO_AIM,
         yV * DriveConstants.TRANSLATION_SPEED_SCALAR_AUTO_AIM,
         MathUtil.clamp(controller.calculate(MathUtil.angleModulus(yaw.getRadians()), angle),
             -DriveConstants.MAX_ROTATION_SPEED_AUTO_AIM, DriveConstants.MAX_ROTATION_SPEED_AUTO_AIM),
-        Rotation2d.fromDegrees(getHeading()));
+        yawChassisSpeeds);
 
     SwerveModuleState[] swerveModuleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(chassisSpeeds);
     setModuleStates(swerveModuleStates);
@@ -620,9 +651,8 @@ public class DriveSubsystem extends SubsystemBase {
     Translation2d goalPose = isBlue ? DriveConstants.BLUE_SPEAKER : DriveConstants.RED_SPEAKER;
     ChassisSpeeds robotVel = getFieldRelativeSpeeds(false);
     double distanceToSpeaker = getPosition().getTranslation().getDistance(goalPose);
-    double directionFlip = isBlue ? 1.0 : -1.0;
     double x = goalPose.getX()
-        - (directionFlip * robotVel.vxMetersPerSecond * (distanceToSpeaker / DriveConstants.NOTE_VELOCITY));
+        - (robotVel.vxMetersPerSecond * (distanceToSpeaker / DriveConstants.NOTE_VELOCITY));
     double y = goalPose.getY() - (robotVel.vyMetersPerSecond * (distanceToSpeaker / DriveConstants.NOTE_VELOCITY));
     Translation2d goalPoseAdjusted = new Translation2d(x, y);
     Pose2d speaker = new Pose2d(goalPoseAdjusted, new Rotation2d());
@@ -664,10 +694,7 @@ public class DriveSubsystem extends SubsystemBase {
    * @param y The desired {@code y} speed from {@code -1.0} to {@code 1.0}.
    */
   public void driveOnTargetSpeaker(DoubleSupplier x, DoubleSupplier y) {
-    boolean isBlue = DriverStation.getAlliance().orElse(DriverStation.Alliance.Blue)
-        .equals(DriverStation.Alliance.Blue);
-    double directionFlip = isBlue ? -1.0 : -1.0; // TODO remove this eventually
-    driveAngle(directionFlip * y.getAsDouble(), directionFlip * x.getAsDouble(), getSpeakerAngle(),
+    driveAngle(y.getAsDouble(), x.getAsDouble(), getSpeakerAngle(),
         m_autoAimRotationPidController, false);
   }
 
@@ -683,6 +710,8 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
   public double getNoteHeight() {
+    boolean isBlue = DriverStation.getAlliance().orElse(DriverStation.Alliance.Blue)
+        .equals(DriverStation.Alliance.Blue);
     var result = m_noteCamera.getLatestResult();
     if (result != null && result.getBestTarget() != null) {
       return result.getBestTarget().getPitch();
@@ -697,7 +726,7 @@ public class DriveSubsystem extends SubsystemBase {
         -MathUtil.clamp((getNoteHeight() + 22) * 0.02, -DriveConstants.TRANSLATION_SPEED_SCALAR_AUTO_AIM,
             DriveConstants.TRANSLATION_SPEED_SCALAR_AUTO_AIM),
         getNoteAngle() * 0.003,
-        -getNoteAngle() * 0.02,
+        -getNoteAngle() * 0.015,
         false, false);
   }
 
@@ -734,5 +763,9 @@ public class DriveSubsystem extends SubsystemBase {
             m_rearLeft.getPosition(),
             m_rearRight.getPosition()
         }, pose);
+  }
+
+  public void setPipelineIndex(int index) {
+    m_noteCamera.setPipelineIndex(index);
   }
 }

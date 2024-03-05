@@ -42,7 +42,7 @@ public final class Constants {
     public static final double kTeleopPercentLimit = .95;
 
     public static final Vector<N3> odometryStd = VecBuilder.fill(0.06, 0.06, 0.01);
-    public static final Vector<N3> visionStd = VecBuilder.fill(0.35, 0.35, 0.4);
+    public static final Vector<N3> visionStd = VecBuilder.fill(0.35, 0.35, 1.0);
 
     // Camera Positions
     public static final Transform3d kFrontCameraLocation = new Transform3d(
@@ -59,7 +59,7 @@ public final class Constants {
 
     public static final Translation2d BLUE_SPEAKER = new Translation2d(0.0241, 5.547868);
     public static final Translation2d RED_SPEAKER = new Translation2d(FIELD_LENGTH - BLUE_SPEAKER.getX(),
-        BLUE_SPEAKER.getY());
+        BLUE_SPEAKER.getY() + 0.1);
     public static final Translation2d STAGE = new Translation2d(4.981067, 4.105783);
 
     public static final double SPEAKER_HEIGHT = 2.08;
@@ -71,7 +71,7 @@ public final class Constants {
     public static final double OPPONENT_WING_LINE = 10.66;
     public static final double AMP_X = 1.9;
 
-    public static final PIDConstants AUTO_AIM_ROT_PID_CONSTANTS = new PIDConstants(10.5, 0.02, 0.3);
+    public static final PIDConstants AUTO_AIM_ROT_PID_CONSTANTS = new PIDConstants(9.5, 0.01, 0.5);
 
     public static final double VISION_REJECT_DISTANCE = 2.3;
 
@@ -79,7 +79,7 @@ public final class Constants {
     public static final double SPIN_COMPENSATION_Y = 0.06;
 
     // Radians
-    public static final double AUTO_AIM_ROT_TOLERANCE = Math.toRadians(2.0);
+    public static final double AUTO_AIM_ROT_TOLERANCE = Math.toRadians(1.7);
 
     // Shooter Angle Map
 
@@ -90,16 +90,16 @@ public final class Constants {
 
     static {
       DISTANCE_TO_ANGLE_MAP.put(1.25, ArmConstants.kSUBWOOFER);
-      DISTANCE_TO_ANGLE_MAP.put(2.2, ArmConstants.kOffset - 0.075);
-      DISTANCE_TO_ANGLE_MAP.put(3.0, ArmConstants.kOffset - 0.058);
-      DISTANCE_TO_ANGLE_MAP.put(4.1, ArmConstants.kOffset - 0.038);
-      DISTANCE_TO_ANGLE_MAP.put(4.9, ArmConstants.kOffset - 0.035);
-      DISTANCE_TO_ANGLE_MAP.put(5.5, ArmConstants.kOffset - 0.028);
+      DISTANCE_TO_ANGLE_MAP.put(2.2, ArmConstants.kOffset - 0.08);
+      DISTANCE_TO_ANGLE_MAP.put(3.0, ArmConstants.kOffset - 0.057);
+      DISTANCE_TO_ANGLE_MAP.put(4.1, ArmConstants.kOffset - 0.041);
+      DISTANCE_TO_ANGLE_MAP.put(4.9, ArmConstants.kOffset - 0.031);
+      DISTANCE_TO_ANGLE_MAP.put(5.5, ArmConstants.kOffset - 0.029);
     }
 
-    public static final double kDirectionSlewRate = 2.4; // radians per second
-    public static final double kMagnitudeSlewRate = 3.6; // percent per second (1 = 100%)
-    public static final double kRotationalSlewRate = 4.0; // percent per second (1 = 100%)
+    public static final double kDirectionSlewRate = 3.8; // radians per second
+    public static final double kMagnitudeSlewRate = 15.6; // percent per second (1 = 100%)
+    public static final double kRotationalSlewRate = 12.0; // percent per second (1 = 100%)
 
     // Chassis configuration
     public static final double kTrackWidth = Units.inchesToMeters(22.5);
@@ -256,14 +256,14 @@ public final class Constants {
     // Arm Positions
     public static final double kOffset = 0.635;
     public static final double kTRANSFER = kOffset - 0.011;
-    public static final double kSUBWOOFER = kOffset - 0.12;
+    public static final double kSUBWOOFER = kOffset - 0.13;
     public static final double kPODIUM = kOffset - 0.055;
     public static final double kTRAP = kOffset - 0.3;
     public static final double kSTAGELINE = kOffset - 0.021;
     public static final double kFOURTHNOTE = kOffset - 0.05;
     public static final double kCLIMBSTART = kTRAP;
     public static final double kCLIMBFINISH = kOffset - .005;
-    public static final double kAMP = kOffset - 0.375;
+    public static final double kAMP = kOffset - 0.395;
     public static final double kSOURCE = kOffset - 0.375; // Change while testing manually
     public static final double kAllowedErrAbs = 0.001;
     public static final double kMinHeightAbs = kOffset;

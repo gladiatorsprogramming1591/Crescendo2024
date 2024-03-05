@@ -82,6 +82,7 @@ public class WarmUpAndAutoShoot extends Command {
       m_arm.ArmOff();
     }
     m_shooter.transferOff();
+    m_drive.isAutoAiming = false;
   }
 
   // Returns true when the command should end.
