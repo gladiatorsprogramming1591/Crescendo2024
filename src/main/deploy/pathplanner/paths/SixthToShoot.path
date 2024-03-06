@@ -3,55 +3,37 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.500635001270004,
-        "y": 4.084914323674802
+        "x": 7.934780484945588,
+        "y": 2.4568687598913663
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.293429202243022,
-        "y": 1.0162951095132964
+        "x": 6.829682890135012,
+        "y": 3.7001035540532623
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 3.3517051912848466,
-        "y": 2.2719022898816124
+        "x": 3.494656220081673,
+        "y": 5.130810261620524
       },
       "prevControl": {
-        "x": 5.48777866786503,
-        "y": 1.1939000801078534
+        "x": 4.639221586135482,
+        "y": 4.578261464215237
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": null
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 0.5,
-      "rotationDegrees": 170.0,
-      "rotateFast": false
-    }
-  ],
-  "constraintZones": [
-    {
-      "name": "New Constraints Zone",
-      "minWaypointRelativePos": 0.85,
-      "maxWaypointRelativePos": 1.0,
-      "constraints": {
-        "maxVelocity": 1.0,
-        "maxAcceleration": 2.5,
-        "maxAngularVelocity": 540.0,
-        "maxAngularAcceleration": 720.0
-      }
-    }
-  ],
+  "rotationTargets": [],
+  "constraintZones": [],
   "eventMarkers": [
     {
       "name": "New Event Marker",
-      "waypointRelativePos": 0.4,
+      "waypointRelativePos": 0.65,
       "command": {
         "type": "parallel",
         "data": {
@@ -71,40 +53,17 @@
           ]
         }
       }
-    },
-    {
-      "name": "New Event Marker",
-      "waypointRelativePos": 0.95,
-      "command": {
-        "type": "sequential",
-        "data": {
-          "commands": [
-            {
-              "type": "named",
-              "data": {
-                "name": "ShootNoteAfterAlign"
-              }
-            },
-            {
-              "type": "named",
-              "data": {
-                "name": "EndAutoAlignTheta"
-              }
-            }
-          ]
-        }
-      }
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 3.0,
-    "maxAcceleration": 4.0,
+    "maxVelocity": 5.4,
+    "maxAcceleration": 5.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 170.0,
+    "rotation": 180.0,
     "rotateFast": false
   },
   "reversed": false,

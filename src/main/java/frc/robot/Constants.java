@@ -72,6 +72,7 @@ public final class Constants {
     public static final double AMP_X = 1.9;
 
     public static final PIDConstants AUTO_AIM_ROT_PID_CONSTANTS = new PIDConstants(7.5, 0.01, 0.5);
+    public static final PIDConstants AUTO_AIM_ROT_PID_CONSTANTS_TELE = new PIDConstants(10.5, 0.01, 0.5);
 
     public static final double VISION_REJECT_DISTANCE = 2.3;
 
@@ -215,7 +216,7 @@ public final class Constants {
     public static final double kTransferSpeedFull = 1.0;
     public static final double kRightShooterSpeedRPM = 5000.0;
     public static final double kLeftShooterSpeedRPM = 0.6 * kRightShooterSpeedRPM;
-    public static final double kRightShooterTrapSpeedRPM = 2800.0;
+    public static final double kRightShooterTrapSpeedRPM = 2400.0;
     public static final double kLeftShooterTrapSpeedRPM = 0.6 * kRightShooterTrapSpeedRPM;
     public static final double kMinShooterSpeed = 4800.0;
     public static final double kRightShooterFarSpeed = 5250.0;
@@ -258,7 +259,7 @@ public final class Constants {
     public static final double kTRANSFER = kOffset - 0.011;
     public static final double kSUBWOOFER = kOffset - 0.13;
     public static final double kPODIUM = kOffset - 0.055;
-    public static final double kTRAP = kOffset - 0.3;
+    public static final double kTRAP = kOffset - 0.33;
     public static final double kSTAGELINE = kOffset - 0.021;
     public static final double kFOURTHNOTE = kOffset - 0.05;
     public static final double kCLIMBSTART = kTRAP;

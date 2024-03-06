@@ -721,6 +721,18 @@ public class DriveSubsystem extends SubsystemBase {
 
   }
 
+  public void setAutoAimRotPIDConstants(boolean auto) {
+    if (auto) {
+      m_autoAimRotationPidController.setPID(DriveConstants.AUTO_AIM_ROT_PID_CONSTANTS.kP,
+          DriveConstants.AUTO_AIM_ROT_PID_CONSTANTS.kI,
+          DriveConstants.AUTO_AIM_ROT_PID_CONSTANTS.kD);
+    } else {
+      m_autoAimRotationPidController.setPID(DriveConstants.AUTO_AIM_ROT_PID_CONSTANTS_TELE.kP,
+          DriveConstants.AUTO_AIM_ROT_PID_CONSTANTS_TELE.kI,
+          DriveConstants.AUTO_AIM_ROT_PID_CONSTANTS_TELE.kD);
+    }
+  }
+
   public void driveRobotRelativeToObject() {
     drive(
         -MathUtil.clamp((getNoteHeight() + 22) * 0.02, -DriveConstants.TRANSLATION_SPEED_SCALAR_AUTO_AIM,

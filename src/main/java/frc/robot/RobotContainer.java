@@ -211,6 +211,8 @@ public class RobotContainer {
                         m_robotDrive.setPipelineIndex(0);
                 }
 
+                m_robotDrive.setAutoAimRotPIDConstants(true);
+
                 return m_autoChooser.getSelected();
         }
 
@@ -253,6 +255,7 @@ public class RobotContainer {
 
         public void teleopInit() {
                 m_robotDrive.setPipelineIndex(2);
+                m_robotDrive.setAutoAimRotPIDConstants(false);
         }
 
 }
