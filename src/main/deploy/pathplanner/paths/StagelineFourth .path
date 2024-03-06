@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.5156569029257874,
-        "y": 6.300430061630451
+        "x": 3.52,
+        "y": 5.0
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.995801201302829,
-        "y": 6.5463576290918635
+        "x": 4.000149892783796,
+        "y": 5.245916644742034
       },
       "isLocked": false,
       "linkedName": "ShootWing"
@@ -38,8 +38,8 @@
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 5.0,
-    "maxAcceleration": 4.0,
+    "maxVelocity": 5.6,
+    "maxAcceleration": 4.5,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },

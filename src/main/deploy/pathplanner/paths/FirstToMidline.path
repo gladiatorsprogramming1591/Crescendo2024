@@ -31,7 +31,7 @@
   "rotationTargets": [
     {
       "waypointRelativePos": 0.35,
-      "rotationDegrees": -160.0,
+      "rotationDegrees": -165.0,
       "rotateFast": false
     },
     {
@@ -43,8 +43,8 @@
   "constraintZones": [
     {
       "name": "New Constraints Zone",
-      "minWaypointRelativePos": 0.4,
-      "maxWaypointRelativePos": 0.6,
+      "minWaypointRelativePos": 0.45,
+      "maxWaypointRelativePos": 0.65,
       "constraints": {
         "maxVelocity": 1.0,
         "maxAcceleration": 4.0,
@@ -85,7 +85,7 @@
     },
     {
       "name": "Shoot",
-      "waypointRelativePos": 0.55,
+      "waypointRelativePos": 0.6,
       "command": {
         "type": "parallel",
         "data": {
@@ -108,8 +108,8 @@
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 5.0,
-    "maxAcceleration": 4.0,
+    "maxVelocity": 5.6,
+    "maxAcceleration": 4.5,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },

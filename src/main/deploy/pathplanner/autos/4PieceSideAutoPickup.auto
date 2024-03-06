@@ -38,7 +38,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "StagelineFourth "
+            "pathName": "StagelineFourthStage "
           }
         },
         {
@@ -50,7 +50,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "FourthToShoot"
+            "pathName": "FourthToShootStage"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "StagelineFourthStage "
           }
         }
       ]

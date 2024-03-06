@@ -71,7 +71,7 @@ public final class Constants {
     public static final double OPPONENT_WING_LINE = 10.66;
     public static final double AMP_X = 1.9;
 
-    public static final PIDConstants AUTO_AIM_ROT_PID_CONSTANTS = new PIDConstants(9.5, 0.01, 0.5);
+    public static final PIDConstants AUTO_AIM_ROT_PID_CONSTANTS = new PIDConstants(7.5, 0.01, 0.5);
 
     public static final double VISION_REJECT_DISTANCE = 2.3;
 
@@ -215,7 +215,7 @@ public final class Constants {
     public static final double kTransferSpeedFull = 1.0;
     public static final double kRightShooterSpeedRPM = 5000.0;
     public static final double kLeftShooterSpeedRPM = 0.6 * kRightShooterSpeedRPM;
-    public static final double kRightShooterTrapSpeedRPM = 2000.0;
+    public static final double kRightShooterTrapSpeedRPM = 2800.0;
     public static final double kLeftShooterTrapSpeedRPM = 0.6 * kRightShooterTrapSpeedRPM;
     public static final double kMinShooterSpeed = 4800.0;
     public static final double kRightShooterFarSpeed = 5250.0;

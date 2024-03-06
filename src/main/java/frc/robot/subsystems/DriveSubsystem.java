@@ -725,8 +725,8 @@ public class DriveSubsystem extends SubsystemBase {
     drive(
         -MathUtil.clamp((getNoteHeight() + 22) * 0.02, -DriveConstants.TRANSLATION_SPEED_SCALAR_AUTO_AIM,
             DriveConstants.TRANSLATION_SPEED_SCALAR_AUTO_AIM),
-        getNoteAngle() * 0.003,
-        -getNoteAngle() * 0.015,
+        getNoteAngle() * 0.004,
+        -getNoteAngle() * 0.01,
         false, false);
   }
 

@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.523057448682655,
-        "y": 6.750770063594335
+        "x": 7.349590682348269,
+        "y": 3.3727209251850745
       },
       "isLocked": false,
       "linkedName": "EndStagelineFourth"
@@ -20,8 +20,8 @@
         "y": 5.0
       },
       "prevControl": {
-        "x": 6.525341895191634,
-        "y": 5.1409601001798295
+        "x": 4.604764701683467,
+        "y": 3.8645760601078973
       },
       "nextControl": null,
       "isLocked": false,
@@ -104,7 +104,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -170.0,
+    "rotation": 180.0,
     "rotateFast": false
   },
   "reversed": false,
