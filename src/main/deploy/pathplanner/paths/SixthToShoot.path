@@ -16,16 +16,16 @@
     },
     {
       "anchor": {
-        "x": 3.494656220081673,
-        "y": 5.130810261620524
+        "x": 3.52,
+        "y": 5.4
       },
       "prevControl": {
-        "x": 4.639221586135482,
-        "y": 4.578261464215237
+        "x": 4.664565366053809,
+        "y": 4.847451202594714
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "FifthNoteShoot"
     }
   ],
   "rotationTargets": [],

@@ -36,6 +36,18 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "AlignAndShootNote"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "EndAutoAlignTheta"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "StagelineFourthStage "
@@ -54,9 +66,45 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "AlignAndShootNote"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "EndAutoAlignTheta"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "StagelineFourthStage "
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AlignAndIntake"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "FourthToShootStage"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AlignAndShootNote"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "EndAutoAlignTheta"
           }
         }
       ]

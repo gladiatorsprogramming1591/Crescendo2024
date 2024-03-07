@@ -3,42 +3,36 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.9,
-        "y": 5.0
+        "x": 2.6,
+        "y": 7.11
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.349590682348269,
-        "y": 3.3727209251850745
+        "x": 3.6,
+        "y": 7.11
       },
       "isLocked": false,
-      "linkedName": "EndStagelineFourth"
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 3.52,
-        "y": 5.0
+        "x": 6.29,
+        "y": 7.0
       },
       "prevControl": {
-        "x": 4.604764701683467,
-        "y": 3.8645760601078973
+        "x": 5.29,
+        "y": 7.0
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "ShootWing"
+      "linkedName": null
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 0.65,
-      "rotationDegrees": -170.0,
-      "rotateFast": false
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [],
   "eventMarkers": [
     {
-      "name": "New Event Marker",
+      "name": "Intake",
       "waypointRelativePos": 0.45,
       "command": {
         "type": "parallel",
@@ -47,13 +41,7 @@
             {
               "type": "named",
               "data": {
-                "name": "BeginAutoAlignTheta"
-              }
-            },
-            {
-              "type": "named",
-              "data": {
-                "name": "AlignShooterOnly"
+                "name": "Intake"
               }
             }
           ]
@@ -69,13 +57,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 180.0,
+    "rotation": 170.0,
     "rotateFast": false
   },
   "reversed": false,
   "folder": null,
   "previewStartingState": {
-    "rotation": 180.0,
+    "rotation": -150.0,
     "velocity": 0
   },
   "useDefaultConstraints": true
