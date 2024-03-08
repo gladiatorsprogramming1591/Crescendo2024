@@ -8,20 +8,20 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.349590682348269,
-        "y": 3.3727209251850745
+        "x": 7.380232963033685,
+        "y": 4.016816935203058
       },
       "isLocked": false,
       "linkedName": "EndStagelineFourth"
     },
     {
       "anchor": {
-        "x": 3.7,
-        "y": 5.0
+        "x": 3.820138653116107,
+        "y": 5.386984811059493
       },
       "prevControl": {
-        "x": 4.784764701683468,
-        "y": 3.8645760601078973
+        "x": 4.904903354799575,
+        "y": 4.25156087116739
       },
       "nextControl": null,
       "isLocked": false,
@@ -63,7 +63,7 @@
   ],
   "globalConstraints": {
     "maxVelocity": 5.6,
-    "maxAcceleration": 4.5,
+    "maxAcceleration": 5.5,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },

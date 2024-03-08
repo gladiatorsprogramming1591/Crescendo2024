@@ -92,7 +92,7 @@ public final class Constants {
     static {
       DISTANCE_TO_ANGLE_MAP.put(1.25, ArmConstants.kSUBWOOFER);
       DISTANCE_TO_ANGLE_MAP.put(2.2, ArmConstants.kOffset - 0.08);
-      DISTANCE_TO_ANGLE_MAP.put(3.0, ArmConstants.kOffset - 0.060);
+      DISTANCE_TO_ANGLE_MAP.put(3.0, ArmConstants.kOffset - 0.057);
       DISTANCE_TO_ANGLE_MAP.put(4.1, ArmConstants.kOffset - 0.044);
       DISTANCE_TO_ANGLE_MAP.put(4.9, ArmConstants.kOffset - 0.031);
       DISTANCE_TO_ANGLE_MAP.put(5.5, ArmConstants.kOffset - 0.029);
@@ -257,7 +257,7 @@ public final class Constants {
     // Arm Positions
     public static final double kOffset = 0.635;
     public static final double kTRANSFER = kOffset - 0.011;
-    public static final double kSUBWOOFER = kOffset - 0.13;
+    public static final double kSUBWOOFER = kOffset - 0.14;
     public static final double kPODIUM = kOffset - 0.055;
     public static final double kTRAP = kOffset - 0.33;
     public static final double kSTAGELINE = kOffset - 0.021;
