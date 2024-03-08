@@ -138,7 +138,9 @@ public class RobotContainer {
                                 m_IntakeSubsystem));
                 m_driverController.rightTrigger()
                                 .whileTrue(new AlignAndIntake(m_ShooterSubsystem, m_ArmSubsystem, m_IntakeSubsystem,
-                                                m_robotDrive));
+                                                m_robotDrive)
+                                                .andThen(new IntakeNote(m_ShooterSubsystem, m_ArmSubsystem,
+                                                                m_IntakeSubsystem)));
                 m_driverController.leftTrigger()
                                 .onTrue(new IntakeNote(m_ShooterSubsystem, m_ArmSubsystem, m_IntakeSubsystem));
                 m_driverController.leftBumper()

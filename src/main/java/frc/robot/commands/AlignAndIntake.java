@@ -24,21 +24,20 @@ public class AlignAndIntake extends SequentialCommandGroup {
             DriveSubsystem driveSubsystem) {
         addRequirements(shooterSubsystem, armSubsystem, intakeSubsystem, driveSubsystem);
         addCommands(
+                new InstantCommand(() -> driveSubsystem.resetNoteHeight()),
                 new ParallelRaceGroup(
                         new FinishWhenBeamBroken(shooterSubsystem),
                         new RunCommand(() -> driveSubsystem.driveRobotRelativeToObject(),
-                                driveSubsystem).until(() -> driveSubsystem.isTargetLost()),
+                                driveSubsystem)
+                                .until(() -> driveSubsystem.isTargetLost()),
                         new SequentialCommandGroup(
                                 new ArmToPositionWithEnd(armSubsystem,
                                         armPositions.TRANSFER),
-                                new ParallelDeadlineGroup(
-                                        new TransferOnWithBeamBreak(
-                                                shooterSubsystem),
-                                        new RunCommand(() -> intakeSubsystem
-                                                .intakeOn(),
-                                                intakeSubsystem)),
-                                new InstantCommand(
-                                        () -> intakeSubsystem.intakeOff()))));
+                                new RunCommand(() -> {
+                                    intakeSubsystem.intakeOn();
+                                    shooterSubsystem.transferOn(true);
+                                },
+                                        intakeSubsystem, shooterSubsystem))));
 
     }
 }

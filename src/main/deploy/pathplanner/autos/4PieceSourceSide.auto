@@ -32,13 +32,25 @@
         {
           "type": "path",
           "data": {
-            "pathName": "SeventhToShoot"
+            "pathName": "SixthToShoot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AlignAndShootNote"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "EndAutoAlignTheta"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "StagelineSixth"
+            "pathName": "StagelineSixthStage "
           }
         },
         {
@@ -51,6 +63,18 @@
           "type": "path",
           "data": {
             "pathName": "SixthToShoot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AlignAndShootNote"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "EndAutoAlignTheta"
           }
         }
       ]

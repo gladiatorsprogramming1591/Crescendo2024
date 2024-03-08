@@ -46,6 +46,7 @@ public final class Constants {
 
     public static final double kNoteCameraHeightFOV = 45.0;
     public static final double kNoteDifferentialTolerance = 15.0;
+    public static final double kMinNoteHeight = -13.0 + kNoteCameraHeightFOV / 2.0;
 
     // Camera Positions
     public static final Transform3d kFrontCameraLocation = new Transform3d(
@@ -95,9 +96,9 @@ public final class Constants {
     static {
       DISTANCE_TO_ANGLE_MAP.put(1.25, ArmConstants.kSUBWOOFER);
       DISTANCE_TO_ANGLE_MAP.put(2.2, ArmConstants.kOffset - 0.08);
-      DISTANCE_TO_ANGLE_MAP.put(3.0, ArmConstants.kOffset - 0.057);
-      DISTANCE_TO_ANGLE_MAP.put(4.1, ArmConstants.kOffset - 0.044);
-      DISTANCE_TO_ANGLE_MAP.put(4.9, ArmConstants.kOffset - 0.031);
+      DISTANCE_TO_ANGLE_MAP.put(3.0, ArmConstants.kOffset - 0.058);
+      DISTANCE_TO_ANGLE_MAP.put(4.1, ArmConstants.kOffset - 0.043);
+      DISTANCE_TO_ANGLE_MAP.put(4.9, ArmConstants.kOffset - 0.033);
       DISTANCE_TO_ANGLE_MAP.put(5.5, ArmConstants.kOffset - 0.029);
     }
 

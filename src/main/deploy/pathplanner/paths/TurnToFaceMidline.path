@@ -4,12 +4,12 @@
     {
       "anchor": {
         "x": 6.0100650871772485,
-        "y": 7.014791090923124
+        "y": 7.1
       },
       "prevControl": null,
       "nextControl": {
         "x": 6.286339485879891,
-        "y": 7.192396061517681
+        "y": 7.277604970594557
       },
       "isLocked": false,
       "linkedName": "MidlineStartLooking"

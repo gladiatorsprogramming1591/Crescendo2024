@@ -721,11 +721,15 @@ public class DriveSubsystem extends SubsystemBase {
                 .equals(DriverStation.Alliance.Blue);
         var result = m_noteCamera.getLatestResult();
         if (result != null && result.getBestTarget() != null) {
-            return result.getBestTarget().getPitch();
+            return result.getBestTarget().getPitch() + DriveConstants.kNoteCameraHeightFOV / 2.0;
         } else {
-            return -DriveConstants.kNoteCameraHeightFOV/2.0;
+            return -DriveConstants.kNoteCameraHeightFOV / 2.0;
         }
 
+    }
+
+    public void resetNoteHeight() {
+        m_lastNoteNeight = getNoteHeight();
     }
 
     public void setAutoAimRotPIDConstants(boolean auto) {
@@ -742,28 +746,31 @@ public class DriveSubsystem extends SubsystemBase {
 
     public void driveRobotRelativeToObject() {
         var result = m_noteCamera.getLatestResult();
-        targetLost = true;  // assu8me we lost it unless we find it within our tolerance
+        targetLost = true; // assu8me we lost it unless we find it within our tolerance
         if (result != null) {
             PhotonTrackedTarget target = result.getBestTarget();
             if (target != null) {
                 double yaw = target.getYaw();
-                // Pitch of 0 is center. Height is from bottom of FOV, so add half of FOV to translate.
-                double height = target.getPitch() + DriveConstants.kNoteCameraHeightFOV/2.0;
+                // Pitch of 0 is center. Height is from bottom of FOV, so add half of FOV to
+                // translate.
+                double height = target.getPitch() + DriveConstants.kNoteCameraHeightFOV / 2.0;
                 // If height difference from last read is bigger than tolerance, stop driving
-                if (Math.abs(height - m_lastNoteNeight) < DriveConstants.kNoteDifferentialTolerance) {
+                if (Math.abs(height - m_lastNoteNeight) < DriveConstants.kNoteDifferentialTolerance
+                        && (height > DriveConstants.kMinNoteHeight)) {
                     m_lastNoteNeight = height;
                     targetLost = false;
+                    System.out.println("Running AutoAim");
                     drive(
-                        -MathUtil.clamp(height * 0.02, -DriveConstants.TRANSLATION_SPEED_SCALAR_AUTO_AIM,
-                            DriveConstants.TRANSLATION_SPEED_SCALAR_AUTO_AIM),
-                        yaw * 0.004,
-                        -yaw * 0.01,
-                        false, false);
+                            -MathUtil.clamp(height * 0.02, -DriveConstants.TRANSLATION_SPEED_SCALAR_AUTO_AIM,
+                                    DriveConstants.TRANSLATION_SPEED_SCALAR_AUTO_AIM),
+                            yaw * 0.004,
+                            -yaw * 0.01,
+                            false, false);
                 }
             }
         }
         if (targetLost) {
-            drive(0,0,0,false,false);
+            drive(0, 0, 0, false, false);
         }
     }
 
