@@ -74,7 +74,7 @@ public final class Constants {
     public static final double OPPONENT_WING_LINE = 10.66;
     public static final double AMP_X = 1.9;
 
-    public static final PIDConstants AUTO_AIM_ROT_PID_CONSTANTS = new PIDConstants(7.5, 0.01, 0.5);
+    public static final PIDConstants AUTO_AIM_ROT_PID_CONSTANTS = new PIDConstants(9.5, 0.01, 0.5);
     public static final PIDConstants AUTO_AIM_ROT_PID_CONSTANTS_TELE = new PIDConstants(10.5, 0.01, 0.5);
 
     public static final double VISION_REJECT_DISTANCE = 2.3;
@@ -95,8 +95,8 @@ public final class Constants {
     static {
       DISTANCE_TO_ANGLE_MAP.put(1.25, ArmConstants.kSUBWOOFER);
       DISTANCE_TO_ANGLE_MAP.put(2.2, ArmConstants.kOffset - 0.08);
-      DISTANCE_TO_ANGLE_MAP.put(3.0, ArmConstants.kOffset - 0.057);
-      DISTANCE_TO_ANGLE_MAP.put(4.1, ArmConstants.kOffset - 0.041);
+      DISTANCE_TO_ANGLE_MAP.put(3.0, ArmConstants.kOffset - 0.060);
+      DISTANCE_TO_ANGLE_MAP.put(4.1, ArmConstants.kOffset - 0.044);
       DISTANCE_TO_ANGLE_MAP.put(4.9, ArmConstants.kOffset - 0.031);
       DISTANCE_TO_ANGLE_MAP.put(5.5, ArmConstants.kOffset - 0.029);
     }
