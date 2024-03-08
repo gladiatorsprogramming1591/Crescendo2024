@@ -44,6 +44,9 @@ public final class Constants {
     public static final Vector<N3> odometryStd = VecBuilder.fill(0.06, 0.06, 0.01);
     public static final Vector<N3> visionStd = VecBuilder.fill(0.35, 0.35, 1.0);
 
+    public static final double kNoteCameraHeightFOV = 45.0;
+    public static final double kNoteDifferentialTolerance = 15.0;
+
     // Camera Positions
     public static final Transform3d kFrontCameraLocation = new Transform3d(
         new Translation3d(Units.inchesToMeters(10.507), Units.inchesToMeters(5.673),

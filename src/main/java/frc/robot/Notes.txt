@@ -1,0 +1,6 @@
+4 piece auto amp side EOD 3/5: 11.09s in pathplanner
+After removing constraint zones for 3rd and 4th notes and shoot commands, 10.53s in pathplanner
+Adjusted path for FirstToMidline to allow faster acceleration to note pickup and saved 80ms.
+Added 5th note pickup and shoot, added 2.28s at 12.73s
+Reduced contraint zone by 5% on FirstToMidline, saved 0.22s to 12.51s
+USed global constraints for 3rd to shoot, stagelinefourthstage, saved 0.84s to 11.67s 

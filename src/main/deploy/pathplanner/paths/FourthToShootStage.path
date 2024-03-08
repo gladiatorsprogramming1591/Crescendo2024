@@ -38,7 +38,7 @@
   "constraintZones": [],
   "eventMarkers": [
     {
-      "name": "New Event Marker",
+      "name": "AlignShooter",
       "waypointRelativePos": 0.45,
       "command": {
         "type": "parallel",
@@ -54,6 +54,23 @@
               "type": "named",
               "data": {
                 "name": "AlignShooterOnly"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Intake",
+      "waypointRelativePos": 0,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "Intake"
               }
             }
           ]

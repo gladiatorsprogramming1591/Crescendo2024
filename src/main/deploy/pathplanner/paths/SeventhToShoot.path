@@ -50,7 +50,7 @@
   ],
   "eventMarkers": [
     {
-      "name": "New Event Marker",
+      "name": "AlignShooter",
       "waypointRelativePos": 0.4,
       "command": {
         "type": "parallel",
@@ -73,7 +73,7 @@
       }
     },
     {
-      "name": "New Event Marker",
+      "name": "Shoot",
       "waypointRelativePos": 0.95,
       "command": {
         "type": "sequential",
@@ -89,6 +89,23 @@
               "type": "named",
               "data": {
                 "name": "EndAutoAlignTheta"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Intake",
+      "waypointRelativePos": 0,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "Intake"
               }
             }
           ]
