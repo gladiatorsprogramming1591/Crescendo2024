@@ -27,7 +27,7 @@ public class AlignAndIntake extends SequentialCommandGroup {
                 new ParallelRaceGroup(
                         new FinishWhenBeamBroken(shooterSubsystem),
                         new RunCommand(() -> driveSubsystem.driveRobotRelativeToObject(),
-                                driveSubsystem),
+                                driveSubsystem).until(() -> driveSubsystem.isTargetLost()),
                         new SequentialCommandGroup(
                                 new ArmToPositionWithEnd(armSubsystem,
                                         armPositions.TRANSFER),
