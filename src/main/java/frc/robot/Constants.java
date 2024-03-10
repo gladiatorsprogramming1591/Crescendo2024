@@ -54,6 +54,16 @@ public final class Constants {
             Units.inchesToMeters(6.789)),
         new Rotation3d(0.0, Math.toRadians(-20.0), Math.toRadians(0.0)));
 
+            public static final Transform3d kLeftCameraLocation = new Transform3d(
+        new Translation3d(Units.inchesToMeters(-2.80), Units.inchesToMeters(12.689),
+            Units.inchesToMeters(9.43)),
+        new Rotation3d(0.0, Math.toRadians(-20.0), Math.toRadians(90.0)));
+
+            public static final Transform3d kRightCameraLocation = new Transform3d(
+        new Translation3d(Units.inchesToMeters(-2.80), Units.inchesToMeters(-12.689),
+            Units.inchesToMeters(9.43)),
+        new Rotation3d(0.0, Math.toRadians(-20.0), Math.toRadians(-90.0)));
+
     // Field Positions
 
     public static final double FIELD_LENGTH = 16.5417;

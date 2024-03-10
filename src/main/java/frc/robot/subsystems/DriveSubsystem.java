@@ -213,7 +213,6 @@ public class DriveSubsystem extends SubsystemBase {
         // Do this in either robot periodic or subsystem periodic
 
         // Vision Initialization
-        if (!DriverStation.isAutonomousEnabled()) {
             m_poseEstimator = new SwerveDrivePoseEstimator(
                     DriveConstants.kDriveKinematics,
                     Rotation2d.fromDegrees(getHeading()),
@@ -228,33 +227,24 @@ public class DriveSubsystem extends SubsystemBase {
                     DriveConstants.visionStd);
 
             m_photonPoseEstimators = new PhotonPoseEstimator[] {
-                    new PhotonPoseEstimator(
-                            AprilTagFields.k2024Crescendo.loadAprilTagLayoutField(),
-                            PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
-                            m_frontCamera,
-                            DriveConstants.kFrontCameraLocation),
+                new PhotonPoseEstimator(
+                    AprilTagFields.k2024Crescendo.loadAprilTagLayoutField(),
+                    PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
+                    m_frontCamera,
+                    DriveConstants.kFrontCameraLocation),
+                new PhotonPoseEstimator(
+                    AprilTagFields.k2024Crescendo.loadAprilTagLayoutField(),
+                    PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
+                    m_leftCamera,
+                    DriveConstants.kLeftCameraLocation),
+                new PhotonPoseEstimator(
+                    AprilTagFields.k2024Crescendo.loadAprilTagLayoutField(),
+                    PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
+                    m_rightCamera,
+                    DriveConstants.kRightCameraLocation),
             };
-        }
-        // Future cameras
-        // new PhotonPoseEstimator(
-        // AprilTagFields.k2024Crescendo.loadAprilTagLayoutField(),
-        // PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
-        // m_leftCamera,
-        // new Transform3d(
-        // new Translation3d(-0.0, -0.0, 0.0),
-        // new Rotation3d(0.0, Math.toRadians(-30.0), Math.toRadians(170.0))
-        // )
-        // ),
-        // new PhotonPoseEstimator(
-        // AprilTagFields.k2024Crescendo.loadAprilTagLayoutField(),
-        // PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
-        // m_rightCamera,
-        // new Transform3d(
-        // new Translation3d(-0.0, -0.0, 0.0),
-        // new Rotation3d(0.0, Math.toRadians(-30.0), Math.toRadians(170.0))
-        // )
-        // ),
-    }
+          };
+
 
     public boolean visionDriveAligned(double desiredId, double desiredY, double rotVisionSetpoint) {
         boolean retValue = true; // true = at desired location
@@ -302,7 +292,7 @@ public class DriveSubsystem extends SubsystemBase {
 
         // updateAprilTagInfo(5.0);
 
-        /* 
+
         for (PhotonPoseEstimator photonPoseEstimator : m_photonPoseEstimators) {
             Optional<EstimatedRobotPose> pose = photonPoseEstimator.update();
             if (pose.isPresent())
@@ -318,10 +308,10 @@ public class DriveSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("Distance to Speaker", getSpeakerDistance());
         SmartDashboard.putNumber("Note Angle", getNoteAngle());
         SmartDashboard.putNumber("Note Height", getNoteHeight());
-        */
+
 
         if (m_noteCamera.isConnected() && m_frontCamera.isConnected()
-            // && m_leftCamera.isConnected() && m_rightCamera.isConnected()
+            && m_leftCamera.isConnected() && m_rightCamera.isConnected()
             ) {
             RobotContainer.m_CANdleSubsystem.setStartupComplete(); // green
         }
