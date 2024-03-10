@@ -32,6 +32,7 @@ public class CANdleSubsystem extends SubsystemBase {
     private enum LedStates {
         Startup,
         StartupComplete,
+
         NoteDetected,
         AutoAimOrShoot,
         Amplify,
@@ -179,11 +180,15 @@ public class CANdleSubsystem extends SubsystemBase {
 
     public void setDefault() {
         if(robotEnabled) {
-            ledState = LedStates.DefaultEnabled;
-            changeAnimation(AnimationTypes.SingleFadeBlue);
+            if (ledState != LedStates.DefaultEnabled) {
+                ledState = LedStates.DefaultEnabled;
+                changeAnimation(AnimationTypes.SingleFadeBlue);
+            }
         } else {
-            ledState = LedStates.DefaultDisabled;
-            changeAnimation(AnimationTypes.SingleFadeGreen);
+            if (ledState != LedStates.DefaultDisabled) {
+                ledState = LedStates.DefaultDisabled;
+                changeAnimation(AnimationTypes.SingleFadeGreen);
+            }
         }
     }
 
