@@ -62,6 +62,7 @@ public class Robot extends TimedRobot {
   /** This function is called once each time the robot enters Disabled mode. */
   @Override
   public void disabledInit() {
+    RobotContainer.m_CANdleSubsystem.setEnabled(false);
   }
 
   @Override
@@ -76,6 +77,7 @@ public class Robot extends TimedRobot {
   public void autonomousInit() {
 
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
+    RobotContainer.m_CANdleSubsystem.setEnabled(true);
 
     /*
      * String autoSelected = SmartDashboard.getString("Auto Selector",
@@ -106,6 +108,7 @@ public class Robot extends TimedRobot {
       m_autonomousCommand.cancel();
     }
     m_robotContainer.teleopInit();
+    RobotContainer.m_CANdleSubsystem.setEnabled(true);
   }
 
   /** This function is called periodically during operator control. */

@@ -41,8 +41,8 @@ public class AlignAndShootNote extends SequentialCommandGroup {
             new RunCommand(() -> driveSubsystem.driveOnTargetSpeaker(x, y), driveSubsystem)),
         new InstantCommand(() -> shooterSubsystem.shooterOff(), shooterSubsystem),
         new InstantCommand(() -> shooterSubsystem.transferOff(), shooterSubsystem),
-        new InstantCommand(() -> armSubsystem.ArmOff(), armSubsystem)
-
+        new InstantCommand(() -> armSubsystem.ArmOff(), armSubsystem),
+        new InstantCommand(() -> RobotContainer.m_CANdleSubsystem.setDefault())
     );
   }
 }

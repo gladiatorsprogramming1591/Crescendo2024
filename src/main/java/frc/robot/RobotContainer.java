@@ -204,7 +204,8 @@ public class RobotContainer {
                 m_operatorController.start()
                                 .onTrue(new ArmToPosition(m_ArmSubsystem, armPositions.CLIMBFINISH,
                                                 ArmConstants.kCurrentLimitClimbing).alongWith(new InstantCommand (() -> m_CANdleSubsystem.changeAnimation(AnimationTypes.Twinkle))));
-                m_operatorController.x().onTrue(new InstantCommand(() -> m_CANdleSubsystem.changeAnimation(AnimationTypes.Strobe)));
+                m_operatorController.x().onTrue(new InstantCommand(() -> m_CANdleSubsystem.setAmplify()));
+                m_operatorController.x().onFalse(new InstantCommand(() -> m_CANdleSubsystem.setDefault()));
                
                 // TODO change the rotation to be the letter buttons
         }
