@@ -74,7 +74,7 @@ public class RobotContainer {
         // The robot's subsystems
         public static CANdleSubsystem m_CANdleSubsystem;
         public final DriveSubsystem m_robotDrive = new DriveSubsystem();
-        private final ShooterSubsystem m_ShooterSubsystem = new ShooterSubsystem(m_CANdleSubsystem);
+        private final ShooterSubsystem m_ShooterSubsystem = new ShooterSubsystem();
         private final IntakeSubsystem m_IntakeSubsystem = new IntakeSubsystem();
         private final ArmSubsystem m_ArmSubsystem = new ArmSubsystem();
         

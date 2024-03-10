@@ -145,7 +145,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
   public boolean isBeamBroken() {
     if (m_ShooterBeamBreak.get() == false) {
-      // RobotContainer.m_CANdleSubsystem.setNoteDetected();
+      RobotContainer.m_CANdleSubsystem.setNoteDetected();
     }
     return m_ShooterBeamBreak.get() == false;
   }

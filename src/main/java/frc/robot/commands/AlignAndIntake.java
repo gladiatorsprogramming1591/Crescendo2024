@@ -27,7 +27,7 @@ public class AlignAndIntake extends SequentialCommandGroup {
             DriveSubsystem driveSubsystem) {
         addRequirements(shooterSubsystem, armSubsystem, intakeSubsystem, driveSubsystem);
         addCommands(
-                new InstantCommand(() -> RobotContainer.m_CANdleSubsystem.changeAnimation(AnimationTypes.Fire)),
+                new InstantCommand(() -> RobotContainer.m_CANdleSubsystem.changeAnimation(AnimationTypes.Larson)),
                 new InstantCommand(() -> driveSubsystem.resetNoteHeight()),
                 new ParallelRaceGroup(
                         new FinishWhenBeamBroken(shooterSubsystem),

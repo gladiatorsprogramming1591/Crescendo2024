@@ -31,7 +31,7 @@ public class AlignShooterOnly extends SequentialCommandGroup {
       DriveSubsystem driveSubsystem, IntakeSubsystem intakeSubsystem) {
     addRequirements(intakeSubsystem, shooterSubsystem, armSubsystem);
     addCommands(
-        new InstantCommand(() -> RobotContainer.m_CANdleSubsystem.changeAnimation(AnimationTypes.Fire)),
+        new InstantCommand(() -> RobotContainer.m_CANdleSubsystem.changeAnimation(AnimationTypes.Larson)),
         new InstantCommand(() -> intakeSubsystem.intakeOff(), intakeSubsystem),
         new WarmUpAndAutoShoot(driveSubsystem, shooterSubsystem, armSubsystem, false, false));
   }

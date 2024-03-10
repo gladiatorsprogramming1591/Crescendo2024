@@ -34,7 +34,7 @@ public class AlignAndShootNote extends SequentialCommandGroup {
     addRequirements(driveSubsystem);
 
     addCommands(
-        new InstantCommand(() -> RobotContainer.m_CANdleSubsystem.changeAnimation(AnimationTypes.Fire)),
+        new InstantCommand(() -> RobotContainer.m_CANdleSubsystem.changeAnimation(AnimationTypes.Larson)),
         new InstantCommand(() -> intakeSubsystem.intakeOff(), intakeSubsystem),
         new ParallelDeadlineGroup(
             new WarmUpAndAutoShoot(driveSubsystem, shooterSubsystem, armSubsystem, true, false),
