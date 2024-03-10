@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.RobotContainer;
 import frc.robot.Constants.NeoMotorConstants;
 import frc.robot.Constants.ShooterConstants;
 
@@ -20,6 +21,7 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkBase;
 
 public class ShooterSubsystem extends SubsystemBase {
+  private CANdleSubsystem m_candle;
   private CANSparkFlex m_rightShooterMotor;
   private CANSparkFlex m_leftShooterMotor;
   private CANSparkMax m_transferMotor;
@@ -42,7 +44,8 @@ public class ShooterSubsystem extends SubsystemBase {
   // SimpleMotorFeedforward(
   // ShooterConstants.kSVolts, ShooterConstants.kVVoltSecondsPerRotation);
 
-  public ShooterSubsystem() {
+  public ShooterSubsystem(CANdleSubsystem candle) {
+    m_candle = candle;
     m_rightShooterMotor = new CANSparkFlex(Constants.ShooterConstants.kRightShooterCANId, MotorType.kBrushless);
     m_leftShooterMotor = new CANSparkFlex(Constants.ShooterConstants.kLeftShooterCANId, MotorType.kBrushless);
     m_rightEncoder = m_rightShooterMotor.getEncoder();
@@ -143,6 +146,9 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   public boolean isBeamBroken() {
+    if (m_ShooterBeamBreak.get() == false) {
+      // m_candle.setNoteDetected();
+    }
     return m_ShooterBeamBreak.get() == false;
   }
 

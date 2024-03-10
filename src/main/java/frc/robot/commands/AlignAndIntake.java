@@ -1,5 +1,6 @@
 package frc.robot.commands;
 
+import java.time.Instant;
 import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.wpilibj2.command.FunctionalCommand;
@@ -9,11 +10,13 @@ import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
+import frc.robot.RobotContainer;
 import frc.robot.commands.armCommands.ArmToPositionWithEnd;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.ArmSubsystem.armPositions;
+import frc.robot.subsystems.CANdleSubsystem.AnimationTypes;
 import frc.robot.subsystems.IntakeSubsystem;
 
 public class AlignAndIntake extends SequentialCommandGroup {
@@ -24,6 +27,7 @@ public class AlignAndIntake extends SequentialCommandGroup {
             DriveSubsystem driveSubsystem) {
         addRequirements(shooterSubsystem, armSubsystem, intakeSubsystem, driveSubsystem);
         addCommands(
+                new InstantCommand(() -> RobotContainer.m_CANdleSubsystem.changeAnimation(AnimationTypes.Fire)),
                 new InstantCommand(() -> driveSubsystem.resetNoteHeight()),
                 new ParallelRaceGroup(
                         new FinishWhenBeamBroken(shooterSubsystem),

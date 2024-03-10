@@ -8,20 +8,20 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.829682890135012,
-        "y": 3.7001035540532623
+        "x": 6.484339891756708,
+        "y": 3.4435630409722364
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 3.52,
-        "y": 5.4
+        "x": 4.0,
+        "y": 5.1
       },
       "prevControl": {
-        "x": 4.664565366053809,
-        "y": 4.847451202594714
+        "x": 5.144565366053808,
+        "y": 4.547451202594713
       },
       "nextControl": null,
       "isLocked": false,
@@ -29,31 +29,20 @@
     }
   ],
   "rotationTargets": [],
-  "constraintZones": [],
-  "eventMarkers": [
+  "constraintZones": [
     {
-      "name": "AlignShooter",
-      "waypointRelativePos": 0.65,
-      "command": {
-        "type": "parallel",
-        "data": {
-          "commands": [
-            {
-              "type": "named",
-              "data": {
-                "name": "BeginAutoAlignTheta"
-              }
-            },
-            {
-              "type": "named",
-              "data": {
-                "name": "AlignShooterOnly"
-              }
-            }
-          ]
-        }
+      "name": "New Constraints Zone",
+      "minWaypointRelativePos": 0.9,
+      "maxWaypointRelativePos": 1.0,
+      "constraints": {
+        "maxVelocity": 5.4,
+        "maxAcceleration": 4.0,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 720.0
       }
-    },
+    }
+  ],
+  "eventMarkers": [
     {
       "name": "Intake",
       "waypointRelativePos": 0,

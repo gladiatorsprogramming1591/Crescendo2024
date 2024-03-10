@@ -3,24 +3,24 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.9,
-        "y": 5.0
+        "x": 8.2,
+        "y": 5.7
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.302836000821786,
-        "y": 4.321298685393376
+        "x": 6.829682890135012,
+        "y": 3.571833297512749
       },
       "isLocked": false,
-      "linkedName": "EndStagelineFourth"
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 3.7967169800245437,
+        "x": 3.9,
         "y": 5.211322262872771
       },
       "prevControl": {
-        "x": 4.522788845862998,
+        "x": 4.626071865838453,
         "y": 3.8528652235621155
       },
       "nextControl": null,

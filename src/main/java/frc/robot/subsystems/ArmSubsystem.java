@@ -162,9 +162,13 @@ public class ArmSubsystem extends SubsystemBase {
     m_rightArmMotor.set(0);
   }
 
-  public boolean atPosition(armPositions pos) {
+  public boolean atPosition(armPositions pos, boolean wideTolerance) {
     double currentEncoderPosition = armAbsEncoder.getAbsolutePosition();
-    return (Math.abs(currentEncoderPosition - mapAbs.get(pos)) < Constants.ArmConstants.kAllowedErrAbs);
+    double tolerance = Constants.ArmConstants.kAllowedErrAbs; 
+    if (wideTolerance){
+      tolerance = Constants.ArmConstants.kAllowedErrWideToleranceAbs; 
+    }
+    return (Math.abs(currentEncoderPosition - mapAbs.get(pos)) < tolerance);
   }
 
   @Override

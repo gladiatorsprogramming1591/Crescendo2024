@@ -16,12 +16,12 @@
     },
     {
       "anchor": {
-        "x": 3.52,
-        "y": 5.4
+        "x": 4.0,
+        "y": 5.1
       },
       "prevControl": {
-        "x": 4.945653594201957,
-        "y": 4.334249037728846
+        "x": 5.425653594201956,
+        "y": 4.034249037728845
       },
       "nextControl": null,
       "isLocked": false,
@@ -44,8 +44,8 @@
   ],
   "eventMarkers": [
     {
-      "name": "New Event Marker",
-      "waypointRelativePos": 0.4,
+      "name": "Intake",
+      "waypointRelativePos": 0,
       "command": {
         "type": "parallel",
         "data": {
@@ -53,13 +53,7 @@
             {
               "type": "named",
               "data": {
-                "name": "BeginAutoAlignTheta"
-              }
-            },
-            {
-              "type": "named",
-              "data": {
-                "name": "AlignShooterOnly"
+                "name": "Intake"
               }
             }
           ]

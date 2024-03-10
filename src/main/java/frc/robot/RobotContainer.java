@@ -37,10 +37,12 @@ import frc.robot.commands.TurnToAngleProfiled;
 import frc.robot.commands.armCommands.ArmToPosition;
 import frc.robot.commands.armCommands.ArmToPositionWithEnd;
 import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.CANdleSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.ArmSubsystem.armPositions;
+import frc.robot.subsystems.CANdleSubsystem.AnimationTypes;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -65,21 +67,27 @@ import com.pathplanner.lib.path.PathPlannerPath;
  */
 public class RobotContainer {
 
-        // The robot's subsystems
-        public final DriveSubsystem m_robotDrive = new DriveSubsystem();
-        private final ShooterSubsystem m_ShooterSubsystem = new ShooterSubsystem();
-        private final IntakeSubsystem m_IntakeSubsystem = new IntakeSubsystem();
-        private final ArmSubsystem m_ArmSubsystem = new ArmSubsystem();
-        private SendableChooser<Command> m_autoChooser;
-
         // The driver's controller
         CommandXboxController m_driverController = new CommandXboxController(OIConstants.kDriverControllerPort);
         CommandXboxController m_operatorController = new CommandXboxController(OIConstants.kOperatorControllerPort);
+
+        // The robot's subsystems
+        public static CANdleSubsystem m_CANdleSubsystem;
+        public final DriveSubsystem m_robotDrive = new DriveSubsystem();
+        private final ShooterSubsystem m_ShooterSubsystem = new ShooterSubsystem(m_CANdleSubsystem);
+        private final IntakeSubsystem m_IntakeSubsystem = new IntakeSubsystem();
+        private final ArmSubsystem m_ArmSubsystem = new ArmSubsystem();
+        
+        private SendableChooser<Command> m_autoChooser;
+
+        
 
         /**
          * The container for the robot. Contains subsystems, OI devices, and commands.
          */
         public RobotContainer() {
+                m_CANdleSubsystem = new CANdleSubsystem();
+
                 // Register Named Commands
                 registerNamedCommands();
 
@@ -195,8 +203,9 @@ public class RobotContainer {
                 m_operatorController.back().onTrue(new ArmToPosition(m_ArmSubsystem, armPositions.CLIMBSTART));
                 m_operatorController.start()
                                 .onTrue(new ArmToPosition(m_ArmSubsystem, armPositions.CLIMBFINISH,
-                                                ArmConstants.kCurrentLimitClimbing));
-                m_operatorController.x().onTrue(new AmpScore(m_ShooterSubsystem, m_ArmSubsystem, armPositions.AMP));
+                                                ArmConstants.kCurrentLimitClimbing).alongWith(new InstantCommand (() -> m_CANdleSubsystem.changeAnimation(AnimationTypes.Twinkle))));
+                m_operatorController.x().onTrue(new InstantCommand(() -> m_CANdleSubsystem.changeAnimation(AnimationTypes.Strobe)));
+               
                 // TODO change the rotation to be the letter buttons
         }
 
@@ -229,7 +238,7 @@ public class RobotContainer {
                                 new IntakeNote(m_ShooterSubsystem, m_ArmSubsystem, m_IntakeSubsystem));
                 NamedCommands.registerCommand("Intake.25",
                                 new IntakeNote(m_ShooterSubsystem, m_ArmSubsystem, m_IntakeSubsystem)
-                                                .withTimeout(0.20));
+                                                .withTimeout(0.30));
                 NamedCommands.registerCommand("ArmStow",
                                 new ArmToPositionWithEnd(m_ArmSubsystem, armPositions.TRANSFER));
                 NamedCommands.registerCommand("AlignAndShootNote",

@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.7051874193434493,
-        "y": 4.53
+        "x": 4.0,
+        "y": 5.1
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.267716535433072,
-        "y": 1.2728356225943225
+        "x": 4.985895156405698,
+        "y": 4.251321779566636
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "FifthNoteShoot"
     },
     {
       "anchor": {
-        "x": 6.6,
-        "y": 4.3
+        "x": 8.0,
+        "y": 2.0
       },
       "prevControl": {
-        "x": 4.806959613919229,
-        "y": 3.996111838377523
+        "x": 7.194759774134935,
+        "y": 3.7001035540532623
       },
       "nextControl": null,
       "isLocked": false,
@@ -33,7 +33,7 @@
   "eventMarkers": [
     {
       "name": "Intake",
-      "waypointRelativePos": 0.1,
+      "waypointRelativePos": 0.5,
       "command": {
         "type": "parallel",
         "data": {
@@ -57,13 +57,13 @@
   },
   "goalEndState": {
     "velocity": 2.0,
-    "rotation": 177.51852822540744,
+    "rotation": 105.05933296040045,
     "rotateFast": false
   },
   "reversed": false,
   "folder": null,
   "previewStartingState": {
-    "rotation": 123.11134196037197,
+    "rotation": 180.0,
     "velocity": 0
   },
   "useDefaultConstraints": true

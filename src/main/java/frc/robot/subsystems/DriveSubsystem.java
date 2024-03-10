@@ -32,6 +32,7 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
+import frc.robot.RobotContainer;
 import frc.robot.Constants.DriveConstants;
 import frc.utils.CommandBuilder;
 import frc.utils.SwerveUtils;
@@ -138,6 +139,9 @@ public class DriveSubsystem extends SubsystemBase {
     PhotonPoseEstimator[] m_photonPoseEstimators;
     SwerveDrivePoseEstimator m_poseEstimator;
     PhotonCamera m_noteCamera;
+    PhotonCamera m_frontCamera;
+    PhotonCamera m_leftCamera;
+    PhotonCamera m_rightCamera;
     private double m_lastNoteNeight = 0.0;
     private boolean targetLost = true;
 
@@ -155,6 +159,9 @@ public class DriveSubsystem extends SubsystemBase {
         m_autoAimRotationPidController.setTolerance(DriveConstants.AUTO_AIM_ROT_TOLERANCE);
 
         m_noteCamera = new PhotonCamera("Note");
+        m_frontCamera = new PhotonCamera("Front");
+        // m_leftCamera = new PhotonCamera("Left");
+        // m_rightCamera = new PhotonCamera("right");
 
         // Configure AutoBuilder last
 
@@ -224,7 +231,7 @@ public class DriveSubsystem extends SubsystemBase {
                     new PhotonPoseEstimator(
                             AprilTagFields.k2024Crescendo.loadAprilTagLayoutField(),
                             PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
-                            new PhotonCamera("Front"),
+                            m_frontCamera,
                             DriveConstants.kFrontCameraLocation),
             };
         }
@@ -232,7 +239,7 @@ public class DriveSubsystem extends SubsystemBase {
         // new PhotonPoseEstimator(
         // AprilTagFields.k2024Crescendo.loadAprilTagLayoutField(),
         // PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
-        // new PhotonCamera("Left"),
+        // m_leftCamera,
         // new Transform3d(
         // new Translation3d(-0.0, -0.0, 0.0),
         // new Rotation3d(0.0, Math.toRadians(-30.0), Math.toRadians(170.0))
@@ -241,7 +248,7 @@ public class DriveSubsystem extends SubsystemBase {
         // new PhotonPoseEstimator(
         // AprilTagFields.k2024Crescendo.loadAprilTagLayoutField(),
         // PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
-        // new PhotonCamera("Right"),
+        // m_rightCamera,
         // new Transform3d(
         // new Translation3d(-0.0, -0.0, 0.0),
         // new Rotation3d(0.0, Math.toRadians(-30.0), Math.toRadians(170.0))
@@ -290,11 +297,12 @@ public class DriveSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("gyroYaw:", gyroYaw);
         SmartDashboard.putNumber("Odometry.x:", m_odometry.getPoseMeters().getX());
         SmartDashboard.putNumber("Odometry.y:", m_odometry.getPoseMeters().getY());
-        SmartDashboard.putNumber("Note Pipeline", m_noteCamera.getPipelineIndex());
+        // SmartDashboard.putNumber("Note Pipeline", m_noteCamera.getPipelineIndex());
         SmartDashboard.putBoolean("IsAiming", isAutoAiming);
 
         // updateAprilTagInfo(5.0);
 
+        /* 
         for (PhotonPoseEstimator photonPoseEstimator : m_photonPoseEstimators) {
             Optional<EstimatedRobotPose> pose = photonPoseEstimator.update();
             if (pose.isPresent())
@@ -310,6 +318,14 @@ public class DriveSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("Distance to Speaker", getSpeakerDistance());
         SmartDashboard.putNumber("Note Angle", getNoteAngle());
         SmartDashboard.putNumber("Note Height", getNoteHeight());
+        */
+
+        if (m_noteCamera.isConnected() && m_frontCamera.isConnected()
+            // && m_leftCamera.isConnected() && m_rightCamera.isConnected()
+            ) {
+            RobotContainer.m_CANdleSubsystem.setStartupComplete(); // green
+        }
+
 
         double driveCurrent = m_frontLeft.getDriveCurrent() + m_frontRight.getDriveCurrent()
                 + m_rearLeft.getDriveCurrent()
@@ -729,6 +745,7 @@ public class DriveSubsystem extends SubsystemBase {
     }
 
     public void resetNoteHeight() {
+        targetLost = false;
         m_lastNoteNeight = getNoteHeight();
     }
 
@@ -746,7 +763,7 @@ public class DriveSubsystem extends SubsystemBase {
 
     public void driveRobotRelativeToObject() {
         var result = m_noteCamera.getLatestResult();
-        targetLost = true; // assu8me we lost it unless we find it within our tolerance
+        targetLost = false;
         if (result != null) {
             PhotonTrackedTarget target = result.getBestTarget();
             if (target != null) {
@@ -759,7 +776,7 @@ public class DriveSubsystem extends SubsystemBase {
                         && (height > DriveConstants.kMinNoteHeight)) {
                     m_lastNoteNeight = height;
                     targetLost = false;
-                    System.out.println("Running AutoAim");
+                    // System.out.println("Running AutoAim");
                     drive(
                             -MathUtil.clamp(height * 0.02, -DriveConstants.TRANSLATION_SPEED_SCALAR_AUTO_AIM,
                                     DriveConstants.TRANSLATION_SPEED_SCALAR_AUTO_AIM),
@@ -767,7 +784,16 @@ public class DriveSubsystem extends SubsystemBase {
                             -yaw * 0.01,
                             false, false);
                 }
+                else {
+                    targetLost = true;
+                }
             }
+            else {
+                targetLost = true;
+            }
+        }
+        else {
+            targetLost = true;
         }
         if (targetLost) {
             drive(0, 0, 0, false, false);

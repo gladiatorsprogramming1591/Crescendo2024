@@ -80,13 +80,31 @@
         {
           "type": "path",
           "data": {
-            "pathName": "SixthNotePickup"
+            "pathName": "SeventhNotePickup"
           }
         },
         {
           "type": "named",
           "data": {
             "name": "AlignAndIntake"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "SeventhToShoot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AlignAndShootNote"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "EndAutoAlignTheta"
           }
         }
       ]

@@ -45,7 +45,7 @@ public final class Constants {
     public static final Vector<N3> visionStd = VecBuilder.fill(0.35, 0.35, 1.0);
 
     public static final double kNoteCameraHeightFOV = 45.0;
-    public static final double kNoteDifferentialTolerance = 15.0;
+    public static final double kNoteDifferentialTolerance = 10.0;
     public static final double kMinNoteHeight = -13.0 + kNoteCameraHeightFOV / 2.0;
 
     // Camera Positions
@@ -142,6 +142,10 @@ public final class Constants {
     public static final double kMinRotSpeed = 0.1;
     public static final double kMinXSpeed = 0.1;
     public static final double kMinYSpeed = 0.1;
+  }
+
+  public static final class CANdleConstants {
+    public static final int kCANdleCanId = 18; 
   }
 
   public static final class ModuleConstants {
@@ -271,6 +275,7 @@ public final class Constants {
     public static final double kAMP = kOffset - 0.395;
     public static final double kSOURCE = kOffset - 0.375; // Change while testing manually
     public static final double kAllowedErrAbs = 0.001;
+    public static final double kAllowedErrWideToleranceAbs = 0.01;
     public static final double kMinHeightAbs = kOffset;
     public static final double kMaxHeightAbs = 0.2;
 

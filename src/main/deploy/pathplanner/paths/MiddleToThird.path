@@ -4,36 +4,105 @@
     {
       "anchor": {
         "x": 2.6,
-        "y": 5.65
+        "y": 5.7
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.22182059748735,
-        "y": 5.6438912877825755
+        "x": 1.383130458568611,
+        "y": 5.821496258377133
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "FrontMiddle"
     },
     {
       "anchor": {
         "x": 2.6,
-        "y": 7.108477783289376
+        "y": 7.3
       },
       "prevControl": {
-        "x": 1.9690263965143329,
-        "y": 6.840526981233927
+        "x": 1.1167230026767763,
+        "y": 7.301537679998438
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "F3"
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.65,
+      "rotationDegrees": -155.0,
+      "rotateFast": false
+    }
+  ],
   "constraintZones": [],
   "eventMarkers": [
     {
-      "name": "Intake",
-      "waypointRelativePos": 0,
+      "name": "Intake1",
+      "waypointRelativePos": 0.0,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "Intake"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Align",
+      "waypointRelativePos": 0.25,
+      "command": {
+        "type": "sequential",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "BeginAutoAlignTheta"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "AlignShooterOnly"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Shoot",
+      "waypointRelativePos": 0.5,
+      "command": {
+        "type": "sequential",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "ShootNoteAfterAlign"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "EndAutoAlignTheta"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Intake2",
+      "waypointRelativePos": 0.7,
       "command": {
         "type": "parallel",
         "data": {
@@ -50,15 +119,15 @@
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 5.6,
-    "maxAcceleration": 5.5,
+    "maxVelocity": 5.0,
+    "maxAcceleration": 3.8,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
-    "velocity": 0,
-    "rotation": -150.0,
-    "rotateFast": false
+    "velocity": 1.5,
+    "rotation": -155.0,
+    "rotateFast": true
   },
   "reversed": false,
   "folder": null,
@@ -66,5 +135,5 @@
     "rotation": 180.0,
     "velocity": 0
   },
-  "useDefaultConstraints": true
+  "useDefaultConstraints": false
 }
