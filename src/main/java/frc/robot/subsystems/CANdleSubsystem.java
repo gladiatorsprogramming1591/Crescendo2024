@@ -28,6 +28,8 @@ public class CANdleSubsystem extends SubsystemBase {
     private Animation m_toAnimate = null;
     private boolean m_startupComplete = false;
     private boolean robotEnabled = false;
+    private boolean m_camerasReady = false;
+    private boolean m_notePresent = false;
 
     private enum LedStates {
         Startup,
@@ -175,6 +177,10 @@ public class CANdleSubsystem extends SubsystemBase {
     }
 
     public void setLEDs(int r, int g, int b) {
+        m_candle.clearAnimation(0);
+        changeAnimation(AnimationTypes.SetAll);
+        System.out.println("Clearing animation");
+        System.out.println("Setting LEDs to r: " + r + " g: " + g + " b: " + b);
         m_candle.setLEDs(r, g, b); 
     }
 
@@ -192,21 +198,26 @@ public class CANdleSubsystem extends SubsystemBase {
         }
     }
 
-    public void setStartupComplete() {
-        if (ledState == LedStates.Startup) { 
-            ledState = LedStates.StartupComplete;
-            m_startupComplete = true; // temp?
+    public void setCamerasReady() {
+        m_camerasReady = true;
+        checkStartupComplete();
+    }
+
+    public void checkStartupComplete() {
+        if(!m_startupComplete && m_notePresent && m_camerasReady) {
+            m_startupComplete = true;
             setLEDs(0, 255, 0); // green
-        }
-        if (startupCompleteCount++ > 150) { // Show startup complete for 3 seconds, then go to default state
-            setDefault();
         }
     }
 
-    public void setNoteDetected() {
-        if(ledState != LedStates.Startup) { // Don't change LEDs until startup complete
-            ledState = LedStates.NoteDetected;
-            setLEDs(255,65,0); // orange
+    public void setNotePresent(boolean present) {
+        m_notePresent = present;
+        checkStartupComplete();
+    }
+
+    public void setNoteDetectedOnIntake() {
+        if(m_startupComplete) {
+            setLEDs(255,45,0); // orange
         }
     }
 
@@ -239,7 +250,7 @@ public class CANdleSubsystem extends SubsystemBase {
             else if (selectedAnimation.equals(4)) changeAnimation(AnimationTypes.Larson);
             else if (selectedAnimation.equals(5)) {
                 changeAnimation(AnimationTypes.SetAll);
-                m_candle.clearAnimation(LedCount);
+                m_candle.clearAnimation(0);
                 setLEDs(0, 0, 255);
             }
             lastAnimation = selectedAnimation;

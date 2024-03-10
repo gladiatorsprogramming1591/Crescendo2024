@@ -316,11 +316,14 @@ public class DriveSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("Note Angle", getNoteAngle());
         SmartDashboard.putNumber("Note Height", getNoteHeight());
 
-
+        SmartDashboard.putBoolean("FrontConnected", m_frontCamera.isConnected());
+        SmartDashboard.putBoolean("NoteConnected", m_noteCamera.isConnected());
+        // SmartDashboard.putBoolean("LeftConnected", m_leftCamera.isConnected());
+        // SmartDashboard.putBoolean("RightConnected", m_rightCamera.isConnected());
         if (m_noteCamera.isConnected() && m_frontCamera.isConnected()
-            // && m_leftCamera.isConnected() && m_rightCamera.isConnected()
+        // && m_leftCamera.isConnected() && m_rightCamera.isConnected()
             ) {
-            RobotContainer.m_CANdleSubsystem.setStartupComplete(); // green
+            RobotContainer.m_CANdleSubsystem.setCamerasReady(); // green
         }
 
 
@@ -760,7 +763,7 @@ public class DriveSubsystem extends SubsystemBase {
     // gets robot relative note angle from 0 (Center)
     private double getNoteAngle() {
         var result = m_noteCamera.getLatestResult();
-        if (result != null && result.getBestTarget() != null) {
+        if (result != null && result.hasTargets() && result.getBestTarget() != null) {
             return result.getBestTarget().getYaw();
         } else {
             return 0;
@@ -770,7 +773,7 @@ public class DriveSubsystem extends SubsystemBase {
 
     private double getNoteHeight() {
         var result = m_noteCamera.getLatestResult();
-        if (result != null && result.getBestTarget() != null) {
+        if (result != null && result.hasTargets() && result.getBestTarget() != null) {
             return result.getBestTarget().getPitch() + DriveConstants.kNoteCameraHeightFOV / 2.0;
         } else {
             return -DriveConstants.kNoteCameraHeightFOV / 2.0;

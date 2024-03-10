@@ -145,7 +145,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
   public boolean isBeamBroken() {
     if (m_ShooterBeamBreak.get() == false) {
-      RobotContainer.m_CANdleSubsystem.setNoteDetected();
+      RobotContainer.m_CANdleSubsystem.setNoteDetectedOnIntake();
     }
     return m_ShooterBeamBreak.get() == false;
   }
@@ -184,6 +184,7 @@ public class ShooterSubsystem extends SubsystemBase {
     SmartDashboard.putString("R Shooter Vel", "" + m_rightEncoder.getVelocity());
     SmartDashboard.putBoolean("ShooterBeamBreak", m_ShooterBeamBreak.get());
     SmartDashboard.putBoolean("ShooterAtSpeed", isShooterAtSpeed());
+    RobotContainer.m_CANdleSubsystem.setNotePresent(!m_ShooterBeamBreak.get());
 
     SmartDashboard.putNumber("Shooter Current",
         m_leftShooterMotor.getOutputCurrent() + m_rightShooterMotor.getOutputCurrent());
