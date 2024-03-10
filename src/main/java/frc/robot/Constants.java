@@ -66,6 +66,11 @@ public final class Constants {
 
     // Field Positions
 
+    public static final double VISION_FIELD_MARGIN = 0.5;
+    public static final double VISION_Z_MARGIN = 0.75;
+    public static final double VISION_STD_XY_SCALE = 0.006;
+    public static final double VISION_STD_ROT_SCALE = 0.015;
+
     public static final double FIELD_LENGTH = 16.5417;
     public static final double FIELD_WIDTH = 8.0136;
 
