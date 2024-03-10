@@ -27,6 +27,17 @@ public class CANdleSubsystem extends SubsystemBase {
 
     private Animation m_toAnimate = null;
     private boolean m_startupComplete = false;
+    private boolean robotEnabled = false;
+
+    private enum LedStates {
+        Startup,
+        StartupComplete,
+        NoteDetected,
+        AutoAimOrShoot,
+        Amplify,
+        DefaultDisabled,
+        DefaultEnabled
+    }
 
     public enum AnimationTypes {
         ColorFlow,
@@ -35,6 +46,8 @@ public class CANdleSubsystem extends SubsystemBase {
         Rainbow,
         RgbFade,
         SingleFade,
+        SingleFadeBlue,
+        SingleFadeGreen,
         Strobe,
         Twinkle,
         TwinkleOff,
@@ -43,6 +56,8 @@ public class CANdleSubsystem extends SubsystemBase {
     private AnimationTypes m_currentAnimation;
     private SendableChooser<Integer> m_animationChooser;
     private Integer lastAnimation = 0;
+    LedStates ledState = LedStates.Startup;
+    private int startupCompleteCount = 0;
 
     public CANdleSubsystem() {
         changeAnimation(AnimationTypes.SetAll);
@@ -74,7 +89,9 @@ public class CANdleSubsystem extends SubsystemBase {
             case Larson: changeAnimation(AnimationTypes.Rainbow); break;
             case Rainbow: changeAnimation(AnimationTypes.RgbFade); break;
             case RgbFade: changeAnimation(AnimationTypes.SingleFade); break;
-            case SingleFade: changeAnimation(AnimationTypes.Strobe); break;
+            case SingleFade: changeAnimation(AnimationTypes.SingleFadeBlue); break;
+            case SingleFadeBlue: changeAnimation(AnimationTypes.SingleFadeGreen); break;
+            case SingleFadeGreen: changeAnimation(AnimationTypes.Strobe); break;
             case Strobe: changeAnimation(AnimationTypes.Twinkle); break;
             case Twinkle: changeAnimation(AnimationTypes.TwinkleOff); break;
             case TwinkleOff: changeAnimation(AnimationTypes.ColorFlow); break;
@@ -89,7 +106,9 @@ public class CANdleSubsystem extends SubsystemBase {
             case Rainbow: changeAnimation(AnimationTypes.Larson); break;
             case RgbFade: changeAnimation(AnimationTypes.Rainbow); break;
             case SingleFade: changeAnimation(AnimationTypes.RgbFade); break;
-            case Strobe: changeAnimation(AnimationTypes.SingleFade); break;
+            case SingleFadeBlue: changeAnimation(AnimationTypes.SingleFade); break;
+            case SingleFadeGreen: changeAnimation(AnimationTypes.SingleFadeBlue); break;
+            case Strobe: changeAnimation(AnimationTypes.SingleFadeGreen); break;
             case Twinkle: changeAnimation(AnimationTypes.Strobe); break;
             case TwinkleOff: changeAnimation(AnimationTypes.Twinkle); break;
             case SetAll: changeAnimation(AnimationTypes.ColorFlow); break;
@@ -132,6 +151,12 @@ public class CANdleSubsystem extends SubsystemBase {
             case SingleFade:
                 m_toAnimate = new SingleFadeAnimation(255, 0, 0, 0, 0.5, LedCount);
                 break;
+            case SingleFadeBlue:
+                m_toAnimate = new SingleFadeAnimation(0, 0, 255, 0, 0.6, LedCount);
+                break;            
+            case SingleFadeGreen:
+                m_toAnimate = new SingleFadeAnimation(0, 255, 0, 0, 0.6, LedCount);
+                break;            
             case Strobe:
                 m_toAnimate = new StrobeAnimation(0, 0, 255, 0, 98.0 / 256.0, LedCount);
                 break;
@@ -152,17 +177,51 @@ public class CANdleSubsystem extends SubsystemBase {
         m_candle.setLEDs(r, g, b); 
     }
 
+    public void setDefault() {
+        if(robotEnabled) {
+            ledState = LedStates.DefaultEnabled;
+            changeAnimation(AnimationTypes.SingleFadeBlue);
+        } else {
+            ledState = LedStates.DefaultDisabled;
+            changeAnimation(AnimationTypes.SingleFadeGreen);
+        }
+    }
+
     public void setStartupComplete() {
-        if (!m_startupComplete) {
-            m_startupComplete = true;
-            setLEDs(0, 255, 0);
+        if (ledState == LedStates.Startup) { 
+            ledState = LedStates.StartupComplete;
+            m_startupComplete = true; // temp?
+            setLEDs(0, 255, 0); // green
+        }
+        if (startupCompleteCount++ > 150) { // Show startup complete for 3 seconds, then go to default state
+            setDefault();
         }
     }
 
     public void setNoteDetected() {
-        if(m_startupComplete) {
-            setLEDs(255,65,0);
+        if(ledState != LedStates.Startup) { // Don't change LEDs until startup complete
+            ledState = LedStates.NoteDetected;
+            setLEDs(255,65,0); // orange
         }
+    }
+
+    public void setAmplify() { 
+        if(ledState != LedStates.Startup) { // Don't change LEDs until startup complete
+            ledState = LedStates.Amplify;
+            changeAnimation(AnimationTypes.Strobe);
+        }
+    }
+
+    public void setAutoAimOrShoot() { 
+        if(ledState != LedStates.Startup) { // Don't change LEDs until startup complete
+            ledState = LedStates.AutoAimOrShoot;
+            changeAnimation(AnimationTypes.Larson);
+        }
+    }
+
+    public void setEnabled(boolean enabled) {
+        robotEnabled = enabled;
+        setDefault();
     }
 
     @Override
