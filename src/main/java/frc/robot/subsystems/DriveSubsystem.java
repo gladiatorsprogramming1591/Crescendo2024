@@ -4,8 +4,10 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
@@ -43,6 +45,8 @@ import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
@@ -213,7 +217,6 @@ public class DriveSubsystem extends SubsystemBase {
         // Do this in either robot periodic or subsystem periodic
 
         // Vision Initialization
-        if (!DriverStation.isAutonomousEnabled()) {
             m_poseEstimator = new SwerveDrivePoseEstimator(
                     DriveConstants.kDriveKinematics,
                     Rotation2d.fromDegrees(getHeading()),
@@ -228,33 +231,24 @@ public class DriveSubsystem extends SubsystemBase {
                     DriveConstants.visionStd);
 
             m_photonPoseEstimators = new PhotonPoseEstimator[] {
-                    new PhotonPoseEstimator(
-                            AprilTagFields.k2024Crescendo.loadAprilTagLayoutField(),
-                            PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
-                            m_frontCamera,
-                            DriveConstants.kFrontCameraLocation),
+                new PhotonPoseEstimator(
+                    AprilTagFields.k2024Crescendo.loadAprilTagLayoutField(),
+                    PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
+                    m_frontCamera,
+                    DriveConstants.kFrontCameraLocation),
+                new PhotonPoseEstimator(
+                    AprilTagFields.k2024Crescendo.loadAprilTagLayoutField(),
+                    PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
+                    m_leftCamera,
+                    DriveConstants.kLeftCameraLocation),
+                new PhotonPoseEstimator(
+                    AprilTagFields.k2024Crescendo.loadAprilTagLayoutField(),
+                    PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
+                    m_rightCamera,
+                    DriveConstants.kRightCameraLocation),
             };
-        }
-        // Future cameras
-        // new PhotonPoseEstimator(
-        // AprilTagFields.k2024Crescendo.loadAprilTagLayoutField(),
-        // PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
-        // m_leftCamera,
-        // new Transform3d(
-        // new Translation3d(-0.0, -0.0, 0.0),
-        // new Rotation3d(0.0, Math.toRadians(-30.0), Math.toRadians(170.0))
-        // )
-        // ),
-        // new PhotonPoseEstimator(
-        // AprilTagFields.k2024Crescendo.loadAprilTagLayoutField(),
-        // PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
-        // m_rightCamera,
-        // new Transform3d(
-        // new Translation3d(-0.0, -0.0, 0.0),
-        // new Rotation3d(0.0, Math.toRadians(-30.0), Math.toRadians(170.0))
-        // )
-        // ),
-    }
+          };
+
 
     public boolean visionDriveAligned(double desiredId, double desiredY, double rotVisionSetpoint) {
         boolean retValue = true; // true = at desired location
@@ -300,14 +294,9 @@ public class DriveSubsystem extends SubsystemBase {
         // SmartDashboard.putNumber("Note Pipeline", m_noteCamera.getPipelineIndex());
         SmartDashboard.putBoolean("IsAiming", isAutoAiming);
 
-        // updateAprilTagInfo(5.0);
-
-        /* 
-        for (PhotonPoseEstimator photonPoseEstimator : m_photonPoseEstimators) {
-            Optional<EstimatedRobotPose> pose = photonPoseEstimator.update();
-            if (pose.isPresent())
-                m_poseEstimator.addVisionMeasurement(pose.get().estimatedPose.toPose2d(), pose.get().timestampSeconds);
-        }
+        // Filtered pose estimation 
+        updatePoseEstimationWithFilter();
+        
         m_poseEstimator.update(Rotation2d.fromDegrees(getHeading()), new SwerveModulePosition[] {
                 m_frontLeft.getPosition(),
                 m_frontRight.getPosition(),
@@ -318,10 +307,10 @@ public class DriveSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("Distance to Speaker", getSpeakerDistance());
         SmartDashboard.putNumber("Note Angle", getNoteAngle());
         SmartDashboard.putNumber("Note Height", getNoteHeight());
-        */
+
 
         if (m_noteCamera.isConnected() && m_frontCamera.isConnected()
-            // && m_leftCamera.isConnected() && m_rightCamera.isConnected()
+            && m_leftCamera.isConnected() && m_rightCamera.isConnected()
             ) {
             RobotContainer.m_CANdleSubsystem.setStartupComplete(); // green
         }
@@ -721,6 +710,55 @@ public class DriveSubsystem extends SubsystemBase {
                 m_autoAimRotationPidController, false);
     }
 
+    public void updatePoseEstimationWithFilter() {
+            List<Pose2d> measurements = new ArrayList<>();
+            List<Pose3d> targets = new ArrayList<>();
+            boolean isBlue = DriverStation.getAlliance().orElse(DriverStation.Alliance.Blue)
+                .equals(DriverStation.Alliance.Blue);
+            Pose2d currentPose = getPosition();
+            for (PhotonPoseEstimator poseEstimator : m_photonPoseEstimators) {
+                Optional<EstimatedRobotPose> pose = poseEstimator.update();
+                if (pose.isPresent()) {
+                    Pose3d raw = pose.get().estimatedPose;
+                    Pose3d pose3d = isBlue
+                        ? raw
+                        : new Pose3d(
+                            DriveConstants.FIELD_LENGTH - raw.getX(),
+                            DriveConstants.FIELD_WIDTH - raw.getY(),
+                            raw.getZ(),
+                            raw.getRotation().minus(new Rotation3d(0.0, 0.0, Math.PI))
+                        );
+                    Pose2d pose2d = pose3d.toPose2d();
+                    if (
+                        pose3d.getX() >= -DriveConstants.VISION_FIELD_MARGIN &&
+                        pose3d.getX() <= DriveConstants.FIELD_LENGTH + DriveConstants.VISION_FIELD_MARGIN &&
+                        pose3d.getY() >= -DriveConstants.VISION_FIELD_MARGIN &&
+                        pose3d.getY() <= DriveConstants.FIELD_WIDTH + DriveConstants.VISION_FIELD_MARGIN &&
+                        pose3d.getZ() >= -DriveConstants.VISION_Z_MARGIN &&
+                        pose3d.getZ() <= DriveConstants.VISION_Z_MARGIN
+                    ) {
+                        double sum = 0.0;
+                        for (PhotonTrackedTarget target : pose.get().targetsUsed) {
+                            Optional<Pose3d> tagPose =
+                                AprilTagFields.k2024Crescendo.loadAprilTagLayoutField().getTagPose(target.getFiducialId());
+                            if (tagPose.isEmpty()) continue;
+                            targets.add(tagPose.get());
+                            sum += currentPose.getTranslation().getDistance(tagPose.get().getTranslation().toTranslation2d());
+                        }
+
+                        int tagCount = pose.get().targetsUsed.size();
+                        double stdScale = Math.pow(sum / tagCount, 2.0) / tagCount;
+                        double xyStd = DriveConstants.VISION_STD_XY_SCALE * stdScale;
+                        double rotStd = DriveConstants.VISION_STD_ROT_SCALE * stdScale;
+
+                        m_poseEstimator.addVisionMeasurement(pose2d, pose.get().timestampSeconds, VecBuilder.fill(xyStd, xyStd, rotStd));
+                        measurements.add(pose2d);
+                        continue;
+                    }
+                }
+            }
+    }
+
     // gets robot relative note angle from 0 (Center)
     private double getNoteAngle() {
         var result = m_noteCamera.getLatestResult();
@@ -733,8 +771,6 @@ public class DriveSubsystem extends SubsystemBase {
     }
 
     private double getNoteHeight() {
-        boolean isBlue = DriverStation.getAlliance().orElse(DriverStation.Alliance.Blue)
-                .equals(DriverStation.Alliance.Blue);
         var result = m_noteCamera.getLatestResult();
         if (result != null && result.getBestTarget() != null) {
             return result.getBestTarget().getPitch() + DriveConstants.kNoteCameraHeightFOV / 2.0;
