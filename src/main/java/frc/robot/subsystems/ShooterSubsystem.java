@@ -21,7 +21,6 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkBase;
 
 public class ShooterSubsystem extends SubsystemBase {
-  private CANdleSubsystem m_candle;
   private CANSparkFlex m_rightShooterMotor;
   private CANSparkFlex m_leftShooterMotor;
   private CANSparkMax m_transferMotor;
@@ -44,8 +43,7 @@ public class ShooterSubsystem extends SubsystemBase {
   // SimpleMotorFeedforward(
   // ShooterConstants.kSVolts, ShooterConstants.kVVoltSecondsPerRotation);
 
-  public ShooterSubsystem(CANdleSubsystem candle) {
-    m_candle = candle;
+  public ShooterSubsystem() {
     m_rightShooterMotor = new CANSparkFlex(Constants.ShooterConstants.kRightShooterCANId, MotorType.kBrushless);
     m_leftShooterMotor = new CANSparkFlex(Constants.ShooterConstants.kLeftShooterCANId, MotorType.kBrushless);
     m_rightEncoder = m_rightShooterMotor.getEncoder();
@@ -147,7 +145,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
   public boolean isBeamBroken() {
     if (m_ShooterBeamBreak.get() == false) {
-      m_candle.setNoteDetected();
+      RobotContainer.m_CANdleSubsystem.setNoteDetected();
     }
     return m_ShooterBeamBreak.get() == false;
   }

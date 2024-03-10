@@ -4,12 +4,12 @@
     {
       "anchor": {
         "x": 2.498094996189994,
-        "y": 4.144115980539654
+        "y": 4.25
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.469753032516051,
-        "y": 4.230282156295686
+        "x": 1.1167230026767763,
+        "y": 4.242785408647741
       },
       "isLocked": false,
       "linkedName": "Podium"
@@ -20,8 +20,8 @@
         "y": 5.7
       },
       "prevControl": {
-        "x": 1.2252593735956716,
-        "y": 5.732693773079855
+        "x": 1.146323831109202,
+        "y": 5.890564858052794
       },
       "nextControl": null,
       "isLocked": false,
@@ -126,7 +126,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -175.0,
+    "rotation": 180.0,
     "rotateFast": true
   },
   "reversed": false,

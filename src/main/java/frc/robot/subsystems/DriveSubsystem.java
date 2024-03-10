@@ -165,7 +165,7 @@ public class DriveSubsystem extends SubsystemBase {
         m_noteCamera = new PhotonCamera("Note");
         m_frontCamera = new PhotonCamera("Front");
         // m_leftCamera = new PhotonCamera("Left");
-        // m_rightCamera = new PhotonCamera("right");
+        // m_rightCamera = new PhotonCamera("Right");
 
         // Configure AutoBuilder last
 
@@ -236,16 +236,16 @@ public class DriveSubsystem extends SubsystemBase {
                     PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
                     m_frontCamera,
                     DriveConstants.kFrontCameraLocation),
-                new PhotonPoseEstimator(
-                    AprilTagFields.k2024Crescendo.loadAprilTagLayoutField(),
-                    PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
-                    m_leftCamera,
-                    DriveConstants.kLeftCameraLocation),
-                new PhotonPoseEstimator(
-                    AprilTagFields.k2024Crescendo.loadAprilTagLayoutField(),
-                    PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
-                    m_rightCamera,
-                    DriveConstants.kRightCameraLocation),
+                // new PhotonPoseEstimator(
+                //     AprilTagFields.k2024Crescendo.loadAprilTagLayoutField(),
+                //     PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
+                //     m_leftCamera,
+                //     DriveConstants.kLeftCameraLocation),
+                // new PhotonPoseEstimator(
+                //     AprilTagFields.k2024Crescendo.loadAprilTagLayoutField(),
+                //     PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
+                //     m_rightCamera,
+                //     DriveConstants.kRightCameraLocation),
             };
           };
 
@@ -295,7 +295,15 @@ public class DriveSubsystem extends SubsystemBase {
         SmartDashboard.putBoolean("IsAiming", isAutoAiming);
 
         // Filtered pose estimation 
-        updatePoseEstimationWithFilter();
+        // updatePoseEstimationWithFilter();
+
+        for (PhotonPoseEstimator photonPoseEstimator : m_photonPoseEstimators){
+            Optional<EstimatedRobotPose> pose = photonPoseEstimator.update();
+            if(pose.isPresent()){
+                m_poseEstimator.addVisionMeasurement(pose.get().estimatedPose.toPose2d(), pose.get().timestampSeconds);
+            }
+        }
+
         
         m_poseEstimator.update(Rotation2d.fromDegrees(getHeading()), new SwerveModulePosition[] {
                 m_frontLeft.getPosition(),
@@ -310,7 +318,7 @@ public class DriveSubsystem extends SubsystemBase {
 
 
         if (m_noteCamera.isConnected() && m_frontCamera.isConnected()
-            && m_leftCamera.isConnected() && m_rightCamera.isConnected()
+            // && m_leftCamera.isConnected() && m_rightCamera.isConnected()
             ) {
             RobotContainer.m_CANdleSubsystem.setStartupComplete(); // green
         }
@@ -713,21 +721,11 @@ public class DriveSubsystem extends SubsystemBase {
     public void updatePoseEstimationWithFilter() {
             List<Pose2d> measurements = new ArrayList<>();
             List<Pose3d> targets = new ArrayList<>();
-            boolean isBlue = DriverStation.getAlliance().orElse(DriverStation.Alliance.Blue)
-                .equals(DriverStation.Alliance.Blue);
             Pose2d currentPose = getPosition();
             for (PhotonPoseEstimator poseEstimator : m_photonPoseEstimators) {
                 Optional<EstimatedRobotPose> pose = poseEstimator.update();
                 if (pose.isPresent()) {
-                    Pose3d raw = pose.get().estimatedPose;
-                    Pose3d pose3d = isBlue
-                        ? raw
-                        : new Pose3d(
-                            DriveConstants.FIELD_LENGTH - raw.getX(),
-                            DriveConstants.FIELD_WIDTH - raw.getY(),
-                            raw.getZ(),
-                            raw.getRotation().minus(new Rotation3d(0.0, 0.0, Math.PI))
-                        );
+                    Pose3d pose3d = pose.get().estimatedPose;
                     Pose2d pose2d = pose3d.toPose2d();
                     if (
                         pose3d.getX() >= -DriveConstants.VISION_FIELD_MARGIN &&
@@ -798,6 +796,7 @@ public class DriveSubsystem extends SubsystemBase {
     }
 
     public void driveRobotRelativeToObject() {
+        System.out.println("driving robot relative to object");
         var result = m_noteCamera.getLatestResult();
         targetLost = false;
         if (result != null) {
