@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.2,
-      "y": 5.55
+      "x": 0.71,
+      "y": 4.53
     },
-    "rotation": 180.0
+    "rotation": 123.11
   },
   "command": {
     "type": "sequential",
@@ -26,55 +26,37 @@
         {
           "type": "path",
           "data": {
-            "pathName": "NearPodiumToPodium"
+            "pathName": "SideToFarMiddleLine"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Intake.25"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "ShootPodium"
+            "name": "AlignAndShootNote"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "PodiumToMiddle"
+            "pathName": "SidePickup2"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Intake.25"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "ShootPodium"
+            "name": "AlignAndShootNote"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "MiddleToThird"
+            "pathName": "SidePickup3"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Intake.25"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "ShootPodium"
+            "name": "AlignAndShootNote"
           }
         }
       ]

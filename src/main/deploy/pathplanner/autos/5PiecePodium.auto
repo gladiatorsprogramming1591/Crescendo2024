@@ -18,21 +18,9 @@
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "ArmStow"
-          }
-        },
-        {
           "type": "path",
           "data": {
-            "pathName": "NearPodiumToPodium"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Intake.25"
+            "pathName": "SubwooferToMiddle"
           }
         },
         {
@@ -44,37 +32,37 @@
         {
           "type": "path",
           "data": {
-            "pathName": "PodiumToMiddle"
+            "pathName": "MiddleToStageleftWNote3"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Intake.25"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "ShootPodium"
+            "name": "ShootStageline"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "MiddleToThird"
+            "pathName": "StageleftToStageleftWNote4"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Intake.25"
+            "name": "ShootStageline"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "StageleftToStageleftWNote5"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "ShootPodium"
+            "name": "ShootStageline"
           }
         }
       ]

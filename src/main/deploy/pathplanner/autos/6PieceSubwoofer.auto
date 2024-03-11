@@ -2,7 +2,7 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.2,
+      "x": 1.22,
       "y": 5.55
     },
     "rotation": 180.0
@@ -15,12 +15,6 @@
           "type": "named",
           "data": {
             "name": "ShootSubwoofer"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "ArmStow"
           }
         },
         {
@@ -50,12 +44,6 @@
         {
           "type": "named",
           "data": {
-            "name": "Intake.25"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
             "name": "ShootPodium"
           }
         },
@@ -74,7 +62,37 @@
         {
           "type": "named",
           "data": {
-            "name": "ShootPodium"
+            "name": "ShootFourthNote"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "ThirdToStagelineAutoIntake"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AlignAndShootNote"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "StagelineFourth "
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AlignAndShootNote"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "FourthToShoot"
           }
         }
       ]
