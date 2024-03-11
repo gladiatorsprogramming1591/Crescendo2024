@@ -148,9 +148,11 @@ public class DriveSubsystem extends SubsystemBase {
     PhotonCamera m_rightCamera;
     private double m_lastNoteNeight = 0.0;
     private boolean targetLost = true;
+    AprilTagFieldLayout fieldLayout;
 
     /** Creates a new DriveSubsystem. */
     public DriveSubsystem() {
+        fieldLayout = AprilTagFields.k2024Crescendo.loadAprilTagLayoutField();
         final double kWheelBase = 22.5;
         double radius = Units.inchesToMeters((kWheelBase / 2) * Math.sqrt(2));
 
@@ -295,14 +297,15 @@ public class DriveSubsystem extends SubsystemBase {
         SmartDashboard.putBoolean("IsAiming", isAutoAiming);
 
         // Filtered pose estimation 
-        // updatePoseEstimationWithFilter();
+        updatePoseEstimationWithFilter();
 
-        for (PhotonPoseEstimator photonPoseEstimator : m_photonPoseEstimators){
-            Optional<EstimatedRobotPose> pose = photonPoseEstimator.update();
-            if(pose.isPresent()){
-                m_poseEstimator.addVisionMeasurement(pose.get().estimatedPose.toPose2d(), pose.get().timestampSeconds);
-            }
-        }
+        // time this
+        // for (PhotonPoseEstimator photonPoseEstimator : m_photonPoseEstimators){
+        //     Optional<EstimatedRobotPose> pose = photonPoseEstimator.update();
+        //     if(pose.isPresent()){
+        //         m_poseEstimator.addVisionMeasurement(pose.get().estimatedPose.toPose2d(), pose.get().timestampSeconds);
+        //     }
+        // }
 
         
         m_poseEstimator.update(Rotation2d.fromDegrees(getHeading()), new SwerveModulePosition[] {
@@ -722,10 +725,9 @@ public class DriveSubsystem extends SubsystemBase {
     }
 
     public void updatePoseEstimationWithFilter() {
-            List<Pose2d> measurements = new ArrayList<>();
-            List<Pose3d> targets = new ArrayList<>();
             Pose2d currentPose = getPosition();
             for (PhotonPoseEstimator poseEstimator : m_photonPoseEstimators) {
+                // print out the time for this line to run 
                 Optional<EstimatedRobotPose> pose = poseEstimator.update();
                 if (pose.isPresent()) {
                     Pose3d pose3d = pose.get().estimatedPose;
@@ -741,9 +743,8 @@ public class DriveSubsystem extends SubsystemBase {
                         double sum = 0.0;
                         for (PhotonTrackedTarget target : pose.get().targetsUsed) {
                             Optional<Pose3d> tagPose =
-                                AprilTagFields.k2024Crescendo.loadAprilTagLayoutField().getTagPose(target.getFiducialId());
+                                fieldLayout.getTagPose(target.getFiducialId());
                             if (tagPose.isEmpty()) continue;
-                            targets.add(tagPose.get());
                             sum += currentPose.getTranslation().getDistance(tagPose.get().getTranslation().toTranslation2d());
                         }
 
@@ -751,9 +752,8 @@ public class DriveSubsystem extends SubsystemBase {
                         double stdScale = Math.pow(sum / tagCount, 2.0) / tagCount;
                         double xyStd = DriveConstants.VISION_STD_XY_SCALE * stdScale;
                         double rotStd = DriveConstants.VISION_STD_ROT_SCALE * stdScale;
-
+                        //time this as well
                         m_poseEstimator.addVisionMeasurement(pose2d, pose.get().timestampSeconds, VecBuilder.fill(xyStd, xyStd, rotStd));
-                        measurements.add(pose2d);
                         continue;
                     }
                 }
