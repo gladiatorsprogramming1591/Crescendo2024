@@ -41,6 +41,7 @@ public class ArmSubsystem extends SubsystemBase {
     CLIMBSTART,
     CLIMBFINISH,
     AMP,
+    AMPFINISH,
     TRAP,
     STAGELINE,
     FOURTHNOTE
@@ -77,6 +78,7 @@ public class ArmSubsystem extends SubsystemBase {
     mapAbs.put(armPositions.CLIMBSTART, ArmConstants.kCLIMBSTART);
     mapAbs.put(armPositions.CLIMBFINISH, ArmConstants.kCLIMBFINISH); // Single Substation
     mapAbs.put(armPositions.AMP, ArmConstants.kAMP); // At hard stop:
+    mapAbs.put(armPositions.AMPFINISH, ArmConstants.kAMPFINISH); // At hard stop:
     m_AbsPidController.setTolerance(ArmConstants.kPositionTolerance);
   }
 
@@ -87,7 +89,7 @@ public class ArmSubsystem extends SubsystemBase {
     if (((armAbsEncoder.getAbsolutePosition() > ArmConstants.kMinHeightAbs)
         && (setpoint > mapAbs.get(armPositions.TRANSFER))) ||
         ((armAbsEncoder.getAbsolutePosition() < ArmConstants.kMaxHeightAbs)
-            && (setpoint < mapAbs.get(armPositions.AMP)))) {
+            && (setpoint < mapAbs.get(armPositions.AMPFINISH)))) {
       m_leftArmMotor.set(0);
       return;
     }

@@ -28,7 +28,7 @@ deploy {
 
                 frcJava(getArtifactTypeClass('FRCJavaArtifact')) {
                     // Added to improve general performance
-                    gcType = edu.wpi.first.gradlerio.deploy.roborio.GarbageCollectorType.G1_Base
+                    // gcType = edu.wpi.first.gradlerio.deploy.roborio.GarbageCollectorType.G1_Base
                 }
 
                 // Static files artifact

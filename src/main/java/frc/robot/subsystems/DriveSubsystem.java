@@ -166,8 +166,8 @@ public class DriveSubsystem extends SubsystemBase {
 
         m_noteCamera = new PhotonCamera("Note");
         m_frontCamera = new PhotonCamera("Front");
-        // m_leftCamera = new PhotonCamera("Left");
-        // m_rightCamera = new PhotonCamera("Right");
+        m_leftCamera = new PhotonCamera("Left");
+        m_rightCamera = new PhotonCamera("Right");
 
         // Configure AutoBuilder last
 
@@ -238,16 +238,16 @@ public class DriveSubsystem extends SubsystemBase {
                     PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
                     m_frontCamera,
                     DriveConstants.kFrontCameraLocation),
-                // new PhotonPoseEstimator(
-                //     AprilTagFields.k2024Crescendo.loadAprilTagLayoutField(),
-                //     PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
-                //     m_leftCamera,
-                //     DriveConstants.kLeftCameraLocation),
-                // new PhotonPoseEstimator(
-                //     AprilTagFields.k2024Crescendo.loadAprilTagLayoutField(),
-                //     PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
-                //     m_rightCamera,
-                //     DriveConstants.kRightCameraLocation),
+                new PhotonPoseEstimator(
+                    AprilTagFields.k2024Crescendo.loadAprilTagLayoutField(),
+                    PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
+                    m_leftCamera,
+                    DriveConstants.kLeftCameraLocation),
+                new PhotonPoseEstimator(
+                    AprilTagFields.k2024Crescendo.loadAprilTagLayoutField(),
+                    PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
+                    m_rightCamera,
+                    DriveConstants.kRightCameraLocation),
             };
           };
 
@@ -321,10 +321,10 @@ public class DriveSubsystem extends SubsystemBase {
 
         SmartDashboard.putBoolean("FrontConnected", m_frontCamera.isConnected());
         SmartDashboard.putBoolean("NoteConnected", m_noteCamera.isConnected());
-        // SmartDashboard.putBoolean("LeftConnected", m_leftCamera.isConnected());
-        // SmartDashboard.putBoolean("RightConnected", m_rightCamera.isConnected());
+        SmartDashboard.putBoolean("LeftConnected", m_leftCamera.isConnected());
+        SmartDashboard.putBoolean("RightConnected", m_rightCamera.isConnected());
         if (m_noteCamera.isConnected() && m_frontCamera.isConnected()
-        // && m_leftCamera.isConnected() && m_rightCamera.isConnected()
+        && m_leftCamera.isConnected() && m_rightCamera.isConnected()
             ) {
             RobotContainer.m_CANdleSubsystem.setCamerasReady(); // green
         }

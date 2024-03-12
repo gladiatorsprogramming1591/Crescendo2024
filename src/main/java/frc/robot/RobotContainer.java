@@ -177,6 +177,7 @@ public class RobotContainer {
                                                 m_ShooterSubsystem)
                                                 .finallyDo((() -> m_ShooterSubsystem.transferOff())));
                 m_driverController.povDown().onTrue(new ArmToPosition(m_ArmSubsystem, armPositions.TRAP));
+                m_operatorController.leftStick().onTrue(new AmpScore(m_ShooterSubsystem, m_ArmSubsystem));
                 m_operatorController.rightStick()
                                 .onTrue(new InstantCommand(() -> m_ShooterSubsystem.transferOn(false),
                                                 m_ShooterSubsystem));
@@ -206,6 +207,7 @@ public class RobotContainer {
                                                 ArmConstants.kCurrentLimitClimbing).alongWith(new InstantCommand (() -> m_CANdleSubsystem.changeAnimation(AnimationTypes.Twinkle))));
                 m_operatorController.x().onTrue(new InstantCommand(() -> m_CANdleSubsystem.setAmplify()));
                 m_operatorController.x().onFalse(new InstantCommand(() -> m_CANdleSubsystem.setDefault()));
+
                
                 // TODO change the rotation to be the letter buttons
         }
@@ -268,6 +270,8 @@ public class RobotContainer {
         public void teleopInit() {
                 m_robotDrive.setPipelineIndex(2);
                 m_robotDrive.setAutoAimRotPIDConstants(false);
+                m_ArmSubsystem.ArmOff();
+                m_ShooterSubsystem.shooterOff();
         }
 
 }

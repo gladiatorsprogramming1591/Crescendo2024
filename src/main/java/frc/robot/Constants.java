@@ -68,8 +68,8 @@ public final class Constants {
 
     public static final double VISION_FIELD_MARGIN = 0.5;
     public static final double VISION_Z_MARGIN = 0.75;
-    public static final double VISION_STD_XY_SCALE = 0.006;
-    public static final double VISION_STD_ROT_SCALE = 0.015;
+    public static final double VISION_STD_XY_SCALE = 0.02;
+    public static final double VISION_STD_ROT_SCALE = 0.035;
 
     public static final double FIELD_LENGTH = 16.5417;
     public static final double FIELD_WIDTH = 8.0136;
@@ -106,12 +106,12 @@ public final class Constants {
     public static final InterpolatingDoubleTreeMap DISTANCE_TO_ANGLE_MAP = new InterpolatingDoubleTreeMap();
 
     public static final double MAX_ROTATION_SPEED_AUTO_AIM = 5.0;
-    public static final double TRANSLATION_SPEED_SCALAR_AUTO_AIM = 0.65;
+    public static final double TRANSLATION_SPEED_SCALAR_AUTO_AIM = 0.5;
 
     static {
       DISTANCE_TO_ANGLE_MAP.put(1.25, ArmConstants.kSUBWOOFER);
       DISTANCE_TO_ANGLE_MAP.put(2.2, ArmConstants.kOffset - 0.077);
-      DISTANCE_TO_ANGLE_MAP.put(3.0, ArmConstants.kOffset - 0.056);
+      DISTANCE_TO_ANGLE_MAP.put(3.0, ArmConstants.kOffset - 0.059);
       DISTANCE_TO_ANGLE_MAP.put(4.1, ArmConstants.kOffset - 0.044);
       DISTANCE_TO_ANGLE_MAP.put(4.9, ArmConstants.kOffset - 0.035);
       DISTANCE_TO_ANGLE_MAP.put(5.5, ArmConstants.kOffset - 0.029);
@@ -278,7 +278,7 @@ public final class Constants {
     public static final double kMaxOpenLoopSpeed = 0.5;
 
     // Arm Positions
-    public static final double kOffset = 0.635;
+    public static final double kOffset = 0.63;
     public static final double kTRANSFER = kOffset - 0.011;
     public static final double kSUBWOOFER = kOffset - 0.14;
     public static final double kPODIUM = kOffset - 0.055;
@@ -287,8 +287,8 @@ public final class Constants {
     public static final double kFOURTHNOTE = kOffset - 0.05;
     public static final double kCLIMBSTART = kTRAP;
     public static final double kCLIMBFINISH = kOffset - .005;
-    public static final double kAMP = kOffset - 0.395;
-    public static final double kSOURCE = kOffset - 0.375; // Change while testing manually
+    public static final double kAMP = kOffset - 0.379;
+    public static final double kAMPFINISH = kOffset - 0.42;
     public static final double kAllowedErrAbs = 0.001;
     public static final double kAllowedErrWideToleranceAbs = 0.01;
     public static final double kMinHeightAbs = kOffset;
