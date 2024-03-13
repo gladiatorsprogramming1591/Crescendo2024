@@ -177,7 +177,7 @@ public class RobotContainer {
                                                 m_ShooterSubsystem)
                                                 .finallyDo((() -> m_ShooterSubsystem.transferOff())));
                 m_driverController.povDown().onTrue(new ArmToPosition(m_ArmSubsystem, armPositions.TRAP));
-                m_operatorController.leftStick().onTrue(new AmpScore(m_ShooterSubsystem, m_ArmSubsystem));
+                // m_operatorController.leftStick().onTrue(new AmpScore(m_ShooterSubsystem, m_ArmSubsystem));
                 m_operatorController.rightStick()
                                 .onTrue(new InstantCommand(() -> m_ShooterSubsystem.transferOn(false),
                                                 m_ShooterSubsystem));

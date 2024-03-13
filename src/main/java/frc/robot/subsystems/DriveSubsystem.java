@@ -323,6 +323,14 @@ public class DriveSubsystem extends SubsystemBase {
         SmartDashboard.putBoolean("NoteConnected", m_noteCamera.isConnected());
         SmartDashboard.putBoolean("LeftConnected", m_leftCamera.isConnected());
         SmartDashboard.putBoolean("RightConnected", m_rightCamera.isConnected());
+        try {
+            SmartDashboard.putNumber("Front Latency", m_frontCamera.getLatestResult().getLatencyMillis());
+            SmartDashboard.putNumber("Note Latency", m_noteCamera.getLatestResult().getLatencyMillis());
+            SmartDashboard.putNumber("Left Latency", m_leftCamera.getLatestResult().getLatencyMillis());
+            SmartDashboard.putNumber("Right Latency", m_rightCamera.getLatestResult().getLatencyMillis());
+        } catch(Exception e) {
+
+        }
         if (m_noteCamera.isConnected() && m_frontCamera.isConnected()
         && m_leftCamera.isConnected() && m_rightCamera.isConnected()
             ) {
