@@ -328,6 +328,10 @@ public class DriveSubsystem extends SubsystemBase {
             SmartDashboard.putNumber("Note Latency", m_noteCamera.getLatestResult().getLatencyMillis());
             SmartDashboard.putNumber("Left Latency", m_leftCamera.getLatestResult().getLatencyMillis());
             SmartDashboard.putNumber("Right Latency", m_rightCamera.getLatestResult().getLatencyMillis());
+            double latencyThreshold = 12.0;
+            SmartDashboard.putBoolean("Front Latency OK", m_frontCamera.getLatestResult().getLatencyMillis() > latencyThreshold);
+            SmartDashboard.putBoolean("Left Latency OK", m_leftCamera.getLatestResult().getLatencyMillis() > latencyThreshold);
+            SmartDashboard.putBoolean("Right Latency OK", m_rightCamera.getLatestResult().getLatencyMillis() > latencyThreshold);
         } catch(Exception e) {
 
         }
