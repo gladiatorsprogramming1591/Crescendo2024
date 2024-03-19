@@ -8,32 +8,44 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.2203329399526117,
-        "y": 5.521335694268008
+        "x": 1.5410015435415498,
+        "y": 5.268947460971846
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.6,
-        "y": 4.2
+        "x": 2.498094996189994,
+        "y": 4.25
       },
       "prevControl": {
-        "x": 2.6935690574841673,
-        "y": 4.235282169456039
+        "x": 2.241554483108968,
+        "y": 4.4769396846486
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Podium"
     }
   ],
   "rotationTargets": [],
-  "constraintZones": [],
+  "constraintZones": [
+    {
+      "name": "New Constraints Zone",
+      "minWaypointRelativePos": 0,
+      "maxWaypointRelativePos": 0.25,
+      "constraints": {
+        "maxVelocity": 1.5,
+        "maxAcceleration": 3.0,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 720.0
+      }
+    }
+  ],
   "eventMarkers": [
     {
       "name": "Intake",
-      "waypointRelativePos": 0.0,
+      "waypointRelativePos": 0.55,
       "command": {
         "type": "parallel",
         "data": {
@@ -42,6 +54,52 @@
               "type": "named",
               "data": {
                 "name": "Intake"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "ShootNote",
+      "waypointRelativePos": 0.15,
+      "command": {
+        "type": "sequential",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "ShootNoteAfterAlign"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "EndAutoAlignTheta"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Align",
+      "waypointRelativePos": 0,
+      "command": {
+        "type": "sequential",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "BeginAutoAlignTheta"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "AlignShooterOnly"
               }
             }
           ]

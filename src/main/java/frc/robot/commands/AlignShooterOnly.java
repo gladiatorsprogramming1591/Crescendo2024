@@ -11,8 +11,8 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.RobotContainer;
 import frc.robot.Constants.DriveConstants;
+import frc.robot.RobotContainer;
 import frc.robot.commands.armCommands.ArmToPositionWithEnd;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
@@ -24,24 +24,16 @@ import frc.robot.subsystems.ShooterSubsystem;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class AlignAndShootNote extends SequentialCommandGroup {
+public class AlignShooterOnly extends SequentialCommandGroup {
 
-  public AlignAndShootNote(ShooterSubsystem shooterSubsystem,
+  public AlignShooterOnly(ShooterSubsystem shooterSubsystem,
       ArmSubsystem armSubsystem,
-      DoubleSupplier x,
-      DoubleSupplier y,
       DriveSubsystem driveSubsystem, IntakeSubsystem intakeSubsystem) {
-    addRequirements(driveSubsystem);
-
+    addRequirements(intakeSubsystem, shooterSubsystem, armSubsystem);
     addCommands(
         new InstantCommand(() -> RobotContainer.m_CANdleSubsystem.changeAnimation(AnimationTypes.Larson)),
         new InstantCommand(() -> intakeSubsystem.intakeOff(), intakeSubsystem),
-        new ParallelDeadlineGroup(
-            new WarmUpAndAutoShoot(driveSubsystem, shooterSubsystem, armSubsystem, true, false),
-            new RunCommand(() -> driveSubsystem.driveOnTargetSpeaker(x, y), driveSubsystem)),
-        new InstantCommand(() -> shooterSubsystem.shooterOff(), shooterSubsystem),
-        new InstantCommand(() -> shooterSubsystem.transferOff(), shooterSubsystem),
-        new InstantCommand(() -> armSubsystem.ArmOff(), armSubsystem),
+        new WarmUpAndAutoShoot(driveSubsystem, shooterSubsystem, armSubsystem, false, false),
         new InstantCommand(() -> RobotContainer.m_CANdleSubsystem.setDefault())
     );
   }

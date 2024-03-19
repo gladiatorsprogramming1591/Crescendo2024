@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.6465019492093177,
-      "y": 6.593200975274989
+      "x": 0.71,
+      "y": 4.53
     },
-    "rotation": -120.25999999999999
+    "rotation": 123.11
   },
   "command": {
     "type": "sequential",
@@ -20,25 +20,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "SideToThird"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Intake.25"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "ShootPodium"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "ThirdToStagelineAutoIntake"
+            "pathName": "SideToFarMiddleLine"
           }
         },
         {
@@ -50,7 +32,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "ThirdToShoot"
+            "pathName": "FifthToShoot"
           }
         },
         {
@@ -60,9 +42,15 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "EndAutoAlignTheta"
+          }
+        },
+        {
           "type": "path",
           "data": {
-            "pathName": "StagelineFourth "
+            "pathName": "SixthNotePickup"
           }
         },
         {
@@ -74,13 +62,49 @@
         {
           "type": "path",
           "data": {
-            "pathName": "FourthToShoot"
+            "pathName": "SixthToShoot"
           }
         },
         {
           "type": "named",
           "data": {
             "name": "AlignAndShootNote"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "EndAutoAlignTheta"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "SeventhNotePickup"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AlignAndIntake"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "SeventhToShoot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AlignAndShootNote"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "EndAutoAlignTheta"
           }
         }
       ]

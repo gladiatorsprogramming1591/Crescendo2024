@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.0,
-        "y": 1.5
+        "x": 5.810980865898964,
+        "y": 1.52
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.0,
-        "y": 1.5
+        "x": 6.810980865898964,
+        "y": 1.52
       },
       "isLocked": false,
       "linkedName": "SideShoot"
@@ -72,8 +72,8 @@
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 5.0,
-    "maxAcceleration": 4.0,
+    "maxVelocity": 5.6,
+    "maxAcceleration": 5.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },

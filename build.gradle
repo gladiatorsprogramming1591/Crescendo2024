@@ -1,6 +1,6 @@
 plugins {
     id "java"
-    id "edu.wpi.first.GradleRIO" version "2024.1.1"
+    id "edu.wpi.first.GradleRIO" version "2024.3.1"
 }
 
 java {
@@ -27,6 +27,8 @@ deploy {
                 // getTargetTypeClass is a shortcut to get the class type using a string
 
                 frcJava(getArtifactTypeClass('FRCJavaArtifact')) {
+                    // Added to improve general performance
+                    // gcType = edu.wpi.first.gradlerio.deploy.roborio.GarbageCollectorType.G1_Base
                 }
 
                 // Static files artifact

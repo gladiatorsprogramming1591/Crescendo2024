@@ -3,14 +3,19 @@ package frc.robot.commands.armCommands;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.ArmSubsystem.armPositions;
 
 public class ArmToPositionWithEnd extends Command {
     private ArmSubsystem m_arm;
     private ArmSubsystem.armPositions m_targetPos;
+    private boolean m_wideTolerance = false; 
 
     public ArmToPositionWithEnd(ArmSubsystem arm, ArmSubsystem.armPositions pos){
         m_arm = arm;
         m_targetPos = pos;
+        if(pos == ArmSubsystem.armPositions.TRANSFER){
+            m_wideTolerance = true; 
+        }
         addRequirements(m_arm);
     }
 
@@ -21,9 +26,9 @@ public class ArmToPositionWithEnd extends Command {
 
     @Override
     public boolean isFinished(){
-        SmartDashboard.putString("Arm at pos", "" + m_arm.atPosition(m_targetPos));
+        SmartDashboard.putString("Arm at pos", "" + m_arm.atPosition(m_targetPos, m_wideTolerance));
 
-        return m_arm.atPosition(m_targetPos);   // Needs additional testing
+        return m_arm.atPosition(m_targetPos, m_wideTolerance);   // Needs additional testing
     }
 
     @Override

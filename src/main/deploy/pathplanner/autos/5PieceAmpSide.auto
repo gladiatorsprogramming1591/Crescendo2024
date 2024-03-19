@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.22,
-      "y": 5.55
+      "x": 0.6465019492093177,
+      "y": 6.593200975274989
     },
-    "rotation": 180.0
+    "rotation": -120.25999999999999
   },
   "command": {
     "type": "sequential",
@@ -20,55 +20,19 @@
         {
           "type": "path",
           "data": {
-            "pathName": "NearPodiumToPodium"
+            "pathName": "FirstToMidline"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Intake.25"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "ShootPodium"
+            "name": "AlignAndIntake"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "PodiumToMiddle"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "ShootPodium"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "MiddleToThird"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Intake.25"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "ShootFourthNote"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "ThirdToStagelineAutoIntake"
+            "pathName": "ThirdToShoot"
           }
         },
         {
@@ -78,9 +42,27 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "EndAutoAlignTheta"
+          }
+        },
+        {
           "type": "path",
           "data": {
-            "pathName": "StagelineFourth "
+            "pathName": "StagelineFourthStage "
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AlignAndIntake"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "FourthToShootStage"
           }
         },
         {
@@ -90,9 +72,39 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "EndAutoAlignTheta"
+          }
+        },
+        {
           "type": "path",
           "data": {
-            "pathName": "FourthToShoot"
+            "pathName": "StagelineFourthStage "
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AlignAndIntake"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "FourthToShootStage"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AlignAndShootNote"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "EndAutoAlignTheta"
           }
         }
       ]

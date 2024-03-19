@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.RobotContainer;
 import frc.robot.Constants.NeoMotorConstants;
 import frc.robot.Constants.ShooterConstants;
 
@@ -143,6 +144,9 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   public boolean isBeamBroken() {
+    if (m_ShooterBeamBreak.get() == false) {
+      RobotContainer.m_CANdleSubsystem.setNoteDetectedOnIntake();
+    }
     return m_ShooterBeamBreak.get() == false;
   }
 
@@ -180,6 +184,7 @@ public class ShooterSubsystem extends SubsystemBase {
     SmartDashboard.putString("R Shooter Vel", "" + m_rightEncoder.getVelocity());
     SmartDashboard.putBoolean("ShooterBeamBreak", m_ShooterBeamBreak.get());
     SmartDashboard.putBoolean("ShooterAtSpeed", isShooterAtSpeed());
+    RobotContainer.m_CANdleSubsystem.setNotePresent(!m_ShooterBeamBreak.get());
 
     SmartDashboard.putNumber("Shooter Current",
         m_leftShooterMotor.getOutputCurrent() + m_rightShooterMotor.getOutputCurrent());

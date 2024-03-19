@@ -42,7 +42,11 @@ public final class Constants {
     public static final double kTeleopPercentLimit = .95;
 
     public static final Vector<N3> odometryStd = VecBuilder.fill(0.06, 0.06, 0.01);
-    public static final Vector<N3> visionStd = VecBuilder.fill(0.35, 0.35, 0.4);
+    public static final Vector<N3> visionStd = VecBuilder.fill(0.35, 0.35, 0.8);
+
+    public static final double kNoteCameraHeightFOV = 45.0;
+    public static final double kNoteDifferentialTolerance = 10.0;
+    public static final double kMinNoteHeight = -13.0 + kNoteCameraHeightFOV / 2.0;
 
     // Camera Positions
     public static final Transform3d kFrontCameraLocation = new Transform3d(
@@ -50,16 +54,31 @@ public final class Constants {
             Units.inchesToMeters(6.789)),
         new Rotation3d(0.0, Math.toRadians(-20.0), Math.toRadians(0.0)));
 
+            public static final Transform3d kLeftCameraLocation = new Transform3d(
+        new Translation3d(Units.inchesToMeters(-2.80), Units.inchesToMeters(12.689),
+            Units.inchesToMeters(9.43)),
+        new Rotation3d(0.0, Math.toRadians(-20.0), Math.toRadians(90.0)));
+
+            public static final Transform3d kRightCameraLocation = new Transform3d(
+        new Translation3d(Units.inchesToMeters(-2.80), Units.inchesToMeters(-12.689),
+            Units.inchesToMeters(9.43)),
+        new Rotation3d(0.0, Math.toRadians(-20.0), Math.toRadians(-90.0)));
+
     // Field Positions
+
+    public static final double VISION_FIELD_MARGIN = 0.5;
+    public static final double VISION_Z_MARGIN = 0.75;
+    public static final double VISION_STD_XY_SCALE = 0.02;
+    public static final double VISION_STD_ROT_SCALE = 0.035;
 
     public static final double FIELD_LENGTH = 16.5417;
     public static final double FIELD_WIDTH = 8.0136;
 
-    public static final double NOTE_VELOCITY = 8.5;
+    public static final double NOTE_VELOCITY = 10.0;
 
     public static final Translation2d BLUE_SPEAKER = new Translation2d(0.0241, 5.547868);
     public static final Translation2d RED_SPEAKER = new Translation2d(FIELD_LENGTH - BLUE_SPEAKER.getX(),
-        BLUE_SPEAKER.getY());
+        BLUE_SPEAKER.getY() + 0.1);
     public static final Translation2d STAGE = new Translation2d(4.981067, 4.105783);
 
     public static final double SPEAKER_HEIGHT = 2.08;
@@ -71,7 +90,8 @@ public final class Constants {
     public static final double OPPONENT_WING_LINE = 10.66;
     public static final double AMP_X = 1.9;
 
-    public static final PIDConstants AUTO_AIM_ROT_PID_CONSTANTS = new PIDConstants(10.5, 0.02, 0.3);
+    public static final PIDConstants AUTO_AIM_ROT_PID_CONSTANTS = new PIDConstants(9.5, 0.01, 0.5);
+    public static final PIDConstants AUTO_AIM_ROT_PID_CONSTANTS_TELE = new PIDConstants(10.5, 0.01, 0.5);
 
     public static final double VISION_REJECT_DISTANCE = 2.3;
 
@@ -79,27 +99,27 @@ public final class Constants {
     public static final double SPIN_COMPENSATION_Y = 0.06;
 
     // Radians
-    public static final double AUTO_AIM_ROT_TOLERANCE = Math.toRadians(2.0);
+    public static final double AUTO_AIM_ROT_TOLERANCE = Math.toRadians(1.7);
 
     // Shooter Angle Map
 
     public static final InterpolatingDoubleTreeMap DISTANCE_TO_ANGLE_MAP = new InterpolatingDoubleTreeMap();
 
     public static final double MAX_ROTATION_SPEED_AUTO_AIM = 5.0;
-    public static final double TRANSLATION_SPEED_SCALAR_AUTO_AIM = 0.65;
+    public static final double TRANSLATION_SPEED_SCALAR_AUTO_AIM = 0.5;
 
     static {
       DISTANCE_TO_ANGLE_MAP.put(1.25, ArmConstants.kSUBWOOFER);
-      DISTANCE_TO_ANGLE_MAP.put(2.2, ArmConstants.kOffset - 0.075);
-      DISTANCE_TO_ANGLE_MAP.put(3.0, ArmConstants.kOffset - 0.058);
-      DISTANCE_TO_ANGLE_MAP.put(4.1, ArmConstants.kOffset - 0.038);
+      DISTANCE_TO_ANGLE_MAP.put(2.2, ArmConstants.kOffset - 0.077);
+      DISTANCE_TO_ANGLE_MAP.put(3.0, ArmConstants.kOffset - 0.059);
+      DISTANCE_TO_ANGLE_MAP.put(4.1, ArmConstants.kOffset - 0.044);
       DISTANCE_TO_ANGLE_MAP.put(4.9, ArmConstants.kOffset - 0.035);
-      DISTANCE_TO_ANGLE_MAP.put(5.5, ArmConstants.kOffset - 0.028);
+      DISTANCE_TO_ANGLE_MAP.put(5.5, ArmConstants.kOffset - 0.029);
     }
 
-    public static final double kDirectionSlewRate = 2.4; // radians per second
-    public static final double kMagnitudeSlewRate = 3.6; // percent per second (1 = 100%)
-    public static final double kRotationalSlewRate = 4.0; // percent per second (1 = 100%)
+    public static final double kDirectionSlewRate = 3.8; // radians per second
+    public static final double kMagnitudeSlewRate = 15.6; // percent per second (1 = 100%)
+    public static final double kRotationalSlewRate = 12.0; // percent per second (1 = 100%)
 
     // Chassis configuration
     public static final double kTrackWidth = Units.inchesToMeters(22.5);
@@ -137,6 +157,10 @@ public final class Constants {
     public static final double kMinRotSpeed = 0.1;
     public static final double kMinXSpeed = 0.1;
     public static final double kMinYSpeed = 0.1;
+  }
+
+  public static final class CANdleConstants {
+    public static final int kCANdleCanId = 18; 
   }
 
   public static final class ModuleConstants {
@@ -215,7 +239,7 @@ public final class Constants {
     public static final double kTransferSpeedFull = 1.0;
     public static final double kRightShooterSpeedRPM = 5000.0;
     public static final double kLeftShooterSpeedRPM = 0.6 * kRightShooterSpeedRPM;
-    public static final double kRightShooterTrapSpeedRPM = 2000.0;
+    public static final double kRightShooterTrapSpeedRPM = 2400.0;
     public static final double kLeftShooterTrapSpeedRPM = 0.6 * kRightShooterTrapSpeedRPM;
     public static final double kMinShooterSpeed = 4800.0;
     public static final double kRightShooterFarSpeed = 5250.0;
@@ -254,18 +278,19 @@ public final class Constants {
     public static final double kMaxOpenLoopSpeed = 0.5;
 
     // Arm Positions
-    public static final double kOffset = 0.635;
+    public static final double kOffset = 0.63;
     public static final double kTRANSFER = kOffset - 0.011;
-    public static final double kSUBWOOFER = kOffset - 0.12;
+    public static final double kSUBWOOFER = kOffset - 0.14;
     public static final double kPODIUM = kOffset - 0.055;
-    public static final double kTRAP = kOffset - 0.3;
+    public static final double kTRAP = kOffset - 0.33;
     public static final double kSTAGELINE = kOffset - 0.021;
     public static final double kFOURTHNOTE = kOffset - 0.05;
     public static final double kCLIMBSTART = kTRAP;
-    public static final double kCLIMBFINISH = kOffset - .025;
-    public static final double kAMP = kOffset - 0.375;
-    public static final double kSOURCE = kOffset - 0.375; // Change while testing manually
+    public static final double kCLIMBFINISH = kOffset - .005;
+    public static final double kAMP = kOffset - 0.379;
+    public static final double kAMPFINISH = kOffset - 0.42;
     public static final double kAllowedErrAbs = 0.001;
+    public static final double kAllowedErrWideToleranceAbs = 0.01;
     public static final double kMinHeightAbs = kOffset;
     public static final double kMaxHeightAbs = 0.2;
 
@@ -278,7 +303,7 @@ public final class Constants {
     // Arm Current Limits
     public static final int kCurrentLimitDefault = 20;
     public static final int kCurrentLimitManual = 10;
-    public static final int kCurrentLimitClimbing = 50;
+    public static final int kCurrentLimitClimbing = 70;
   }
 
   public static final class OIConstants {
