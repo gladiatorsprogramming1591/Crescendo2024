@@ -621,7 +621,7 @@ public class DriveSubsystem extends SubsystemBase {
     /**
      * Gets the robot's position.
      */
-    protected Pose2d getPosition() {
+    public Pose2d getPosition() {
         return m_poseEstimator.getEstimatedPosition();
     }
 
@@ -779,6 +779,11 @@ public class DriveSubsystem extends SubsystemBase {
 
     }
 
+  public boolean hasNoteTarget() {
+    var result = m_noteCamera.getLatestResult();
+    return result != null && result.hasTargets();
+  }
+  
     private double getNoteHeight() {
         var result = m_noteCamera.getLatestResult();
         if (result != null && result.hasTargets() && result.getBestTarget() != null) {

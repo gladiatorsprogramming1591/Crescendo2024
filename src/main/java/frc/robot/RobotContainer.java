@@ -29,6 +29,7 @@ import frc.robot.commands.AlignAndIntake;
 import frc.robot.commands.AlignAndShootNote;
 import frc.robot.commands.AlignShooterOnly;
 import frc.robot.commands.AmpScore;
+import frc.robot.commands.FindNoteAndIntake;
 import frc.robot.commands.IntakeNote;
 import frc.robot.commands.IntakeSourcePartOne;
 import frc.robot.commands.ShootFast;
@@ -264,6 +265,8 @@ public class RobotContainer {
                 NamedCommands.registerCommand("EndAutoAlignTheta",
                                 new InstantCommand(() -> {
                                 }));
+                NamedCommands.registerCommand("FindNoteAndIntake", 
+                                new FindNoteAndIntake(m_ShooterSubsystem, m_ArmSubsystem, m_IntakeSubsystem, m_robotDrive));
 
         }
 
