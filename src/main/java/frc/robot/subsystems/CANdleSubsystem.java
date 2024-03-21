@@ -186,7 +186,9 @@ public class CANdleSubsystem extends SubsystemBase {
 
     public void setDefault() {
         if(robotEnabled) {
-            if (ledState != LedStates.DefaultEnabled) {
+            if(m_notePresent) {
+                setNoteDetectedOnIntake();
+            } else if (ledState != LedStates.DefaultEnabled) {
                 ledState = LedStates.DefaultEnabled;
                 changeAnimation(AnimationTypes.SingleFadeBlue);
             }
