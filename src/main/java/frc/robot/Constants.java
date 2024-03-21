@@ -54,12 +54,12 @@ public final class Constants {
             Units.inchesToMeters(6.789)),
         new Rotation3d(0.0, Math.toRadians(-20.0), Math.toRadians(0.0)));
 
-            public static final Transform3d kLeftCameraLocation = new Transform3d(
+    public static final Transform3d kLeftCameraLocation = new Transform3d(
         new Translation3d(Units.inchesToMeters(-2.80), Units.inchesToMeters(12.689),
             Units.inchesToMeters(9.43)),
         new Rotation3d(180.0, Math.toRadians(-20.0), Math.toRadians(90.0)));
 
-            public static final Transform3d kRightCameraLocation = new Transform3d(
+    public static final Transform3d kRightCameraLocation = new Transform3d(
         new Translation3d(Units.inchesToMeters(-2.80), Units.inchesToMeters(-12.689),
             Units.inchesToMeters(9.43)),
         new Rotation3d(180.0, Math.toRadians(-20.0), Math.toRadians(-90.0)));
@@ -109,7 +109,8 @@ public final class Constants {
     public static final double TRANSLATION_SPEED_SCALAR_AUTO_AIM = 0.5;
 
     static {
-      DISTANCE_TO_ANGLE_MAP.put(1.25, ArmConstants.kSUBWOOFER + .011); // 3/15: Moved subwoofer higher for auto, move this back down
+      DISTANCE_TO_ANGLE_MAP.put(1.25, ArmConstants.kSUBWOOFER + .011); // 3/15: Moved subwoofer higher for auto, move
+                                                                       // this back down
       DISTANCE_TO_ANGLE_MAP.put(2.2, ArmConstants.kOffset - 0.088);
       DISTANCE_TO_ANGLE_MAP.put(3.0, ArmConstants.kOffset - 0.064);
       DISTANCE_TO_ANGLE_MAP.put(4.1, ArmConstants.kOffset - 0.044);
@@ -117,7 +118,7 @@ public final class Constants {
       DISTANCE_TO_ANGLE_MAP.put(5.5, ArmConstants.kOffset - 0.029);
     }
 
-    public static final double kDirectionSlewRate = 3.8; // radians per second
+    public static final double kDirectionSlewRate = 4.8; // radians per second
     public static final double kMagnitudeSlewRate = 15.6; // percent per second (1 = 100%)
     public static final double kRotationalSlewRate = 12.0; // percent per second (1 = 100%)
 
@@ -160,7 +161,7 @@ public final class Constants {
   }
 
   public static final class CANdleConstants {
-    public static final int kCANdleCanId = 18; 
+    public static final int kCANdleCanId = 18;
   }
 
   public static final class ModuleConstants {
@@ -214,7 +215,7 @@ public final class Constants {
     public static final IdleMode kDrivingMotorIdleMode = IdleMode.kBrake;
     public static final IdleMode kTurningMotorIdleMode = IdleMode.kBrake;
 
-    public static final int kDrivingMotorCurrentLimit = 35; // amps
+    public static final int kDrivingMotorCurrentLimit = 50; // amps
     public static final int kTurningMotorCurrentLimit = 15; // amps
 
     public static final double kExampleTurningP = 0.01;
