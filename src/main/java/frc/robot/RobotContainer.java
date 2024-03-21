@@ -32,6 +32,7 @@ import frc.robot.commands.AmpScore;
 import frc.robot.commands.IntakeNote;
 import frc.robot.commands.IntakeSourcePartOne;
 import frc.robot.commands.ShootFast;
+import frc.robot.commands.ShootNote;
 import frc.robot.commands.TransferOnWithBeamBreak;
 import frc.robot.commands.TurnToAngleProfiled;
 import frc.robot.commands.armCommands.ArmToPosition;
@@ -177,14 +178,21 @@ public class RobotContainer {
                                                 m_ShooterSubsystem)
                                                 .finallyDo((() -> m_ShooterSubsystem.transferOff())));
                 m_driverController.povDown().onTrue(new ArmToPosition(m_ArmSubsystem, armPositions.TRAP));
+                m_driverController.rightBumper().onTrue(new ArmToPosition(m_ArmSubsystem, armPositions.CLIMBFINISH,
+                                                ArmConstants.kCurrentLimitClimbing).alongWith(new InstantCommand (() -> m_CANdleSubsystem.changeAnimation(AnimationTypes.Twinkle))));
                 // m_operatorController.leftStick().onTrue(new AmpScore(m_ShooterSubsystem, m_ArmSubsystem));
-                m_operatorController.rightStick()
-                                .onTrue(new InstantCommand(() -> m_ShooterSubsystem.transferOn(false),
-                                                m_ShooterSubsystem));
-                m_operatorController.rightTrigger()
-                                .onTrue(new ShootFast(m_ShooterSubsystem, m_ArmSubsystem, armPositions.SUBWOOFER));
-                m_operatorController.leftTrigger()
-                                .onTrue(new ShootFast(m_ShooterSubsystem, m_ArmSubsystem, armPositions.PODIUM));
+                // m_operatorController.rightStick()
+                //                 .onTrue(new InstantCommand(() -> m_ShooterSubsystem.transferOn(false),
+                //                                 m_ShooterSubsystem));
+               m_operatorController.rightStick().onTrue(
+                                new ArmToPosition(m_ArmSubsystem, armPositions.AMPFINISH)
+                                                .alongWith(new WarmUpShooter(m_ShooterSubsystem, true)));
+                                
+                m_operatorController.leftStick().onTrue(new ArmToPosition(m_ArmSubsystem, armPositions.TRANSFER));
+                m_operatorController.rightTrigger().onTrue(new ShootFast(m_ShooterSubsystem, m_ArmSubsystem, armPositions.SUBWOOFER)); 
+                m_operatorController.leftTrigger().onTrue(new ShootFast(m_ShooterSubsystem, m_ArmSubsystem, armPositions.TRANSFER)); 
+
+                                
                 // m_operatorController.x().onTrue(new ShootNote(m_ShooterSubsystem,
                 // m_ArmSubsystem, armPositions.STAGELINE));
                 m_operatorController.b()
@@ -202,9 +210,9 @@ public class RobotContainer {
                                 new ArmToPosition(m_ArmSubsystem, armPositions.TRAP)
                                                 .alongWith(new WarmUpShooter(m_ShooterSubsystem, true)));
                 m_operatorController.back().onTrue(new ArmToPosition(m_ArmSubsystem, armPositions.CLIMBSTART));
-                m_operatorController.start()
-                                .onTrue(new ArmToPosition(m_ArmSubsystem, armPositions.CLIMBFINISH,
-                                                ArmConstants.kCurrentLimitClimbing).alongWith(new InstantCommand (() -> m_CANdleSubsystem.changeAnimation(AnimationTypes.Twinkle))));
+                // m_operatorController.start()
+                //                 .onTrue(new ArmToPosition(m_ArmSubsystem, armPositions.CLIMBFINISH,
+                //                                 ArmConstants.kCurrentLimitClimbing).alongWith(new InstantCommand (() -> m_CANdleSubsystem.changeAnimation(AnimationTypes.Twinkle))));
                 m_operatorController.x().onTrue(new InstantCommand(() -> m_CANdleSubsystem.setAmplify()));
                 m_operatorController.x().onFalse(new InstantCommand(() -> m_CANdleSubsystem.setDefault()));
 
@@ -238,7 +246,8 @@ public class RobotContainer {
                 NamedCommands.registerCommand("ShootStageline",
                                 new ShootFast(m_ShooterSubsystem, m_ArmSubsystem, armPositions.STAGELINE));
                 NamedCommands.registerCommand("Intake",
-                                new IntakeNote(m_ShooterSubsystem, m_ArmSubsystem, m_IntakeSubsystem));
+                                new IntakeNote(m_ShooterSubsystem, m_ArmSubsystem, m_IntakeSubsystem)
+                                                .finallyDo(() -> m_ShooterSubsystem.transferOff()));
                 NamedCommands.registerCommand("Intake.25",
                                 new IntakeNote(m_ShooterSubsystem, m_ArmSubsystem, m_IntakeSubsystem)
                                                 .withTimeout(0.30));

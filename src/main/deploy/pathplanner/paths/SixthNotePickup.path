@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 4.0,
+        "x": 4.15,
         "y": 5.1
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.2672257282976105,
-        "y": 4.357197006701705
+        "x": 5.460173697270473,
+        "y": 4.4795920361071495
       },
       "isLocked": false,
       "linkedName": "FifthNoteShoot"
     },
     {
       "anchor": {
-        "x": 6.711279576405308,
-        "y": 3.374494441296575
+        "x": 6.9,
+        "y": 3.37
       },
       "prevControl": {
-        "x": 5.889744241026946,
-        "y": 3.9930013090795398
+        "x": 5.804769348000235,
+        "y": 4.445496766378149
       },
       "nextControl": null,
       "isLocked": false,
@@ -57,7 +57,7 @@
   },
   "goalEndState": {
     "velocity": 2.0,
-    "rotation": 154.9831065219,
+    "rotation": 150.0,
     "rotateFast": false
   },
   "reversed": false,

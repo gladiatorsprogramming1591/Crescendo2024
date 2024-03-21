@@ -20,7 +20,7 @@ public class ShootFast extends SequentialCommandGroup {
                         new ArmToPositionWithEnd(armSubsystem, position),
                         // new RunCommand(() -> shooterSubsystem.shooterOn(),
                         // shooterSubsystem).withTimeout(1.0)
-                        new WarmUpShooter(shooterSubsystem, false)).withTimeout(0.45),
+                        new WarmUpShooter(shooterSubsystem, false)).withTimeout(0.5),
                 new RunCommand(() -> shooterSubsystem.transferOn(false), shooterSubsystem).withTimeout(0.10),
                 new InstantCommand(() -> shooterSubsystem.shooterOff(), shooterSubsystem),
                 new InstantCommand(() -> shooterSubsystem.transferOff(), shooterSubsystem));

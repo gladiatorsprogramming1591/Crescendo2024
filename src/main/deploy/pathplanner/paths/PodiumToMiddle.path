@@ -17,11 +17,11 @@
     {
       "anchor": {
         "x": 2.6,
-        "y": 5.7
+        "y": 5.6
       },
       "prevControl": {
         "x": 1.146323831109202,
-        "y": 5.890564858052794
+        "y": 5.790564858052793
       },
       "nextControl": null,
       "isLocked": false,
@@ -30,7 +30,7 @@
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.65,
+      "waypointRelativePos": 0.7,
       "rotationDegrees": 170.0,
       "rotateFast": false
     }
@@ -56,7 +56,7 @@
     },
     {
       "name": "Align",
-      "waypointRelativePos": 0.25,
+      "waypointRelativePos": 0.3,
       "command": {
         "type": "sequential",
         "data": {
@@ -79,7 +79,7 @@
     },
     {
       "name": "Shoot",
-      "waypointRelativePos": 0.5,
+      "waypointRelativePos": 0.55,
       "command": {
         "type": "sequential",
         "data": {
@@ -120,7 +120,7 @@
   ],
   "globalConstraints": {
     "maxVelocity": 5.0,
-    "maxAcceleration": 4.0,
+    "maxAcceleration": 3.2,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },

@@ -109,9 +109,9 @@ public final class Constants {
     public static final double TRANSLATION_SPEED_SCALAR_AUTO_AIM = 0.5;
 
     static {
-      DISTANCE_TO_ANGLE_MAP.put(1.25, ArmConstants.kSUBWOOFER);
-      DISTANCE_TO_ANGLE_MAP.put(2.2, ArmConstants.kOffset - 0.077);
-      DISTANCE_TO_ANGLE_MAP.put(3.0, ArmConstants.kOffset - 0.059);
+      DISTANCE_TO_ANGLE_MAP.put(1.25, ArmConstants.kSUBWOOFER + .011); // 3/15: Moved subwoofer higher for auto, move this back down
+      DISTANCE_TO_ANGLE_MAP.put(2.2, ArmConstants.kOffset - 0.088);
+      DISTANCE_TO_ANGLE_MAP.put(3.0, ArmConstants.kOffset - 0.064);
       DISTANCE_TO_ANGLE_MAP.put(4.1, ArmConstants.kOffset - 0.044);
       DISTANCE_TO_ANGLE_MAP.put(4.9, ArmConstants.kOffset - 0.035);
       DISTANCE_TO_ANGLE_MAP.put(5.5, ArmConstants.kOffset - 0.029);
@@ -239,7 +239,7 @@ public final class Constants {
     public static final double kTransferSpeedFull = 1.0;
     public static final double kRightShooterSpeedRPM = 5000.0;
     public static final double kLeftShooterSpeedRPM = 0.6 * kRightShooterSpeedRPM;
-    public static final double kRightShooterTrapSpeedRPM = 2400.0;
+    public static final double kRightShooterTrapSpeedRPM = 1600.0;
     public static final double kLeftShooterTrapSpeedRPM = 0.6 * kRightShooterTrapSpeedRPM;
     public static final double kMinShooterSpeed = 4800.0;
     public static final double kRightShooterFarSpeed = 5250.0;
@@ -280,19 +280,19 @@ public final class Constants {
     // Arm Positions
     public static final double kOffset = 0.63;
     public static final double kTRANSFER = kOffset - 0.011;
-    public static final double kSUBWOOFER = kOffset - 0.14;
+    public static final double kSUBWOOFER = kOffset - 0.151;
     public static final double kPODIUM = kOffset - 0.055;
     public static final double kTRAP = kOffset - 0.33;
     public static final double kSTAGELINE = kOffset - 0.021;
     public static final double kFOURTHNOTE = kOffset - 0.05;
     public static final double kCLIMBSTART = kTRAP;
     public static final double kCLIMBFINISH = kOffset - .005;
-    public static final double kAMP = kOffset - 0.379;
-    public static final double kAMPFINISH = kOffset - 0.42;
+    public static final double kAMP = kOffset - 0.375;
+    public static final double kAMPFINISH = kOffset - 0.53;
     public static final double kAllowedErrAbs = 0.001;
     public static final double kAllowedErrWideToleranceAbs = 0.01;
     public static final double kMinHeightAbs = kOffset;
-    public static final double kMaxHeightAbs = 0.2;
+    public static final double kMaxHeightAbs = kAMPFINISH - 0.03;
 
     // Arm Speed
     public static final double kArmMinOutput = -1.0; // -1.00
