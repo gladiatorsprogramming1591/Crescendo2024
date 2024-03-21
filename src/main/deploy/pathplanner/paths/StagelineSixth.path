@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.52,
-        "y": 2.3
+        "x": 3.5,
+        "y": 2.8
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.35308024462203,
-        "y": 1.5787108497293916
+        "x": 4.33308024462203,
+        "y": 2.078710849729392
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "SeventhShot"
     },
     {
       "anchor": {
-        "x": 6.818112808836172,
-        "y": 2.3
+        "x": 6.7,
+        "y": 2.1115257615130627
       },
       "prevControl": {
-        "x": 5.754186123756863,
-        "y": 1.3517711650807926
+        "x": 5.298894120865165,
+        "y": 1.3912389363240272
       },
       "nextControl": null,
       "isLocked": false,
@@ -39,7 +39,7 @@
   },
   "goalEndState": {
     "velocity": 3.0,
-    "rotation": -138.23448232493206,
+    "rotation": -145.0,
     "rotateFast": false
   },
   "reversed": false,
