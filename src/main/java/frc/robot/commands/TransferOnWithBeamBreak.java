@@ -24,8 +24,6 @@ public class TransferOnWithBeamBreak extends Command {
 
     @Override
     public void end(boolean isInterrupted){
-        if (!isInterrupted){
             m_shooter.transferOff();
-        }
     }
 }

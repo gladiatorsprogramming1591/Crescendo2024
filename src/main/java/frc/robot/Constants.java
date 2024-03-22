@@ -114,8 +114,8 @@ public final class Constants {
       DISTANCE_TO_ANGLE_MAP.put(2.2, ArmConstants.kOffset - 0.088);
       DISTANCE_TO_ANGLE_MAP.put(3.0, ArmConstants.kOffset - 0.064);
       DISTANCE_TO_ANGLE_MAP.put(4.1, ArmConstants.kOffset - 0.044);
-      DISTANCE_TO_ANGLE_MAP.put(4.9, ArmConstants.kOffset - 0.035);
-      DISTANCE_TO_ANGLE_MAP.put(5.5, ArmConstants.kOffset - 0.029);
+      DISTANCE_TO_ANGLE_MAP.put(4.9, ArmConstants.kOffset - 0.037);
+      DISTANCE_TO_ANGLE_MAP.put(5.5, ArmConstants.kOffset - 0.031);
     }
 
     public static final double kDirectionSlewRate = 4.8; // radians per second
@@ -280,7 +280,7 @@ public final class Constants {
 
     // Arm Positions
     public static final double kOffset = 0.63;
-    public static final double kTRANSFER = kOffset - 0.011;
+    public static final double kTRANSFER = kOffset - 0.005;
     public static final double kSUBWOOFER = kOffset - 0.151;
     public static final double kPODIUM = kOffset - 0.055;
     public static final double kTRAP = kOffset - 0.33;
