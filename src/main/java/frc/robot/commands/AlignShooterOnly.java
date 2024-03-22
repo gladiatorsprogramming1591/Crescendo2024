@@ -35,7 +35,7 @@ public class AlignShooterOnly extends SequentialCommandGroup {
         new InstantCommand(() -> RobotContainer.m_CANdleSubsystem.changeAnimation(AnimationTypes.Larson)),
         new InstantCommand(() -> intakeSubsystem.intakeOff(), intakeSubsystem),
         new WarmUpAndAutoShoot(driveSubsystem, shooterSubsystem, armSubsystem, false, false),
-        new InstantCommand(() -> RobotContainer.m_CANdleSubsystem.setDefault())
+        new InstantCommand(() -> RobotContainer.m_CANdleSubsystem.setDefault(!shooterSubsystem.isBeamBroken()))
     );
   }
 }

@@ -238,16 +238,16 @@ public class DriveSubsystem extends SubsystemBase {
                     PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
                     m_frontCamera,
                     DriveConstants.kFrontCameraLocation),
-                new PhotonPoseEstimator(
-                    AprilTagFields.k2024Crescendo.loadAprilTagLayoutField(),
-                    PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
-                    m_leftCamera,
-                    DriveConstants.kLeftCameraLocation),
-                new PhotonPoseEstimator(
-                    AprilTagFields.k2024Crescendo.loadAprilTagLayoutField(),
-                    PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
-                    m_rightCamera,
-                    DriveConstants.kRightCameraLocation),
+                // new PhotonPoseEstimator(
+                //     AprilTagFields.k2024Crescendo.loadAprilTagLayoutField(),
+                //     PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
+                //     m_leftCamera,
+                //     DriveConstants.kLeftCameraLocation),
+                // new PhotonPoseEstimator(
+                //     AprilTagFields.k2024Crescendo.loadAprilTagLayoutField(),
+                //     PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
+                //     m_rightCamera,
+                //     DriveConstants.kRightCameraLocation),
             };
           };
 
@@ -326,17 +326,17 @@ public class DriveSubsystem extends SubsystemBase {
         try {
             SmartDashboard.putNumber("Front Latency", m_frontCamera.getLatestResult().getLatencyMillis());
             SmartDashboard.putNumber("Note Latency", m_noteCamera.getLatestResult().getLatencyMillis());
-            SmartDashboard.putNumber("Left Latency", m_leftCamera.getLatestResult().getLatencyMillis());
-            SmartDashboard.putNumber("Right Latency", m_rightCamera.getLatestResult().getLatencyMillis());
+            // SmartDashboard.putNumber("Left Latency", m_leftCamera.getLatestResult().getLatencyMillis());
+            // SmartDashboard.putNumber("Right Latency", m_rightCamera.getLatestResult().getLatencyMillis());
             double latencyThreshold = 12.0;
             SmartDashboard.putBoolean("Front Latency OK", m_frontCamera.getLatestResult().getLatencyMillis() > latencyThreshold);
-            SmartDashboard.putBoolean("Left Latency OK", m_leftCamera.getLatestResult().getLatencyMillis() > latencyThreshold);
-            SmartDashboard.putBoolean("Right Latency OK", m_rightCamera.getLatestResult().getLatencyMillis() > latencyThreshold);
+            // SmartDashboard.putBoolean("Left Latency OK", m_leftCamera.getLatestResult().getLatencyMillis() > latencyThreshold);
+            // SmartDashboard.putBoolean("Right Latency OK", m_rightCamera.getLatestResult().getLatencyMillis() > latencyThreshold);
         } catch(Exception e) {
 
         }
         if (m_noteCamera.isConnected() && m_frontCamera.isConnected()
-        && m_leftCamera.isConnected() && m_rightCamera.isConnected()
+        // && m_leftCamera.isConnected() && m_rightCamera.isConnected()
             ) {
             RobotContainer.m_CANdleSubsystem.setCamerasReady(); // green
         }

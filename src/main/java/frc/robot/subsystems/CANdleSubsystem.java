@@ -184,9 +184,9 @@ public class CANdleSubsystem extends SubsystemBase {
         m_candle.setLEDs(r, g, b); 
     }
 
-    public void setDefault() {
+    public void setDefault(boolean isNotePresent) {
         if(robotEnabled) {
-            if(m_notePresent) {
+            if(isNotePresent) {
                 setNoteDetectedOnIntake();
             } else if (ledState != LedStates.DefaultEnabled) {
                 ledState = LedStates.DefaultEnabled;
@@ -239,11 +239,14 @@ public class CANdleSubsystem extends SubsystemBase {
 
     public void setEnabled(boolean enabled) {
         robotEnabled = enabled;
-        setDefault();
+        setDefault(m_notePresent);
     }
 
     @Override
     public void periodic() {
+      if(m_startupComplete && m_notePresent) setNoteDetectedOnIntake();
+      else {
+
         Integer selectedAnimation = m_animationChooser.getSelected();
         if(selectedAnimation != null && !selectedAnimation.equals(lastAnimation)) {
             if (selectedAnimation.equals(1)) changeAnimation(AnimationTypes.Fire);
@@ -260,13 +263,13 @@ public class CANdleSubsystem extends SubsystemBase {
 
         // This method will be called once per scheduler run
         if(m_toAnimate == null) {
-            // m_candle.setLEDs((int)(joystick.getLeftTriggerAxis() * 255), 
-            //                   (int)(joystick.getRightTriggerAxis() * 255), 
-            //                   (int)(joystick.getLeftX() * 255));
+                if (m_startupComplete) setLEDs(0, 255, 0);
         } else {
             m_candle.animate(m_toAnimate);
         }
-        // m_candle.modulateVBatOutput(joystick.getRightY());
+      }
+      SmartDashboard.putBoolean("LED Note Present", m_notePresent);
+      SmartDashboard.putBoolean("LED Startup Complete", m_startupComplete);
     }
 
     @Override
