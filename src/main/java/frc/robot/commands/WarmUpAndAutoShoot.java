@@ -58,7 +58,7 @@ public class WarmUpAndAutoShoot extends Command {
       }
     }
     m_arm.ArmToPosition(DriveConstants.DISTANCE_TO_ANGLE_MAP.get(m_drive.getSpeakerDistance()));
-    m_shooter.shooterOn(m_drive.getSpeakerDistance() > 5.0);
+    m_shooter.shooterOn(m_drive.getSpeakerDistance() > 5.0, 0.0);
     if (m_drive.getIsOnTargetSpeaker() && m_shooter.isShooterAtSpeed() && m_autoShoot) {
       onTargetCount++;
       if (onTargetCount > 2) { // 10 * 20 ms = 200 ms of being on target & at speed

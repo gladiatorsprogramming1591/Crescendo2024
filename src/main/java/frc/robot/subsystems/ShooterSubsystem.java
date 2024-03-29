@@ -113,12 +113,19 @@ public class ShooterSubsystem extends SubsystemBase {
     // m_rightShooterMotor.setVoltage(rightFF);
   }
 
-  public void shooterOn(boolean farShot) {
+  // Moonshot distance = 0 means no moon shot
+  public void shooterOn(boolean farShot, double moonShotDistance) {
     if (farShot) {
       m_leftSetpoint = ShooterConstants.kLeftShooterFarSpeed;
       m_rightShooterMotor.getPIDController().setReference(ShooterConstants.kRightShooterFarSpeed,
           ControlType.kVelocity);
       m_leftShooterMotor.getPIDController().setReference(ShooterConstants.kLeftShooterFarSpeed,
+          ControlType.kVelocity);
+    } else if (moonShotDistance > 0) { // May wan to tune based on distance
+      m_leftSetpoint = ShooterConstants.kLeftShooterMoonSpeed;
+      m_rightShooterMotor.getPIDController().setReference(ShooterConstants.kRightShooterMoonSpeed,
+          ControlType.kVelocity);
+      m_leftShooterMotor.getPIDController().setReference(ShooterConstants.kLeftShooterMoonSpeed,
           ControlType.kVelocity);
     } else {
       shooterOn();
