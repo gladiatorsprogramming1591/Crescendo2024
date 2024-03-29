@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
+import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.NeoMotorConstants;
 import frc.robot.Constants.ShooterConstants;
 
@@ -113,23 +114,24 @@ public class ShooterSubsystem extends SubsystemBase {
     // m_rightShooterMotor.setVoltage(rightFF);
   }
 
-  // Moonshot distance = 0 means no moon shot
-  public void shooterOn(boolean farShot, double moonShotDistance) {
+  public void shooterOn(boolean farShot) {
     if (farShot) {
       m_leftSetpoint = ShooterConstants.kLeftShooterFarSpeed;
       m_rightShooterMotor.getPIDController().setReference(ShooterConstants.kRightShooterFarSpeed,
           ControlType.kVelocity);
       m_leftShooterMotor.getPIDController().setReference(ShooterConstants.kLeftShooterFarSpeed,
           ControlType.kVelocity);
-    } else if (moonShotDistance > 0) { // May wan to tune based on distance
-      m_leftSetpoint = ShooterConstants.kLeftShooterMoonSpeed;
-      m_rightShooterMotor.getPIDController().setReference(ShooterConstants.kRightShooterMoonSpeed,
-          ControlType.kVelocity);
-      m_leftShooterMotor.getPIDController().setReference(ShooterConstants.kLeftShooterMoonSpeed,
-          ControlType.kVelocity);
     } else {
       shooterOn();
     }
+  }
+
+  public void moonShoot(double moonShotDistance) {
+      double rightSetpoint = DriveConstants.MOONSHOT_SPEED_MAP.get(moonShotDistance);
+      m_rightShooterMotor.getPIDController().setReference(rightSetpoint,
+          ControlType.kVelocity);
+      m_leftShooterMotor.getPIDController().setReference(rightSetpoint*ShooterConstants.kShooterRatio,
+          ControlType.kVelocity);
   }
 
   public void shooterIntake() {

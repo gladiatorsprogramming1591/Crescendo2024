@@ -59,7 +59,7 @@ public class WarmUpAndMoonShoot extends Command {
     }
     double targetDistance = m_drive.getMoonshotTargetDistance();
     m_arm.ArmToPosition(DriveConstants.MOONSHOT_ANGLE_MAP.get(targetDistance));
-    m_shooter.shooterOn(targetDistance > 5.0, targetDistance);
+    m_shooter.moonShoot(targetDistance);
     if (m_drive.getIsOnTargetMoonshot() && m_shooter.isShooterAtSpeed() && m_autoShoot) {
       onTargetCount++;
       if (onTargetCount > 2) { // 10 * 20 ms = 200 ms of being on target & at speed

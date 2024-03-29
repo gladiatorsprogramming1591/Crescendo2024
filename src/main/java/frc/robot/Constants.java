@@ -109,6 +109,7 @@ public final class Constants {
 
     public static final InterpolatingDoubleTreeMap DISTANCE_TO_ANGLE_MAP = new InterpolatingDoubleTreeMap();
     public static final InterpolatingDoubleTreeMap MOONSHOT_ANGLE_MAP = new InterpolatingDoubleTreeMap();
+    public static final InterpolatingDoubleTreeMap MOONSHOT_SPEED_MAP = new InterpolatingDoubleTreeMap();
 
     public static final double MAX_ROTATION_SPEED_AUTO_AIM = 5.0;
     public static final double TRANSLATION_SPEED_SCALAR_AUTO_AIM = 0.5;
@@ -126,6 +127,11 @@ public final class Constants {
       MOONSHOT_ANGLE_MAP.put(6.0, ArmConstants.kOffset - 0.09);
       MOONSHOT_ANGLE_MAP.put(7.0, ArmConstants.kOffset - 0.08);
       MOONSHOT_ANGLE_MAP.put(8.0, ArmConstants.kOffset - 0.07);
+
+      MOONSHOT_SPEED_MAP.put(5.0, ShooterConstants.kLeftShooterMoonSpeed * 1.0);
+      MOONSHOT_SPEED_MAP.put(6.0, ShooterConstants.kLeftShooterMoonSpeed * 1.1);
+      MOONSHOT_SPEED_MAP.put(7.0, ShooterConstants.kLeftShooterMoonSpeed * 1.2);
+      MOONSHOT_SPEED_MAP.put(8.0, ShooterConstants.kLeftShooterMoonSpeed * 1.3);
     }
 
     public static final double kDirectionSlewRate = 4.8; // radians per second
@@ -248,15 +254,16 @@ public final class Constants {
     // public static final double kLeftShooterSpeed = 1.0;
     public static final double kTransferSpeed = 0.25;
     public static final double kTransferSpeedFull = 1.0;
+    public static final double kShooterRatio = 0.6;
     public static final double kRightShooterSpeedRPM = 5000.0;
-    public static final double kLeftShooterSpeedRPM = 0.6 * kRightShooterSpeedRPM;
+    public static final double kLeftShooterSpeedRPM = kShooterRatio * kRightShooterSpeedRPM;
     public static final double kRightShooterTrapSpeedRPM = 1600.0;
-    public static final double kLeftShooterTrapSpeedRPM = 0.6 * kRightShooterTrapSpeedRPM;
+    public static final double kLeftShooterTrapSpeedRPM = kShooterRatio * kRightShooterTrapSpeedRPM;
     public static final double kMinShooterSpeed = 4800.0;
     public static final double kRightShooterFarSpeed = 5250.0;
-    public static final double kLeftShooterFarSpeed = 0.6 * kRightShooterFarSpeed;
+    public static final double kLeftShooterFarSpeed = kShooterRatio * kRightShooterFarSpeed;
     public static final double kRightShooterMoonSpeed = 4800.0;
-    public static final double kLeftShooterMoonSpeed = 0.6 * kRightShooterMoonSpeed;
+    public static final double kLeftShooterMoonSpeed = kShooterRatio * kRightShooterMoonSpeed;
     public static final double kShooterRPMTolerance = 200.0;
     public static final double kSVolts = 0.05;
     public static final double kVVoltSecondsPerRotation =
