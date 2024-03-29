@@ -75,9 +75,13 @@ public final class Constants {
     public static final double FIELD_WIDTH = 8.0136;
 
     public static final double NOTE_VELOCITY = 10.0;
+    public static final double NOTE_VELOCITY_MOONSHOT = 10.0;
 
     public static final Translation2d BLUE_SPEAKER = new Translation2d(0.0241, 5.547868);
     public static final Translation2d RED_SPEAKER = new Translation2d(FIELD_LENGTH - BLUE_SPEAKER.getX(),
+        BLUE_SPEAKER.getY() + 0.1);
+    public static final Translation2d BLUE_MOONSHOT_TARGET = new Translation2d(1.5, 6.9);
+    public static final Translation2d RED_MOONSHOT_TARGET = new Translation2d(FIELD_LENGTH - BLUE_SPEAKER.getX(),
         BLUE_SPEAKER.getY() + 0.1);
     public static final Translation2d STAGE = new Translation2d(4.981067, 4.105783);
 

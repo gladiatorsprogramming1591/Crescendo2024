@@ -62,7 +62,8 @@ import org.photonvision.targeting.PhotonTrackedTarget;
 import com.ctre.phoenix6.hardware.Pigeon2;
 
 public class DriveSubsystem extends SubsystemBase {
-    public boolean isAutoAiming = false;
+    public boolean isAutoAimingSpeaker = false;
+    public boolean isAutoAimingMoonshot = false;
     public static final double kTurnRateToleranceDegPerS = 5.0;
 
     public static final double kTurnToleranceDeg = 1.0;
@@ -294,7 +295,8 @@ public class DriveSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("Odometry.x:", m_odometry.getPoseMeters().getX());
         SmartDashboard.putNumber("Odometry.y:", m_odometry.getPoseMeters().getY());
         // SmartDashboard.putNumber("Note Pipeline", m_noteCamera.getPipelineIndex());
-        SmartDashboard.putBoolean("IsAiming", isAutoAiming);
+        SmartDashboard.putBoolean("IsAimingSpeaker", isAutoAimingSpeaker);
+        SmartDashboard.putBoolean("IsAimingMoonshot", isAutoAimingMoonshot);
 
         // Filtered pose estimation 
         updatePoseEstimationWithFilter();
@@ -316,6 +318,7 @@ public class DriveSubsystem extends SubsystemBase {
         });
 
         SmartDashboard.putNumber("Distance to Speaker", getSpeakerDistance());
+        SmartDashboard.putNumber("Distance to Moonshot", getMoonshotTargetDistance());
         SmartDashboard.putNumber("Note Angle", getNoteAngle());
         SmartDashboard.putNumber("Note Height", getNoteHeight());
 
@@ -612,10 +615,15 @@ public class DriveSubsystem extends SubsystemBase {
 
     public void driveRobotRelative(ChassisSpeeds robotRelativeSpeeds) {
         ChassisSpeeds targetSpeeds = ChassisSpeeds.discretize(robotRelativeSpeeds, 0.02);
-        if (isAutoAiming) {
+        if (isAutoAimingSpeaker) {
             targetSpeeds.omegaRadiansPerSecond = MathUtil.clamp(
                     m_autoAimRotationPidController.calculate(getPosition().getRotation().getRadians(),
                             getSpeakerAngle()),
+                    -DriveConstants.MAX_ROTATION_SPEED_AUTO_AIM, DriveConstants.MAX_ROTATION_SPEED_AUTO_AIM);
+        } else if (isAutoAimingMoonshot) {
+            targetSpeeds.omegaRadiansPerSecond = MathUtil.clamp(
+                    m_autoAimRotationPidController.calculate(getPosition().getRotation().getRadians(),
+                            getMoonshotAngle()),
                     -DriveConstants.MAX_ROTATION_SPEED_AUTO_AIM, DriveConstants.MAX_ROTATION_SPEED_AUTO_AIM);
         }
         SwerveModuleState[] targetStates = Constants.DriveConstants.kDriveKinematics.toSwerveModuleStates(targetSpeeds);
@@ -699,6 +707,27 @@ public class DriveSubsystem extends SubsystemBase {
     }
 
     /**
+     * Gets a field-relative position for the moonshot the robot should take.
+     * 
+     * @return A {@link Translation2d} representing a field relative position in
+     *         meters.
+     */
+    public Translation2d getMoonshotTargetPosition() {
+        boolean isBlue = DriverStation.getAlliance().orElse(DriverStation.Alliance.Blue)
+                .equals(DriverStation.Alliance.Blue);
+        Translation2d goalPose = isBlue ? DriveConstants.BLUE_MOONSHOT_TARGET : DriveConstants.RED_MOONSHOT_TARGET;
+        ChassisSpeeds robotVel = getFieldRelativeSpeeds(false);
+        double distanceToMoonshotTarget = getPosition().getTranslation().getDistance(goalPose);
+        double x = goalPose.getX()
+                - (robotVel.vxMetersPerSecond * (distanceToMoonshotTarget / DriveConstants.NOTE_VELOCITY_MOONSHOT));
+        double y = goalPose.getY() - (robotVel.vyMetersPerSecond * (distanceToMoonshotTarget / DriveConstants.NOTE_VELOCITY_MOONSHOT));
+        Translation2d goalPoseAdjusted = new Translation2d(x, y);
+        Pose2d target = new Pose2d(goalPoseAdjusted, new Rotation2d());
+        m_goalPoseField.setRobotPose(target);
+        return goalPoseAdjusted;
+    }
+
+    /**
      * Gets the angle for the robot to face to score in the speaker, in radians.
      */
     private double getSpeakerAngle() {
@@ -707,21 +736,25 @@ public class DriveSubsystem extends SubsystemBase {
         Translation2d robotPoint = getPosition().getTranslation();
         Rotation2d shotRot = speakerPosition.minus(robotPoint).getAngle();
 
-        // Translation2d targetPosition = new Translation2d(
-        // speakerPosition.getX() + shotRot.getSin() * speakerDistance,
-        // speakerPosition.getY() + shotRot.getCos() * speakerDistance);
-
-        // Pose3d speakerRotTarget = new Pose3d(targetPosition.getX(),
-        // targetPosition.getY(), DriveConstants.SPEAKER_HEIGHT, new Rotation3d());
-        // SmartDashboard.putNumber("Angle To Speaker",
-        // targetPosition.minus(robotPoint).getAngle().getRadians());
-        // SmartDashboard.putNumber("Target Position X", targetPosition.getX());
-        // SmartDashboard.putNumber("Target Position Y", targetPosition.getY());
-
         double angleToSpeaker = MathUtil.angleModulus(speakerPosition.minus(robotPoint).getAngle().getRadians());
         SmartDashboard.putNumber("Angle To Speaker", angleToSpeaker);
 
         return MathUtil.angleModulus(angleToSpeaker);
+    }
+
+    /**
+     * Gets the angle for the robot to face to moonshot near the amp, in radians.
+     */
+    private double getMoonshotAngle() {
+        Translation2d moonshotTargetPosition = getMoonshotTargetPosition();
+        double moonshotTargetDistance = getMoonshotTargetDistance();
+        Translation2d robotPoint = getPosition().getTranslation();
+        Rotation2d shotRot = moonshotTargetPosition.minus(robotPoint).getAngle();
+
+        double angleToMoonshot = MathUtil.angleModulus(moonshotTargetPosition.minus(robotPoint).getAngle().getRadians());
+        SmartDashboard.putNumber("Angle To Moonshot", angleToMoonshot);
+
+        return MathUtil.angleModulus(angleToMoonshot);
     }
 
     /**
@@ -733,6 +766,18 @@ public class DriveSubsystem extends SubsystemBase {
      */
     public void driveOnTargetSpeaker(DoubleSupplier x, DoubleSupplier y) {
         driveAngle(y.getAsDouble(), x.getAsDouble(), getSpeakerAngle(),
+                m_autoAimRotationPidController, false);
+    }
+
+    /**
+     * This command allows the driver to keep driving, but forces the robot to face
+     * the moonshot target.
+     * 
+     * @param x The desired {@code x} speed from {@code -1.0} to {@code 1.0}.
+     * @param y The desired {@code y} speed from {@code -1.0} to {@code 1.0}.
+     */
+    public void driveOnMoonshotTarget(DoubleSupplier x, DoubleSupplier y) {
+        driveAngle(y.getAsDouble(), x.getAsDouble(), getMoonshotAngle(),
                 m_autoAimRotationPidController, false);
     }
 
@@ -874,7 +919,20 @@ public class DriveSubsystem extends SubsystemBase {
         return getPosition().getTranslation().getDistance(getSpeakerPosition());
     }
 
+    /**
+     * This command gets the distance of the current shot to the moonshot target.
+     * 
+     * @return The distance in meters.
+     */
+    public double getMoonshotTargetDistance() {
+        return getPosition().getTranslation().getDistance(getMoonshotTargetPosition());
+    }
+
     public boolean getIsOnTargetSpeaker() {
+        return m_autoAimRotationPidController.atSetpoint();
+    }
+
+    public boolean getIsOnTargetMoonshot() {
         return m_autoAimRotationPidController.atSetpoint();
     }
 
