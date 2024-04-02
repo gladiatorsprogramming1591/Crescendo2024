@@ -29,6 +29,7 @@ public class ShooterSubsystem extends SubsystemBase {
   private final double m_rightTargetVelocity = Constants.ShooterConstants.kRightShooterSpeedRPM;
   private final double m_leftTargetVelocity = Constants.ShooterConstants.kLeftShooterSpeedRPM;
   private double m_leftSetpoint = Constants.ShooterConstants.kLeftShooterSpeedRPM;
+  private double m_rightSetpoint = Constants.ShooterConstants.kRightShooterSpeedRPM;
   private final DigitalInput m_ShooterBeamBreak = new DigitalInput(4);
   // private final PIDController m_leftPidController = new PIDController(
   // ShooterConstants.kShooterP, ShooterConstants.kShooterI,
@@ -94,6 +95,7 @@ public class ShooterSubsystem extends SubsystemBase {
     System.out.println("Setting right shooter speed to " + m_rightTargetVelocity);
 
     m_leftSetpoint = m_leftTargetVelocity;
+    m_rightSetpoint = m_rightTargetVelocity;
     m_rightShooterMotor.getPIDController().setReference(m_rightTargetVelocity, ControlType.kVelocity);
     m_leftShooterMotor.getPIDController().setReference(m_leftTargetVelocity, ControlType.kVelocity);
 
@@ -116,6 +118,7 @@ public class ShooterSubsystem extends SubsystemBase {
   public void shooterOn(boolean farShot) {
     if (farShot) {
       m_leftSetpoint = ShooterConstants.kLeftShooterFarSpeed;
+      m_rightSetpoint = ShooterConstants.kRightShooterFarSpeed;
       m_rightShooterMotor.getPIDController().setReference(ShooterConstants.kRightShooterFarSpeed,
           ControlType.kVelocity);
       m_leftShooterMotor.getPIDController().setReference(ShooterConstants.kLeftShooterFarSpeed,
@@ -127,6 +130,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
   public void shooterIntake() {
     m_leftSetpoint = -0.35 * ShooterConstants.kLeftShooterSpeedRPM;
+    m_rightSetpoint = -0.35 * ShooterConstants.kRightShooterSpeedRPM;
     m_rightShooterMotor.getPIDController().setReference(m_leftSetpoint,
         ControlType.kVelocity);
     m_leftShooterMotor.getPIDController().setReference(m_leftSetpoint,
@@ -140,7 +144,8 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   public boolean isShooterAtSpeed() {
-    return m_leftEncoder.getVelocity() > m_leftSetpoint - ShooterConstants.kShooterRPMTolerance;
+    return m_leftEncoder.getVelocity() > m_leftSetpoint - ShooterConstants.kShooterRPMTolerance
+        && m_rightEncoder.getVelocity() > m_rightSetpoint - ShooterConstants.kShooterRPMTolerance;
   }
 
   public boolean isBeamBroken() {
