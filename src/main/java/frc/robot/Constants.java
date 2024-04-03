@@ -330,6 +330,10 @@ public final class Constants {
         kMaxAngularSpeedRadiansPerSecond, kMaxAngularSpeedRadiansPerSecondSquared);
   }
 
+  public static final class BlowerConstants {
+    public static final int blowerCANID = 19;
+  }
+
   public static final class NeoMotorConstants {
     public static final double kFreeSpeedRpm = 5676;
   }
