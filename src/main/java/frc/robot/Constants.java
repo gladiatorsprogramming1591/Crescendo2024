@@ -118,10 +118,11 @@ public final class Constants {
       DISTANCE_TO_ANGLE_MAP.put(1.25, ArmConstants.kSUBWOOFER + .011); // 3/15: Moved subwoofer higher for auto, move
                                                                        // this back down
       DISTANCE_TO_ANGLE_MAP.put(2.2, ArmConstants.kOffset - 0.088);
-      DISTANCE_TO_ANGLE_MAP.put(3.0, ArmConstants.kOffset - 0.064);
-      DISTANCE_TO_ANGLE_MAP.put(4.1, ArmConstants.kOffset - 0.044);
-      DISTANCE_TO_ANGLE_MAP.put(4.9, ArmConstants.kOffset - 0.037);
+      DISTANCE_TO_ANGLE_MAP.put(3.0, ArmConstants.kOffset - 0.055);
+      DISTANCE_TO_ANGLE_MAP.put(4.1, ArmConstants.kOffset - 0.042);
+      DISTANCE_TO_ANGLE_MAP.put(4.9, ArmConstants.kOffset - 0.035);
       DISTANCE_TO_ANGLE_MAP.put(5.5, ArmConstants.kOffset - 0.031);
+      DISTANCE_TO_ANGLE_MAP.put(6.3, ArmConstants.kOffset - 0.026);
 
       MOONSHOT_ANGLE_MAP.put(5.0, ArmConstants.kOffset - 0.1);
       MOONSHOT_ANGLE_MAP.put(6.0, ArmConstants.kOffset - 0.09);
@@ -254,14 +255,13 @@ public final class Constants {
     // public static final double kLeftShooterSpeed = 1.0;
     public static final double kTransferSpeed = 0.25;
     public static final double kTransferSpeedFull = 1.0;
-    public static final double kShooterRatio = 0.6;
-    public static final double kRightShooterSpeedRPM = 5000.0;
-    public static final double kLeftShooterSpeedRPM = kShooterRatio * kRightShooterSpeedRPM;
+    public static final double kRightShooterSpeedRPM = 5500.0;
+    public static final double kLeftShooterSpeedRPM = 0.65 * kRightShooterSpeedRPM;
     public static final double kRightShooterTrapSpeedRPM = 1600.0;
     public static final double kLeftShooterTrapSpeedRPM = kShooterRatio * kRightShooterTrapSpeedRPM;
     public static final double kMinShooterSpeed = 4800.0;
-    public static final double kRightShooterFarSpeed = 5250.0;
-    public static final double kLeftShooterFarSpeed = kShooterRatio * kRightShooterFarSpeed;
+    public static final double kRightShooterFarSpeed = 5500.0;
+    public static final double kLeftShooterFarSpeed = 0.6 * kRightShooterFarSpeed;
     public static final double kRightShooterMoonSpeed = 4800.0;
     public static final double kLeftShooterMoonSpeed = kShooterRatio * kRightShooterMoonSpeed;
     public static final double kShooterRPMTolerance = 200.0;
@@ -298,7 +298,7 @@ public final class Constants {
     public static final double kMaxOpenLoopSpeed = 0.5;
 
     // Arm Positions
-    public static final double kOffset = 0.63;
+    public static final double kOffset = 0.846;
     public static final double kTRANSFER = kOffset - 0.005;
     public static final double kSUBWOOFER = kOffset - 0.151;
     public static final double kPODIUM = kOffset - 0.055;

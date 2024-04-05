@@ -194,7 +194,7 @@ public class RobotContainer {
                                 
                 m_operatorController.leftStick().onTrue(new ArmToPosition(m_ArmSubsystem, armPositions.TRANSFER));
                 m_operatorController.rightTrigger().onTrue(new ShootFast(m_ShooterSubsystem, m_ArmSubsystem, armPositions.SUBWOOFER)); 
-                m_operatorController.leftTrigger().onTrue(new ShootFast(m_ShooterSubsystem, m_ArmSubsystem, armPositions.TRANSFER)); 
+                m_operatorController.leftTrigger().onTrue(new ShootNote(m_ShooterSubsystem, m_ArmSubsystem, armPositions.TRANSFER)); 
 
                                 
                 // m_operatorController.x().onTrue(new ShootNote(m_ShooterSubsystem,
