@@ -13,7 +13,6 @@ public class BlowerSubsystem extends SubsystemBase {
   public BlowerSubsystem() {
     blowerMotor = new TalonSRX(Constants.BlowerConstants.blowerCANID);
     blowerMotor.setNeutralMode(NeutralMode.Brake);
-    //saturation volate?
     blowerMotor.configVoltageCompSaturation(12.0);
     blowerMotor.enableVoltageCompensation(true);
   }
@@ -26,7 +25,7 @@ public class BlowerSubsystem extends SubsystemBase {
 
   public void blowerOff() {
     // Turns on the blower motor
-    System.out.println("Turning blower on full");
-    blowerMotor.set(TalonSRXControlMode.PercentOutput, 1.0);
+    System.out.println("Turning blower off");
+    blowerMotor.set(TalonSRXControlMode.PercentOutput, 0.0);
   }
 }
