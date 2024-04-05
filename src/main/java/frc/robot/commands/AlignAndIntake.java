@@ -41,7 +41,7 @@ public class AlignAndIntake extends SequentialCommandGroup {
                                     intakeSubsystem.intakeOn();
                                     shooterSubsystem.transferOn(true);
                                 }, intakeSubsystem, shooterSubsystem))),
-                new InstantCommand(() -> RobotContainer.m_CANdleSubsystem.setDefault())
+                new InstantCommand(() -> RobotContainer.m_CANdleSubsystem.setDefault(!shooterSubsystem.isBeamBroken()))
         );
 
     }

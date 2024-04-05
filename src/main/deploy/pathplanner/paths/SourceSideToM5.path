@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 4.3,
-        "y": 5.1
+        "x": 0.7051874193434493,
+        "y": 4.53
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.285895156405698,
-        "y": 4.251321779566636
+        "x": 3.267716535433072,
+        "y": 1.2728356225943225
       },
       "isLocked": false,
-      "linkedName": "SixthNoteShoot"
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 8.2,
-        "y": 2.0
+        "x": 6.54354154862156,
+        "y": 1.1
       },
       "prevControl": {
-        "x": 7.236888689161994,
-        "y": 4.311854008323402
+        "x": 4.7378910142435675,
+        "y": 1.3221703366483666
       },
       "nextControl": null,
       "isLocked": false,
@@ -33,7 +33,7 @@
   "eventMarkers": [
     {
       "name": "Intake",
-      "waypointRelativePos": 0.5,
+      "waypointRelativePos": 0.1,
       "command": {
         "type": "parallel",
         "data": {
@@ -57,13 +57,13 @@
   },
   "goalEndState": {
     "velocity": 2.0,
-    "rotation": 105.05933296040045,
+    "rotation": -170.0,
     "rotateFast": false
   },
   "reversed": false,
   "folder": null,
   "previewStartingState": {
-    "rotation": 180.0,
+    "rotation": 123.11134196037197,
     "velocity": 0
   },
   "useDefaultConstraints": true

@@ -42,7 +42,7 @@ public class AlignAndShootNote extends SequentialCommandGroup {
         new InstantCommand(() -> shooterSubsystem.shooterOff(), shooterSubsystem),
         new InstantCommand(() -> shooterSubsystem.transferOff(), shooterSubsystem),
         new InstantCommand(() -> armSubsystem.ArmOff(), armSubsystem),
-        new InstantCommand(() -> RobotContainer.m_CANdleSubsystem.setDefault())
+        new InstantCommand(() -> RobotContainer.m_CANdleSubsystem.setDefault(!shooterSubsystem.isBeamBroken()))
     );
   }
 }

@@ -24,14 +24,14 @@ import frc.robot.subsystems.ShooterSubsystem;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class AlignShooterOnly extends SequentialCommandGroup {
+public class IntakeAndAlignShooter extends SequentialCommandGroup {
 
-  public AlignShooterOnly(ShooterSubsystem shooterSubsystem,
+  public IntakeAndAlignShooter(ShooterSubsystem shooterSubsystem,
       ArmSubsystem armSubsystem,
       DriveSubsystem driveSubsystem, IntakeSubsystem intakeSubsystem) {
     addRequirements(intakeSubsystem, shooterSubsystem, armSubsystem);
     addCommands(
-        new InstantCommand(() -> shooterSubsystem.transferOff(), shooterSubsystem),
+        new IntakeNote(shooterSubsystem, armSubsystem, intakeSubsystem),
         new InstantCommand(() -> RobotContainer.m_CANdleSubsystem.changeAnimation(AnimationTypes.Larson)),
         new InstantCommand(() -> intakeSubsystem.intakeOff(), intakeSubsystem),
         new WarmUpAndAutoShoot(driveSubsystem, shooterSubsystem, armSubsystem, false, false),

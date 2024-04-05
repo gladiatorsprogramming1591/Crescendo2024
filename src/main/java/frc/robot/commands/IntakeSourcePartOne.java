@@ -26,7 +26,7 @@ public class IntakeSourcePartOne extends Command {
 
     @Override
     public void execute() {
-        m_arm.ArmToPosition(ArmConstants.kSUBWOOFER - 0.05);
+        m_arm.ArmToPosition(ArmConstants.kSUBWOOFER - 0.03);
         if (m_hasNote) {
             m_shooter.transferReverse(true);
             m_shooter.shooterIntake();

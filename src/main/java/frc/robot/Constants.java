@@ -54,15 +54,15 @@ public final class Constants {
             Units.inchesToMeters(6.789)),
         new Rotation3d(0.0, Math.toRadians(-20.0), Math.toRadians(0.0)));
 
-            public static final Transform3d kLeftCameraLocation = new Transform3d(
+    public static final Transform3d kLeftCameraLocation = new Transform3d(
         new Translation3d(Units.inchesToMeters(-2.80), Units.inchesToMeters(12.689),
             Units.inchesToMeters(9.43)),
-        new Rotation3d(0.0, Math.toRadians(-20.0), Math.toRadians(90.0)));
+        new Rotation3d(180.0, Math.toRadians(-20.0), Math.toRadians(90.0)));
 
-            public static final Transform3d kRightCameraLocation = new Transform3d(
+    public static final Transform3d kRightCameraLocation = new Transform3d(
         new Translation3d(Units.inchesToMeters(-2.80), Units.inchesToMeters(-12.689),
             Units.inchesToMeters(9.43)),
-        new Rotation3d(0.0, Math.toRadians(-20.0), Math.toRadians(-90.0)));
+        new Rotation3d(180.0, Math.toRadians(-20.0), Math.toRadians(-90.0)));
 
     // Field Positions
 
@@ -109,15 +109,17 @@ public final class Constants {
     public static final double TRANSLATION_SPEED_SCALAR_AUTO_AIM = 0.5;
 
     static {
-      DISTANCE_TO_ANGLE_MAP.put(1.25, ArmConstants.kSUBWOOFER);
-      DISTANCE_TO_ANGLE_MAP.put(2.2, ArmConstants.kOffset - 0.077);
-      DISTANCE_TO_ANGLE_MAP.put(3.0, ArmConstants.kOffset - 0.059);
-      DISTANCE_TO_ANGLE_MAP.put(4.1, ArmConstants.kOffset - 0.044);
+      DISTANCE_TO_ANGLE_MAP.put(1.25, ArmConstants.kSUBWOOFER + .011); // 3/15: Moved subwoofer higher for auto, move
+                                                                       // this back down
+      DISTANCE_TO_ANGLE_MAP.put(2.2, ArmConstants.kOffset - 0.088);
+      DISTANCE_TO_ANGLE_MAP.put(3.0, ArmConstants.kOffset - 0.055);
+      DISTANCE_TO_ANGLE_MAP.put(4.1, ArmConstants.kOffset - 0.042);
       DISTANCE_TO_ANGLE_MAP.put(4.9, ArmConstants.kOffset - 0.035);
-      DISTANCE_TO_ANGLE_MAP.put(5.5, ArmConstants.kOffset - 0.029);
+      DISTANCE_TO_ANGLE_MAP.put(5.5, ArmConstants.kOffset - 0.031);
+      DISTANCE_TO_ANGLE_MAP.put(6.3, ArmConstants.kOffset - 0.026);
     }
 
-    public static final double kDirectionSlewRate = 3.8; // radians per second
+    public static final double kDirectionSlewRate = 4.8; // radians per second
     public static final double kMagnitudeSlewRate = 15.6; // percent per second (1 = 100%)
     public static final double kRotationalSlewRate = 12.0; // percent per second (1 = 100%)
 
@@ -160,7 +162,7 @@ public final class Constants {
   }
 
   public static final class CANdleConstants {
-    public static final int kCANdleCanId = 18; 
+    public static final int kCANdleCanId = 18;
   }
 
   public static final class ModuleConstants {
@@ -214,7 +216,7 @@ public final class Constants {
     public static final IdleMode kDrivingMotorIdleMode = IdleMode.kBrake;
     public static final IdleMode kTurningMotorIdleMode = IdleMode.kBrake;
 
-    public static final int kDrivingMotorCurrentLimit = 35; // amps
+    public static final int kDrivingMotorCurrentLimit = 50; // amps
     public static final int kTurningMotorCurrentLimit = 15; // amps
 
     public static final double kExampleTurningP = 0.01;
@@ -237,12 +239,12 @@ public final class Constants {
     // public static final double kLeftShooterSpeed = 1.0;
     public static final double kTransferSpeed = 0.25;
     public static final double kTransferSpeedFull = 1.0;
-    public static final double kRightShooterSpeedRPM = 5000.0;
-    public static final double kLeftShooterSpeedRPM = 0.6 * kRightShooterSpeedRPM;
-    public static final double kRightShooterTrapSpeedRPM = 2400.0;
+    public static final double kRightShooterSpeedRPM = 5500.0;
+    public static final double kLeftShooterSpeedRPM = 0.65 * kRightShooterSpeedRPM;
+    public static final double kRightShooterTrapSpeedRPM = 1600.0;
     public static final double kLeftShooterTrapSpeedRPM = 0.6 * kRightShooterTrapSpeedRPM;
     public static final double kMinShooterSpeed = 4800.0;
-    public static final double kRightShooterFarSpeed = 5250.0;
+    public static final double kRightShooterFarSpeed = 5500.0;
     public static final double kLeftShooterFarSpeed = 0.6 * kRightShooterFarSpeed;
     public static final double kShooterRPMTolerance = 200.0;
     public static final double kSVolts = 0.05;
@@ -278,21 +280,21 @@ public final class Constants {
     public static final double kMaxOpenLoopSpeed = 0.5;
 
     // Arm Positions
-    public static final double kOffset = 0.63;
-    public static final double kTRANSFER = kOffset - 0.011;
-    public static final double kSUBWOOFER = kOffset - 0.14;
+    public static final double kOffset = 0.846;
+    public static final double kTRANSFER = kOffset - 0.005;
+    public static final double kSUBWOOFER = kOffset - 0.151;
     public static final double kPODIUM = kOffset - 0.055;
     public static final double kTRAP = kOffset - 0.33;
     public static final double kSTAGELINE = kOffset - 0.021;
     public static final double kFOURTHNOTE = kOffset - 0.05;
     public static final double kCLIMBSTART = kTRAP;
     public static final double kCLIMBFINISH = kOffset - .005;
-    public static final double kAMP = kOffset - 0.379;
-    public static final double kAMPFINISH = kOffset - 0.42;
+    public static final double kAMP = kOffset - 0.375;
+    public static final double kAMPFINISH = kOffset - 0.53;
     public static final double kAllowedErrAbs = 0.001;
     public static final double kAllowedErrWideToleranceAbs = 0.01;
     public static final double kMinHeightAbs = kOffset;
-    public static final double kMaxHeightAbs = 0.2;
+    public static final double kMaxHeightAbs = kAMPFINISH - 0.03;
 
     // Arm Speed
     public static final double kArmMinOutput = -1.0; // -1.00

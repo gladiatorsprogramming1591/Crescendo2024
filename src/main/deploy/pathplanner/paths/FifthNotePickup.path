@@ -8,20 +8,20 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.285895156405698,
-        "y": 4.251321779566636
+        "x": 5.085229870459742,
+        "y": 4.440124264863915
       },
       "isLocked": false,
       "linkedName": "SixthNoteShoot"
     },
     {
       "anchor": {
-        "x": 8.2,
-        "y": 2.0
+        "x": 6.9,
+        "y": 4.1
       },
       "prevControl": {
-        "x": 7.236888689161994,
-        "y": 4.311854008323402
+        "x": 5.744319180946055,
+        "y": 4.034249037728845
       },
       "nextControl": null,
       "isLocked": false,
@@ -33,7 +33,7 @@
   "eventMarkers": [
     {
       "name": "Intake",
-      "waypointRelativePos": 0.5,
+      "waypointRelativePos": 0.6,
       "command": {
         "type": "parallel",
         "data": {
@@ -57,7 +57,7 @@
   },
   "goalEndState": {
     "velocity": 2.0,
-    "rotation": 105.05933296040045,
+    "rotation": 180.0,
     "rotateFast": false
   },
   "reversed": false,

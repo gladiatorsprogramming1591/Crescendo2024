@@ -19,6 +19,7 @@ public class IntakeNote extends SequentialCommandGroup {
                         ){
         addRequirements(shooterSubsystem, armSubsystem, intakeSubsystem);
         addCommands(
+            new InstantCommand(() -> shooterSubsystem.transferOff(), shooterSubsystem),
             new ArmToPositionWithEnd(armSubsystem, armPositions.TRANSFER), 
             new ParallelRaceGroup(
                 new TransferOnWithBeamBreak(shooterSubsystem), 
@@ -27,6 +28,7 @@ public class IntakeNote extends SequentialCommandGroup {
             new InstantCommand(()-> intakeSubsystem.intakeOff(), intakeSubsystem)
 
         ); 
-                        }
+    }
+
 }
         

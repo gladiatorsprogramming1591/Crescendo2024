@@ -8,24 +8,24 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.484339891756708,
-        "y": 3.4435630409722364
+        "x": 6.701004443378358,
+        "y": 3.5718051464633596
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 4.0,
+        "x": 4.3,
         "y": 5.1
       },
       "prevControl": {
-        "x": 5.144565366053808,
-        "y": 4.547451202594713
+        "x": 5.431752346243635,
+        "y": 4.356431195030721
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "FifthNoteShoot"
+      "linkedName": "SixthNoteShoot"
     }
   ],
   "rotationTargets": [],

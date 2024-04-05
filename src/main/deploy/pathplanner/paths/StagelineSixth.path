@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.52,
-        "y": 2.3
+        "x": 3.5,
+        "y": 2.8
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.35308024462203,
-        "y": 1.5787108497293916
+        "x": 4.668822414567908,
+        "y": 1.716848049080714
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "SeventhShot"
     },
     {
       "anchor": {
-        "x": 6.818112808836172,
-        "y": 2.3
+        "x": 7.244094488188978,
+        "y": 2.1312596471346796
       },
       "prevControl": {
-        "x": 5.754186123756863,
-        "y": 1.3517711650807926
+        "x": 6.109396064945978,
+        "y": 1.4208397647564535
       },
       "nextControl": null,
       "isLocked": false,
@@ -30,7 +30,18 @@
   ],
   "rotationTargets": [],
   "constraintZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "Intake",
+      "waypointRelativePos": 0.65,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": []
+        }
+      }
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 5.6,
     "maxAcceleration": 5.0,
@@ -39,7 +50,7 @@
   },
   "goalEndState": {
     "velocity": 3.0,
-    "rotation": -138.23448232493206,
+    "rotation": -155.0,
     "rotateFast": false
   },
   "reversed": false,
