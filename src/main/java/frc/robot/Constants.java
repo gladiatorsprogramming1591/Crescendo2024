@@ -257,9 +257,9 @@ public final class Constants {
     public static final double kTransferSpeedFull = 1.0;
     public static final double kRightShooterSpeedRPM = 5500.0;
     public static final double kLeftShooterSpeedRPM = 0.65 * kRightShooterSpeedRPM;
-    public static final double kRightShooterTrapSpeedRPM = 1600.0;
+    public static final double kRightShooterTrapSpeedRPM = 1300.0;
+    public static final double kLeftShooterTrapSpeedRPM = 1.0 * kRightShooterTrapSpeedRPM;
     public static final double kShooterRatio = 0.6;
-    public static final double kLeftShooterTrapSpeedRPM = kShooterRatio * kRightShooterTrapSpeedRPM;
     public static final double kMinShooterSpeed = 4800.0;
     public static final double kRightShooterFarSpeed = 5500.0;
     public static final double kLeftShooterFarSpeed = kShooterRatio * kRightShooterFarSpeed;
@@ -348,6 +348,10 @@ public final class Constants {
     // Constraint for the motion profiled robot angle controller
     public static final TrapezoidProfile.Constraints kThetaControllerConstraints = new TrapezoidProfile.Constraints(
         kMaxAngularSpeedRadiansPerSecond, kMaxAngularSpeedRadiansPerSecondSquared);
+  }
+
+  public static final class BlowerConstants {
+    public static final int blowerCANID = 19;
   }
 
   public static final class NeoMotorConstants {

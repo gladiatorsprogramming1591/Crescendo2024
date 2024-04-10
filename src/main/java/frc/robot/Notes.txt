@@ -4,3 +4,22 @@ Adjusted path for FirstToMidline to allow faster acceleration to note pickup and
 Added 5th note pickup and shoot, added 2.28s at 12.73s
 Reduced contraint zone by 5% on FirstToMidline, saved 0.22s to 12.51s
 USed global constraints for 3rd to shoot, stagelinefourthstage, saved 0.84s to 11.67s 
+
+
+
+
+TrapShoot 
+1. Manually go to the trap 
+2. When the button is held, square up to the trap by reading one of the three april tags. 
+    - When the target is seen and the button is held, the trap will get squared up. 
+    - DriveSubsystem 
+3. Once the april tag is read, start a count for if we lose the target or not.
+4. If we don't lose the target, angle the arm, start the blower, and wait until the shooter is up to speed and the count is greater
+than a certain number (2?)
+    - WarmUpShooter 
+5. Shoot the note into the trap 
+    - ShooterSubsystem 
+6. Climb right after?? (depends on where we are shooting from.)
+
+Ask what button J wants (or if it will be my button)
+
