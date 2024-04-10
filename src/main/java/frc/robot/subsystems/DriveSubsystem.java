@@ -294,9 +294,7 @@ public class DriveSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("gyroYaw:", gyroYaw);
         SmartDashboard.putNumber("Odometry.x:", m_odometry.getPoseMeters().getX());
         SmartDashboard.putNumber("Odometry.y:", m_odometry.getPoseMeters().getY());
-        // SmartDashboard.putNumber("Note Pipeline", m_noteCamera.getPipelineIndex());
-        SmartDashboard.putBoolean("IsAiming", isAutoAiming);
-    
+        // SmartDashboard.putNumber("Note Pipeline", m_noteCamera.getPipelineIndex());  
         SmartDashboard.putBoolean("IsAimingSpeaker", isAutoAimingSpeaker);
         SmartDashboard.putBoolean("IsAimingMoonshot", isAutoAimingMoonshot);
 
