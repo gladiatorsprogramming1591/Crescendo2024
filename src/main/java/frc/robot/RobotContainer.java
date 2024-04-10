@@ -34,12 +34,15 @@ import frc.robot.commands.IntakeSourcePartOne;
 import frc.robot.commands.ShootFast;
 import frc.robot.commands.ShootNote;
 import frc.robot.commands.TransferOnWithBeamBreak;
+import frc.robot.commands.TrapShootFinish;
+import frc.robot.commands.TrapShootPrep;
 import frc.robot.commands.TurnToAngleProfiled;
 import frc.robot.commands.armCommands.ArmToPosition;
 import frc.robot.commands.armCommands.ArmToPositionWithEnd;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.CANdleSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.BlowerSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.ArmSubsystem.armPositions;
@@ -78,6 +81,7 @@ public class RobotContainer {
         private final ShooterSubsystem m_ShooterSubsystem = new ShooterSubsystem();
         private final IntakeSubsystem m_IntakeSubsystem = new IntakeSubsystem();
         private final ArmSubsystem m_ArmSubsystem = new ArmSubsystem();
+        private final BlowerSubsystem m_BlowerSubsystem = new BlowerSubsystem();
         
         private SendableChooser<Command> m_autoChooser;
 
@@ -206,16 +210,15 @@ public class RobotContainer {
                 m_operatorController.povRight().onTrue(new ArmToPosition(m_ArmSubsystem, armPositions.AMP));
                 m_operatorController.leftBumper()
                                 .whileTrue(new IntakeSourcePartOne(m_ShooterSubsystem, m_ArmSubsystem));
-                m_operatorController.rightBumper().onTrue(
-                                new ArmToPosition(m_ArmSubsystem, armPositions.TRAP)
-                                                .alongWith(new WarmUpShooter(m_ShooterSubsystem, true)));
+                m_operatorController.rightBumper().onTrue(new TrapShootPrep(m_ShooterSubsystem, m_ArmSubsystem, armPositions.TRAP, m_BlowerSubsystem));
+                m_operatorController.rightBumper().onFalse(new TrapShootFinish(m_ShooterSubsystem, m_BlowerSubsystem));
                 m_operatorController.back().onTrue(new ArmToPosition(m_ArmSubsystem, armPositions.CLIMBSTART));
                 // m_operatorController.start()
                 //                 .onTrue(new ArmToPosition(m_ArmSubsystem, armPositions.CLIMBFINISH,
                 //                                 ArmConstants.kCurrentLimitClimbing).alongWith(new InstantCommand (() -> m_CANdleSubsystem.changeAnimation(AnimationTypes.Twinkle))));
                 m_operatorController.x().onTrue(new InstantCommand(() -> m_CANdleSubsystem.setAmplify()));
                 m_operatorController.x().onFalse(new InstantCommand(() -> m_CANdleSubsystem.setDefault(!m_ShooterSubsystem.isBeamBroken())));
-
+                
                
                 // TODO change the rotation to be the letter buttons
         }

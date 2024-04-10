@@ -241,8 +241,8 @@ public final class Constants {
     public static final double kTransferSpeedFull = 1.0;
     public static final double kRightShooterSpeedRPM = 5500.0;
     public static final double kLeftShooterSpeedRPM = 0.65 * kRightShooterSpeedRPM;
-    public static final double kRightShooterTrapSpeedRPM = 1600.0;
-    public static final double kLeftShooterTrapSpeedRPM = 0.6 * kRightShooterTrapSpeedRPM;
+    public static final double kRightShooterTrapSpeedRPM = 1300.0;
+    public static final double kLeftShooterTrapSpeedRPM = 1.0 * kRightShooterTrapSpeedRPM;
     public static final double kMinShooterSpeed = 4800.0;
     public static final double kRightShooterFarSpeed = 5500.0;
     public static final double kLeftShooterFarSpeed = 0.6 * kRightShooterFarSpeed;
