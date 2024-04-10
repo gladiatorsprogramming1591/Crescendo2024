@@ -10,7 +10,7 @@ import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 
-public class WarmUpAndAutoShoot extends Command {
+public class WarmUpAndMoonShoot extends Command {
 
   int transferCount;
   int onTargetCount;
@@ -28,7 +28,7 @@ public class WarmUpAndAutoShoot extends Command {
   boolean m_autoShoot = true;
   boolean m_shootImmediately = false;
 
-  public WarmUpAndAutoShoot(DriveSubsystem driveSubsystem, ShooterSubsystem shooterSubsystem,
+  public WarmUpAndMoonShoot(DriveSubsystem driveSubsystem, ShooterSubsystem shooterSubsystem,
       ArmSubsystem armSubsystem, boolean autoShoot, boolean shootImmediately) {
     m_drive = driveSubsystem;
     m_shooter = shooterSubsystem;
@@ -57,9 +57,10 @@ public class WarmUpAndAutoShoot extends Command {
         m_end = true;
       }
     }
-    m_arm.ArmToPosition(DriveConstants.DISTANCE_TO_ANGLE_MAP.get(m_drive.getSpeakerDistance()));
-    m_shooter.shooterOn(m_drive.getSpeakerDistance() > 5.0);
-    if (m_drive.getIsOnTargetSpeaker() && m_shooter.isShooterAtSpeed() && m_autoShoot) {
+    double targetDistance = m_drive.getMoonshotTargetDistance();
+    m_arm.ArmToPosition(DriveConstants.MOONSHOT_ANGLE_MAP.get(targetDistance));
+    m_shooter.moonShoot(targetDistance);
+    if (m_drive.getIsOnTargetMoonshot() && m_shooter.isShooterAtSpeed() && m_autoShoot) {
       onTargetCount++;
       if (onTargetCount > 2) { // 10 * 20 ms = 200 ms of being on target & at speed
         m_shooter.transferOn(false);
@@ -82,7 +83,7 @@ public class WarmUpAndAutoShoot extends Command {
       m_arm.ArmOff();
     }
     m_shooter.transferOff();
-    m_drive.isAutoAimingSpeaker = false;
+    m_drive.isAutoAimingMoonshot = false;
   }
 
   // Returns true when the command should end.

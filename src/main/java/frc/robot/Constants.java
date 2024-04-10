@@ -75,9 +75,13 @@ public final class Constants {
     public static final double FIELD_WIDTH = 8.0136;
 
     public static final double NOTE_VELOCITY = 10.0;
+    public static final double NOTE_VELOCITY_MOONSHOT = 10.0;
 
     public static final Translation2d BLUE_SPEAKER = new Translation2d(0.0241, 5.547868);
     public static final Translation2d RED_SPEAKER = new Translation2d(FIELD_LENGTH - BLUE_SPEAKER.getX(),
+        BLUE_SPEAKER.getY() + 0.1);
+    public static final Translation2d BLUE_MOONSHOT_TARGET = new Translation2d(1.5, 6.9);
+    public static final Translation2d RED_MOONSHOT_TARGET = new Translation2d(FIELD_LENGTH - BLUE_SPEAKER.getX(),
         BLUE_SPEAKER.getY() + 0.1);
     public static final Translation2d STAGE = new Translation2d(4.981067, 4.105783);
 
@@ -104,6 +108,8 @@ public final class Constants {
     // Shooter Angle Map
 
     public static final InterpolatingDoubleTreeMap DISTANCE_TO_ANGLE_MAP = new InterpolatingDoubleTreeMap();
+    public static final InterpolatingDoubleTreeMap MOONSHOT_ANGLE_MAP = new InterpolatingDoubleTreeMap();
+    public static final InterpolatingDoubleTreeMap MOONSHOT_SPEED_MAP = new InterpolatingDoubleTreeMap();
 
     public static final double MAX_ROTATION_SPEED_AUTO_AIM = 5.0;
     public static final double TRANSLATION_SPEED_SCALAR_AUTO_AIM = 0.5;
@@ -117,6 +123,16 @@ public final class Constants {
       DISTANCE_TO_ANGLE_MAP.put(4.9, ArmConstants.kOffset - 0.035);
       DISTANCE_TO_ANGLE_MAP.put(5.5, ArmConstants.kOffset - 0.031);
       DISTANCE_TO_ANGLE_MAP.put(6.3, ArmConstants.kOffset - 0.026);
+
+      MOONSHOT_ANGLE_MAP.put(5.0, ArmConstants.kOffset - 0.1);
+      MOONSHOT_ANGLE_MAP.put(6.0, ArmConstants.kOffset - 0.09);
+      MOONSHOT_ANGLE_MAP.put(7.0, ArmConstants.kOffset - 0.08);
+      MOONSHOT_ANGLE_MAP.put(8.0, ArmConstants.kOffset - 0.07);
+
+      MOONSHOT_SPEED_MAP.put(5.0, ShooterConstants.kLeftShooterMoonSpeed * 1.0);
+      MOONSHOT_SPEED_MAP.put(6.0, ShooterConstants.kLeftShooterMoonSpeed * 1.1);
+      MOONSHOT_SPEED_MAP.put(7.0, ShooterConstants.kLeftShooterMoonSpeed * 1.2);
+      MOONSHOT_SPEED_MAP.put(8.0, ShooterConstants.kLeftShooterMoonSpeed * 1.3);
     }
 
     public static final double kDirectionSlewRate = 4.8; // radians per second
@@ -243,9 +259,12 @@ public final class Constants {
     public static final double kLeftShooterSpeedRPM = 0.65 * kRightShooterSpeedRPM;
     public static final double kRightShooterTrapSpeedRPM = 1300.0;
     public static final double kLeftShooterTrapSpeedRPM = 1.0 * kRightShooterTrapSpeedRPM;
+    public static final double kShooterRatio = 0.6;
     public static final double kMinShooterSpeed = 4800.0;
     public static final double kRightShooterFarSpeed = 5500.0;
-    public static final double kLeftShooterFarSpeed = 0.6 * kRightShooterFarSpeed;
+    public static final double kLeftShooterFarSpeed = kShooterRatio * kRightShooterFarSpeed;
+    public static final double kRightShooterMoonSpeed = 4800.0;
+    public static final double kLeftShooterMoonSpeed = kShooterRatio * kRightShooterMoonSpeed;
     public static final double kShooterRPMTolerance = 200.0;
     public static final double kSVolts = 0.05;
     public static final double kVVoltSecondsPerRotation =

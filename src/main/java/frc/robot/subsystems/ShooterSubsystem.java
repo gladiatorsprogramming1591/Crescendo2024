@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
+import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.NeoMotorConstants;
 import frc.robot.Constants.ShooterConstants;
 
@@ -126,6 +127,15 @@ public class ShooterSubsystem extends SubsystemBase {
     } else {
       shooterOn();
     }
+  }
+
+  public void moonShoot(double moonShotDistance) {
+      m_rightSetpoint = DriveConstants.MOONSHOT_SPEED_MAP.get(moonShotDistance);
+      m_leftSetpoint = m_rightSetpoint*ShooterConstants.kShooterRatio;
+      m_rightShooterMotor.getPIDController().setReference(m_rightSetpoint,
+          ControlType.kVelocity);
+      m_leftShooterMotor.getPIDController().setReference(m_leftSetpoint,
+          ControlType.kVelocity);
   }
 
   public void shooterIntake() {

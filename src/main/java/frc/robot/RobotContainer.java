@@ -27,6 +27,7 @@ import frc.robot.commands.WarmUpAndAutoShoot;
 import frc.robot.commands.WarmUpShooter;
 import frc.robot.commands.AlignAndIntake;
 import frc.robot.commands.AlignAndShootNote;
+import frc.robot.commands.AlignAndMoonShoot;
 import frc.robot.commands.AlignShooterOnly;
 import frc.robot.commands.AmpScore;
 import frc.robot.commands.IntakeNote;
@@ -149,6 +150,9 @@ public class RobotContainer {
                 m_driverController.start().whileTrue(new AlignAndShootNote(m_ShooterSubsystem, m_ArmSubsystem,
                                 () -> m_driverController.getLeftX(), () -> m_driverController.getLeftY(), m_robotDrive,
                                 m_IntakeSubsystem));
+                m_driverController.rightStick().whileTrue(new AlignAndMoonShoot(m_ShooterSubsystem, m_ArmSubsystem,
+                                () -> m_driverController.getLeftX(), () -> m_driverController.getLeftY(), m_robotDrive,
+                                m_IntakeSubsystem));
                 m_driverController.rightTrigger()
                                 .whileTrue(new AlignAndIntake(m_ShooterSubsystem, m_ArmSubsystem, m_IntakeSubsystem,
                                                 m_robotDrive)
@@ -260,6 +264,10 @@ public class RobotContainer {
                                 new AlignAndShootNote(m_ShooterSubsystem, m_ArmSubsystem, () -> 0, () -> 0,
                                                 m_robotDrive,
                                                 m_IntakeSubsystem));
+                NamedCommands.registerCommand("AlignAndMoonShoot",
+                                new AlignAndMoonShoot(m_ShooterSubsystem, m_ArmSubsystem, () -> 0, () -> 0,
+                                                m_robotDrive,
+                                                m_IntakeSubsystem));
                 NamedCommands.registerCommand("ShootFourthNote",
                                 new ShootFast(m_ShooterSubsystem, m_ArmSubsystem, armPositions.FOURTHNOTE));
                 NamedCommands.registerCommand("AlignAndIntake",
@@ -272,7 +280,7 @@ public class RobotContainer {
                                 new WarmUpAndAutoShoot(m_robotDrive, m_ShooterSubsystem, m_ArmSubsystem, false, true)
                                                 .beforeStarting(() -> m_IntakeSubsystem.intakeOff()));
                 NamedCommands.registerCommand("BeginAutoAlignTheta",
-                                new InstantCommand(() -> m_robotDrive.isAutoAiming = true));
+                                new InstantCommand(() -> m_robotDrive.isAutoAimingSpeaker = true));
                 NamedCommands.registerCommand("EndAutoAlignTheta",
                                 new InstantCommand(() -> {
                                 }));
