@@ -130,10 +130,11 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   public void moonShoot(double moonShotDistance) {
-      double rightSetpoint = DriveConstants.MOONSHOT_SPEED_MAP.get(moonShotDistance);
-      m_rightShooterMotor.getPIDController().setReference(rightSetpoint,
+      m_rightSetpoint = DriveConstants.MOONSHOT_SPEED_MAP.get(moonShotDistance);
+      m_leftSetpoint = m_rightSetpoint*ShooterConstants.kShooterRatio;
+      m_rightShooterMotor.getPIDController().setReference(m_rightSetpoint,
           ControlType.kVelocity);
-      m_leftShooterMotor.getPIDController().setReference(rightSetpoint*ShooterConstants.kShooterRatio,
+      m_leftShooterMotor.getPIDController().setReference(m_leftSetpoint,
           ControlType.kVelocity);
   }
 

@@ -933,6 +933,7 @@ public class DriveSubsystem extends SubsystemBase {
     }
 
     public boolean getIsOnTargetMoonshot() {
+        SmartDashboard.putNumber("Moonshot Error", m_autoAimRotationPidController.getPositionError());
         return m_autoAimRotationPidController.atSetpoint();
     }
 
