@@ -41,9 +41,13 @@ public class ArmToPosition extends Command {
         m_currentLimit = currentLimit;
     }
 
+    public void initialize(){
+        m_arm.setArmCurrentLimit(m_currentLimit);
+    }
+
     @Override
     public void execute(){
-        m_arm.ArmToPosition(m_targetPos, m_currentLimit);
+        m_arm.ArmToPosition(m_targetPos);
     }
 
     @Override

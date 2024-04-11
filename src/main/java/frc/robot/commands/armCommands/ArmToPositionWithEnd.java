@@ -2,6 +2,7 @@ package frc.robot.commands.armCommands;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants.ArmConstants;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ArmSubsystem.armPositions;
 
@@ -17,6 +18,10 @@ public class ArmToPositionWithEnd extends Command {
             m_wideTolerance = true; 
         }
         addRequirements(m_arm);
+    }
+
+    public void initialize() {
+        m_arm.setArmCurrentLimit(ArmConstants.kCurrentLimitDefault);
     }
 
     @Override

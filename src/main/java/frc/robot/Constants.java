@@ -124,15 +124,15 @@ public final class Constants {
       DISTANCE_TO_ANGLE_MAP.put(5.5, ArmConstants.kOffset - 0.031);
       DISTANCE_TO_ANGLE_MAP.put(6.3, ArmConstants.kOffset - 0.026);
 
-      MOONSHOT_ANGLE_MAP.put(5.0, ArmConstants.kOffset - 0.1);
-      MOONSHOT_ANGLE_MAP.put(6.0, ArmConstants.kOffset - 0.09);
-      MOONSHOT_ANGLE_MAP.put(7.0, ArmConstants.kOffset - 0.08);
-      MOONSHOT_ANGLE_MAP.put(8.0, ArmConstants.kOffset - 0.07);
+      MOONSHOT_ANGLE_MAP.put(5.0, ArmConstants.kOffset - 0.11);
+      MOONSHOT_ANGLE_MAP.put(6.0, ArmConstants.kOffset - 0.10);
+      MOONSHOT_ANGLE_MAP.put(7.0, ArmConstants.kOffset - 0.09);
+      MOONSHOT_ANGLE_MAP.put(8.0, ArmConstants.kOffset - 0.08);
 
-      MOONSHOT_SPEED_MAP.put(5.0, ShooterConstants.kLeftShooterMoonSpeed * 1.0);
-      MOONSHOT_SPEED_MAP.put(6.0, ShooterConstants.kLeftShooterMoonSpeed * 1.1);
-      MOONSHOT_SPEED_MAP.put(7.0, ShooterConstants.kLeftShooterMoonSpeed * 1.2);
-      MOONSHOT_SPEED_MAP.put(8.0, ShooterConstants.kLeftShooterMoonSpeed * 1.3);
+      MOONSHOT_SPEED_MAP.put(5.0, ShooterConstants.kLeftShooterMoonSpeed * 0.7);
+      MOONSHOT_SPEED_MAP.put(6.0, ShooterConstants.kLeftShooterMoonSpeed * 0.85);
+      MOONSHOT_SPEED_MAP.put(7.0, ShooterConstants.kLeftShooterMoonSpeed * 1.0);
+      MOONSHOT_SPEED_MAP.put(8.0, ShooterConstants.kLeftShooterMoonSpeed * 1.1);
     }
 
     public static final double kDirectionSlewRate = 4.8; // radians per second
@@ -257,7 +257,7 @@ public final class Constants {
     public static final double kTransferSpeedFull = 1.0;
     public static final double kRightShooterSpeedRPM = 5500.0;
     public static final double kLeftShooterSpeedRPM = 0.65 * kRightShooterSpeedRPM;
-    public static final double kRightShooterTrapSpeedRPM = 1300.0;
+    public static final double kRightShooterTrapSpeedRPM = 1050.0;
     public static final double kLeftShooterTrapSpeedRPM = 1.0 * kRightShooterTrapSpeedRPM;
     public static final double kShooterRatio = 0.6;
     public static final double kMinShooterSpeed = 4800.0;
@@ -303,7 +303,7 @@ public final class Constants {
     public static final double kTRANSFER = kOffset - 0.005;
     public static final double kSUBWOOFER = kOffset - 0.151;
     public static final double kPODIUM = kOffset - 0.055;
-    public static final double kTRAP = kOffset - 0.33;
+    public static final double kTRAP = kOffset - 0.313;
     public static final double kSTAGELINE = kOffset - 0.021;
     public static final double kFOURTHNOTE = kOffset - 0.05;
     public static final double kCLIMBSTART = kTRAP;

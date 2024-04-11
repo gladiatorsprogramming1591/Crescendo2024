@@ -82,9 +82,12 @@ public class ArmSubsystem extends SubsystemBase {
     m_AbsPidController.setTolerance(ArmConstants.kPositionTolerance);
   }
 
-  public void ArmToPosition(double setpoint, int currentLimit) {
+  public void setArmCurrentLimit(int currentLimit) {
     m_rightArmMotor.setSmartCurrentLimit(currentLimit);
     m_leftArmMotor.setSmartCurrentLimit(currentLimit);
+  }
+
+  public void ArmToPosition(double setpoint) {
 
     if (((armAbsEncoder.getAbsolutePosition() > ArmConstants.kMinHeightAbs)
         && (setpoint > mapAbs.get(armPositions.TRANSFER))) ||
@@ -115,16 +118,7 @@ public class ArmSubsystem extends SubsystemBase {
 
   public void ArmToPosition(armPositions position) {
     double ref = mapAbs.get(position);
-    ArmToPosition(ref, ArmConstants.kCurrentLimitDefault);
-  }
-
-  public void ArmToPosition(armPositions position, int currentLimit) {
-    double ref = mapAbs.get(position);
-    ArmToPosition(ref, currentLimit);
-  }
-
-  public void ArmToPosition(double position) {
-    ArmToPosition(position, ArmConstants.kCurrentLimitDefault);
+    ArmToPosition(ref);
   }
 
   public void ArmForward(double speed) {
@@ -166,9 +160,9 @@ public class ArmSubsystem extends SubsystemBase {
 
   public boolean atPosition(armPositions pos, boolean wideTolerance) {
     double currentEncoderPosition = armAbsEncoder.getAbsolutePosition();
-    double tolerance = Constants.ArmConstants.kAllowedErrAbs; 
-    if (wideTolerance){
-      tolerance = Constants.ArmConstants.kAllowedErrWideToleranceAbs; 
+    double tolerance = Constants.ArmConstants.kAllowedErrAbs;
+    if (wideTolerance) {
+      tolerance = Constants.ArmConstants.kAllowedErrWideToleranceAbs;
     }
     return (Math.abs(currentEncoderPosition - mapAbs.get(pos)) < tolerance);
   }
