@@ -1,7 +1,9 @@
 package frc.robot.commands;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
@@ -55,7 +57,7 @@ public class FindNote extends Command {
         noteFound = false;
         doneSearching = false;
         doneLookingRight = false;
-        initialHeading = drive.getHeading();
+        initialHeading = Math.toRadians(drive.getHeading());
 
         final double THRESHOLD = 0.2;
         double y = drive.getPosition().getTranslation().getY();
@@ -66,10 +68,13 @@ public class FindNote extends Command {
         } else { // Otherwise, look right 45 degrees
             rightTurnAngle = Math.PI/4;
         }
+        System.out.println("rightTurnAngle initial value = " + rightTurnAngle);
     }
 
     @Override
     public void execute() {
+        double goal = 0.0;
+        double driveAngle = 0.0;
         // Check for note already in vision
         if (drive.hasNoteTarget()) {
             noteFound = true;
@@ -81,12 +86,21 @@ public class FindNote extends Command {
             }
 
             if (!doneLookingRight) {
-                turnController.setGoal(initialHeading + rightTurnAngle);                
+                goal = MathUtil.clamp(initialHeading + rightTurnAngle, -Math.PI, Math.PI);
+                turnController.setGoal(goal);                
             } else {
-                turnController.setGoal(initialHeading - Math.PI/2);
+                goal = MathUtil.clamp(initialHeading - Math.PI/2, -Math.PI, Math.PI);
+                turnController.setGoal(goal);
             }
-            drive.drive(0,0,turnController.calculate(drive.getHeading()),false,false);
+            driveAngle = turnController.calculate(Math.toRadians(drive.getHeading()));
+            drive.drive(0,0,driveAngle,false,false);
         }
+        SmartDashboard.putBoolean("FindNote rtDone", doneLookingRight);
+        System.out.println("doneLookingRight:" + doneLookingRight);
+        SmartDashboard.putNumber("FindNote goal", goal);
+        SmartDashboard.putNumber("FindNote driveAngle", driveAngle);
+        System.out.println("driveAngle: " + driveAngle);
+        System.out.println("goal: " + goal);
     }
 
     @Override
