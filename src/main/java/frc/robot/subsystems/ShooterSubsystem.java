@@ -116,13 +116,13 @@ public class ShooterSubsystem extends SubsystemBase {
     // m_rightShooterMotor.setVoltage(rightFF);
   }
 
-  public void shooterOn(boolean farShot) {
-    if (farShot) {
-      m_leftSetpoint = ShooterConstants.kLeftShooterFarSpeed;
-      m_rightSetpoint = ShooterConstants.kRightShooterFarSpeed;
-      m_rightShooterMotor.getPIDController().setReference(ShooterConstants.kRightShooterFarSpeed,
+  public void shooterOn(boolean nearShot) {
+    if (nearShot) {
+      m_leftSetpoint = ShooterConstants.kLeftShooterNearSpeed;
+      m_rightSetpoint = ShooterConstants.kRightShooterNearSpeed;
+      m_rightShooterMotor.getPIDController().setReference(ShooterConstants.kRightShooterNearSpeed,
           ControlType.kVelocity);
-      m_leftShooterMotor.getPIDController().setReference(ShooterConstants.kLeftShooterFarSpeed,
+      m_leftShooterMotor.getPIDController().setReference(ShooterConstants.kLeftShooterNearSpeed,
           ControlType.kVelocity);
     } else {
       shooterOn();

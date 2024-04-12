@@ -113,6 +113,9 @@ public class ArmSubsystem extends SubsystemBase {
       m_rightArmMotor.set(0);
       return;
     }
+    // if (setpoint == ArmConstants.kTRANSFER && pidOut > -0.1){
+    //   pidOut = -0.1; 
+    // }
     m_rightArmMotor.set(pidOut);
   }
 

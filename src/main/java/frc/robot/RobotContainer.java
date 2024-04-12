@@ -159,7 +159,7 @@ public class RobotContainer {
                                                 .andThen(new IntakeNote(m_ShooterSubsystem, m_ArmSubsystem,
                                                                 m_IntakeSubsystem)));
                 m_driverController.leftTrigger()
-                                .onTrue(new IntakeNote(m_ShooterSubsystem, m_ArmSubsystem, m_IntakeSubsystem));
+                                .whileTrue(new IntakeNote(m_ShooterSubsystem, m_ArmSubsystem, m_IntakeSubsystem).finallyDo( (()-> m_IntakeSubsystem.intakeOff())));
                 m_driverController.leftBumper()
                                 .onTrue(new InstantCommand(() -> m_IntakeSubsystem.intakeOn(), m_IntakeSubsystem));
                 // m_driverController.rightTrigger(OIConstants.kArmDeadband).whileTrue(new
