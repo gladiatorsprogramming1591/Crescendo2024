@@ -173,14 +173,14 @@ public class CANdleSubsystem extends SubsystemBase {
                 m_toAnimate = null;
                 break;
         }
-        System.out.println("Animation Changed to " + m_currentAnimation.toString());
+        // System.out.println("Animation Changed to " + m_currentAnimation.toString());
     }
 
     public void setLEDs(int r, int g, int b) {
         m_candle.clearAnimation(0);
         changeAnimation(AnimationTypes.SetAll);
-        System.out.println("Clearing animation");
-        System.out.println("Setting LEDs to r: " + r + " g: " + g + " b: " + b);
+        // System.out.println("Clearing animation");
+        // System.out.println("Setting LEDs to r: " + r + " g: " + g + " b: " + b);
         m_candle.setLEDs(r, g, b); 
     }
 

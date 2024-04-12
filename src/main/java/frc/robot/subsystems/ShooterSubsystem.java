@@ -180,6 +180,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
   public void transferOff() {
     m_transferMotor.set(0);
+    System.out.println("Turning transfer off");
   }
 
   public void transferReverse() {

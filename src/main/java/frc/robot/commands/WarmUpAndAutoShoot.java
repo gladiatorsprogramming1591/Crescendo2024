@@ -4,6 +4,7 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.subsystems.ArmSubsystem;
@@ -53,14 +54,17 @@ public class WarmUpAndAutoShoot extends Command {
     if (m_shootImmediately) {
       m_shooter.transferOn(false);
       transferCount++;
+      System.out.println("Turning Transfer on for shoot immediately");
       if (transferCount > 5) { // 1010 - 1000 = 10 * 20 ms = 200 ms to run transfer before finishing command
         m_end = true;
       }
     }
     m_arm.ArmToPosition(DriveConstants.DISTANCE_TO_ANGLE_MAP.get(m_drive.getSpeakerDistance()));
+    System.out.println("Warming up shooter at distance: " + m_drive.getSpeakerDistance() + ", time: " + RobotController.getFPGATime());
     m_shooter.shooterOn(m_drive.getSpeakerDistance() < 3.2);
     if (m_drive.getIsOnTargetSpeaker() && m_shooter.isShooterAtSpeed() && m_autoShoot) {
       onTargetCount++;
+      System.out.println("Warmed up at: " + RobotController.getFPGATime());
       if (onTargetCount > 2) { // 10 * 20 ms = 200 ms of being on target & at speed
         m_shooter.transferOn(false);
         transferCount++;
@@ -68,7 +72,7 @@ public class WarmUpAndAutoShoot extends Command {
           m_end = true;
         }
       }
-    } else {
+    } else if (!m_shootImmediately) {
       m_end = false;
       m_shooter.transferOff();
     }
