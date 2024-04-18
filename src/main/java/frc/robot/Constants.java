@@ -80,9 +80,9 @@ public final class Constants {
     public static final Translation2d BLUE_SPEAKER = new Translation2d(0.0241, 5.547868);
     public static final Translation2d RED_SPEAKER = new Translation2d(FIELD_LENGTH - BLUE_SPEAKER.getX(),
         BLUE_SPEAKER.getY() + 0.1);
-    public static final Translation2d BLUE_MOONSHOT_TARGET = new Translation2d(1.5, 6.9);
-    public static final Translation2d RED_MOONSHOT_TARGET = new Translation2d(FIELD_LENGTH - BLUE_SPEAKER.getX(),
-        BLUE_SPEAKER.getY() + 0.1);
+    public static final Translation2d BLUE_MOONSHOT_TARGET = new Translation2d(1.5, 7.3);
+    public static final Translation2d RED_MOONSHOT_TARGET = new Translation2d(FIELD_LENGTH - BLUE_MOONSHOT_TARGET.getX(),
+        BLUE_MOONSHOT_TARGET.getY() + 0.1);
     public static final Translation2d STAGE = new Translation2d(4.981067, 4.105783);
 
     public static final double SPEAKER_HEIGHT = 2.08;
@@ -124,10 +124,10 @@ public final class Constants {
       DISTANCE_TO_ANGLE_MAP.put(5.5, ArmConstants.kOffset - 0.029);
       DISTANCE_TO_ANGLE_MAP.put(6.3, ArmConstants.kOffset - 0.022);
 
-      MOONSHOT_ANGLE_MAP.put(5.0, ArmConstants.kOffset - 0.11);
-      MOONSHOT_ANGLE_MAP.put(6.0, ArmConstants.kOffset - 0.10);
-      MOONSHOT_ANGLE_MAP.put(7.0, ArmConstants.kOffset - 0.09);
-      MOONSHOT_ANGLE_MAP.put(8.0, ArmConstants.kOffset - 0.08);
+      MOONSHOT_ANGLE_MAP.put(5.0, ArmConstants.kOffset - 0.13);
+      MOONSHOT_ANGLE_MAP.put(6.0, ArmConstants.kOffset - 0.12);
+      MOONSHOT_ANGLE_MAP.put(7.0, ArmConstants.kOffset - 0.10);
+      MOONSHOT_ANGLE_MAP.put(8.0, ArmConstants.kOffset - 0.09);
 
       MOONSHOT_SPEED_MAP.put(5.0, ShooterConstants.kLeftShooterMoonSpeed * 0.7);
       MOONSHOT_SPEED_MAP.put(6.0, ShooterConstants.kLeftShooterMoonSpeed * 0.85);
@@ -263,7 +263,7 @@ public final class Constants {
     public static final double kMinShooterSpeed = 4800.0;
     public static final double kRightShooterNearSpeed = 5000.0;
     public static final double kLeftShooterNearSpeed = kShooterRatio * kRightShooterNearSpeed;
-    public static final double kRightShooterMoonSpeed = 4800.0;
+    public static final double kRightShooterMoonSpeed = 4900.0;
     public static final double kLeftShooterMoonSpeed = kShooterRatio * kRightShooterMoonSpeed;
     public static final double kShooterRPMTolerance = 200.0;
     public static final double kSVolts = 0.05;
