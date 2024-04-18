@@ -80,7 +80,7 @@ public final class Constants {
     public static final Translation2d BLUE_SPEAKER = new Translation2d(0.0241, 5.547868);
     public static final Translation2d RED_SPEAKER = new Translation2d(FIELD_LENGTH - BLUE_SPEAKER.getX(),
         BLUE_SPEAKER.getY() + 0.1);
-    public static final Translation2d BLUE_MOONSHOT_TARGET = new Translation2d(1.5, 7.3);
+    public static final Translation2d BLUE_MOONSHOT_TARGET = new Translation2d(1.1, 6.9);
     public static final Translation2d RED_MOONSHOT_TARGET = new Translation2d(FIELD_LENGTH - BLUE_MOONSHOT_TARGET.getX(),
         BLUE_MOONSHOT_TARGET.getY() + 0.1);
     public static final Translation2d STAGE = new Translation2d(4.981067, 4.105783);
@@ -129,7 +129,7 @@ public final class Constants {
       MOONSHOT_ANGLE_MAP.put(7.0, ArmConstants.kOffset - 0.10);
       MOONSHOT_ANGLE_MAP.put(8.0, ArmConstants.kOffset - 0.09);
 
-      MOONSHOT_SPEED_MAP.put(5.0, ShooterConstants.kLeftShooterMoonSpeed * 0.7);
+      MOONSHOT_SPEED_MAP.put(5.0, ShooterConstants.kLeftShooterMoonSpeed * 0.71);
       MOONSHOT_SPEED_MAP.put(6.0, ShooterConstants.kLeftShooterMoonSpeed * 0.85);
       MOONSHOT_SPEED_MAP.put(7.0, ShooterConstants.kLeftShooterMoonSpeed * 1.0);
       MOONSHOT_SPEED_MAP.put(8.0, ShooterConstants.kLeftShooterMoonSpeed * 1.1);
@@ -257,7 +257,7 @@ public final class Constants {
     public static final double kTransferSpeedFull = 1.0;
     public static final double kRightShooterSpeedRPM = 5500.0;
     public static final double kLeftShooterSpeedRPM = 0.65 * kRightShooterSpeedRPM;
-    public static final double kRightShooterTrapSpeedRPM = 1050.0;
+    public static final double kRightShooterTrapSpeedRPM = 1025*1.0;
     public static final double kLeftShooterTrapSpeedRPM = 1.0 * kRightShooterTrapSpeedRPM;
     public static final double kShooterRatio = 0.6;
     public static final double kMinShooterSpeed = 4800.0;
