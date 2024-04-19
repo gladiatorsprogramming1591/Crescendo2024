@@ -1,0 +1,49 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 0.6465019492093177,
+      "y": 6.593200975274989
+    },
+    "rotation": -120.25999999999999
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "ShootSubwoofer"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "FirstToMidline"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AlignAndIntake"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "ThirdToShootSimbots"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AlignAndShootNote"
+          }
+        }
+      ]
+    }
+  },
+  "folder": null,
+  "choreoAuto": false
+}

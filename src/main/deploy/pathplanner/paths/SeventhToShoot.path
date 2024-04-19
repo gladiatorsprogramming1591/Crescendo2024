@@ -32,29 +32,6 @@
   "constraintZones": [],
   "eventMarkers": [
     {
-      "name": "AlignShooter",
-      "waypointRelativePos": 0.7,
-      "command": {
-        "type": "parallel",
-        "data": {
-          "commands": [
-            {
-              "type": "named",
-              "data": {
-                "name": "BeginAutoAlignTheta"
-              }
-            },
-            {
-              "type": "named",
-              "data": {
-                "name": "AlignShooterOnly"
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
       "name": "Intake",
       "waypointRelativePos": 0,
       "command": {

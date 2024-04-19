@@ -297,6 +297,14 @@ public class DriveSubsystem extends SubsystemBase {
         // SmartDashboard.putNumber("Note Pipeline", m_noteCamera.getPipelineIndex());  
         SmartDashboard.putBoolean("IsAimingSpeaker", isAutoAimingSpeaker);
         SmartDashboard.putBoolean("IsAimingMoonshot", isAutoAimingMoonshot);
+        SmartDashboard.putNumber("FL Mod Angle", m_frontLeft.getState().angle.getDegrees());
+        SmartDashboard.putNumber("RL Mod Angle", m_rearLeft.getState().angle.getDegrees());
+        SmartDashboard.putNumber("RR Mod Angle", m_rearRight.getState().angle.getDegrees());
+        SmartDashboard.putNumber("FR Mod Angle", m_frontRight.getState().angle.getDegrees());
+        SmartDashboard.putNumber("FL Mod Speed", m_frontLeft.getState().speedMetersPerSecond);
+        SmartDashboard.putNumber("RL Mod Speed", m_rearLeft.getState().speedMetersPerSecond);
+        SmartDashboard.putNumber("RR Mod Speed", m_rearRight.getState().speedMetersPerSecond);
+        SmartDashboard.putNumber("FR Mod Speed", m_frontRight.getState().speedMetersPerSecond);
 
         
 
