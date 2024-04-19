@@ -115,14 +115,14 @@ public final class Constants {
     public static final double TRANSLATION_SPEED_SCALAR_AUTO_AIM = 0.5;
 
     static {
-      DISTANCE_TO_ANGLE_MAP.put(1.25, ArmConstants.kSUBWOOFER + .011); // 3/15: Moved subwoofer higher for auto, move
+      DISTANCE_TO_ANGLE_MAP.put(1.25, ArmConstants.kSUBWOOFER + .009); // 3/15: Moved subwoofer higher for auto, move
                                                                        // this back down
-      DISTANCE_TO_ANGLE_MAP.put(2.2, ArmConstants.kOffset - 0.086);
+      DISTANCE_TO_ANGLE_MAP.put(2.2, ArmConstants.kOffset - 0.085);
       DISTANCE_TO_ANGLE_MAP.put(3.0, ArmConstants.kOffset - 0.063);
       DISTANCE_TO_ANGLE_MAP.put(4.1, ArmConstants.kOffset - 0.041);
-      DISTANCE_TO_ANGLE_MAP.put(4.9, ArmConstants.kOffset - 0.037);
+      DISTANCE_TO_ANGLE_MAP.put(4.9, ArmConstants.kOffset - 0.036);
       DISTANCE_TO_ANGLE_MAP.put(5.5, ArmConstants.kOffset - 0.029);
-      DISTANCE_TO_ANGLE_MAP.put(6.3, ArmConstants.kOffset - 0.022);
+      DISTANCE_TO_ANGLE_MAP.put(6.3, ArmConstants.kOffset - 0.024);
 
       MOONSHOT_ANGLE_MAP.put(5.0, ArmConstants.kOffset - 0.13);
       MOONSHOT_ANGLE_MAP.put(6.0, ArmConstants.kOffset - 0.12);

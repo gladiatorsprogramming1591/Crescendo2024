@@ -732,8 +732,8 @@ public class DriveSubsystem extends SubsystemBase {
                 - (robotVel.vxMetersPerSecond * (distanceToMoonshotTarget / DriveConstants.NOTE_VELOCITY_MOONSHOT));
         double y = goalPose.getY() - (robotVel.vyMetersPerSecond * (distanceToMoonshotTarget / DriveConstants.NOTE_VELOCITY_MOONSHOT));
         Translation2d goalPoseAdjusted = new Translation2d(x, y);
-        Pose2d target = new Pose2d(goalPoseAdjusted, new Rotation2d());
-        m_goalPoseField.setRobotPose(target);
+        // Pose2d target = new Pose2d(goalPoseAdjusted, new Rotation2d());
+        // m_goalPoseField.setRobotPose(target);
         return goalPoseAdjusted;
     }
 
