@@ -1,0 +1,115 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 0.6465019492093177,
+      "y": 6.593200975274989
+    },
+    "rotation": -120.25999999999999
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "ShootSubwoofer"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "FirstToMidline"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AlignAndIntake"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "ThirdToShoot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AlignAndShootNote"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "EndAutoAlignTheta"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "StagelineFourthStage "
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AlignAndIntake"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "FourthToShootStage"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AlignAndShootNote"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "EndAutoAlignTheta"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "StagelineFourthStage "
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AlignAndIntake"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "FourthToShootStage"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AlignAndShootNote"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "EndAutoAlignTheta"
+          }
+        }
+      ]
+    }
+  },
+  "folder": null,
+  "choreoAuto": false
+}

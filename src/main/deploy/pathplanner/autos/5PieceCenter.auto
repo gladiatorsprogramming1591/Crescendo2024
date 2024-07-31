@@ -1,0 +1,127 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 1.2,
+      "y": 5.55
+    },
+    "rotation": 180.0
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "ShootSubwoofer"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ArmStow"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "NearPodiumToPodium"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Intake.25"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ShootPodium"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "PodiumToMiddle"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Intake.25"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ShootPodium"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "CenterLineUnderStage"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AlignAndIntake"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "FourthToShootStage"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AlignAndShootNote"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "EndAutoAlignTheta"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "StagelineFourthStage "
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AlignAndShootNote"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "EndAutoAlignTheta"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "FourthToShootStage"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AlignAndShootNote"
+          }
+        }
+      ]
+    }
+  },
+  "folder": null,
+  "choreoAuto": false
+}

@@ -1,0 +1,58 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 3.7,
+        "y": 5.4
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 4.1801498927837955,
+        "y": 5.645916644742035
+      },
+      "isLocked": false,
+      "linkedName": "ShootWing"
+    },
+    {
+      "anchor": {
+        "x": 6.818112808836172,
+        "y": 6.417538427088266
+      },
+      "prevControl": {
+        "x": 6.337968510459132,
+        "y": 6.8391285427364
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": null
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.5,
+      "rotationDegrees": 176.47660820160215,
+      "rotateFast": false
+    }
+  ],
+  "constraintZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 5.6,
+    "maxAcceleration": 5.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0
+  },
+  "goalEndState": {
+    "velocity": 3.0,
+    "rotation": 138.65222278030626,
+    "rotateFast": true
+  },
+  "reversed": false,
+  "folder": null,
+  "previewStartingState": {
+    "rotation": -167.64,
+    "velocity": 0
+  },
+  "useDefaultConstraints": true
+}
