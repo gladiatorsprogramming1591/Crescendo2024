@@ -39,7 +39,7 @@ public final class Constants {
     public static final double kMaxModuleMetersPerSecond = 5.66;
     public static final double kMaxSpeedMetersPerSecond = kMaxModuleMetersPerSecond;
     public static final double kMaxAngularSpeed = 2 * Math.PI; // radians per second
-    public static final double kTeleopPercentLimit = .95;
+    public static final double kTeleopPercentLimit = 0.95; // was 0.95
 
     public static final Vector<N3> odometryStd = VecBuilder.fill(0.06, 0.06, 0.01);
     public static final Vector<N3> visionStd = VecBuilder.fill(0.35, 0.35, 0.8);
@@ -80,9 +80,9 @@ public final class Constants {
     public static final Translation2d BLUE_SPEAKER = new Translation2d(0.0241, 5.547868);
     public static final Translation2d RED_SPEAKER = new Translation2d(FIELD_LENGTH - BLUE_SPEAKER.getX(),
         BLUE_SPEAKER.getY() + 0.1);
-    public static final Translation2d BLUE_MOONSHOT_TARGET = new Translation2d(0.5, 6.8);
-    public static final Translation2d RED_MOONSHOT_TARGET = new Translation2d(FIELD_LENGTH - BLUE_MOONSHOT_TARGET.getX(),
-        BLUE_MOONSHOT_TARGET.getY() + 0.1);
+    public static final Translation2d BLUE_MOONSHOT_TARGET = new Translation2d(0.5, 8.0);
+    public static final Translation2d RED_MOONSHOT_TARGET = new Translation2d(FIELD_LENGTH - BLUE_MOONSHOT_TARGET.getX() + 0.4,
+        BLUE_MOONSHOT_TARGET.getY() - 0.7);
     public static final Translation2d STAGE = new Translation2d(4.981067, 4.105783);
 
     public static final double SPEAKER_HEIGHT = 2.08;
@@ -114,6 +114,10 @@ public final class Constants {
     public static final double MAX_ROTATION_SPEED_AUTO_AIM = 5.0;
     public static final double TRANSLATION_SPEED_SCALAR_AUTO_AIM = 0.5;
 
+    public static final double EDISON_FACTOR = .9; // set to 1 for Milstein Field Map
+    public static final double EDISON_PASS_FACTOR = 0.825;
+    ;
+
     static {
       DISTANCE_TO_ANGLE_MAP.put(1.25, ArmConstants.kSUBWOOFER + .009); // 3/15: Moved subwoofer higher for auto, move
                                                                        // this back down
@@ -124,15 +128,15 @@ public final class Constants {
       DISTANCE_TO_ANGLE_MAP.put(5.5, ArmConstants.kOffset - 0.029);
       DISTANCE_TO_ANGLE_MAP.put(6.3, ArmConstants.kOffset - 0.024);
 
-      MOONSHOT_ANGLE_MAP.put(5.0, ArmConstants.kOffset - 0.13);
-      MOONSHOT_ANGLE_MAP.put(6.0, ArmConstants.kOffset - 0.12);
-      MOONSHOT_ANGLE_MAP.put(7.0, ArmConstants.kOffset - 0.10);
-      MOONSHOT_ANGLE_MAP.put(8.0, ArmConstants.kOffset - 0.09);
+      MOONSHOT_ANGLE_MAP.put(5.0, ArmConstants.kOffset - (0.13 * EDISON_PASS_FACTOR));
+      MOONSHOT_ANGLE_MAP.put(6.0, ArmConstants.kOffset - (0.12 * EDISON_PASS_FACTOR));
+      MOONSHOT_ANGLE_MAP.put(7.0, ArmConstants.kOffset - (0.10 * EDISON_PASS_FACTOR));
+      MOONSHOT_ANGLE_MAP.put(8.0, ArmConstants.kOffset - (0.09 * EDISON_PASS_FACTOR));
 
-      MOONSHOT_SPEED_MAP.put(5.0, ShooterConstants.kLeftShooterMoonSpeed * 0.71);
-      MOONSHOT_SPEED_MAP.put(6.0, ShooterConstants.kLeftShooterMoonSpeed * 0.85);
-      MOONSHOT_SPEED_MAP.put(7.0, ShooterConstants.kLeftShooterMoonSpeed * 1.0);
-      MOONSHOT_SPEED_MAP.put(8.0, ShooterConstants.kLeftShooterMoonSpeed * 1.1);
+      MOONSHOT_SPEED_MAP.put(5.0, ShooterConstants.kLeftShooterMoonSpeed * 0.71 * EDISON_PASS_FACTOR);
+      MOONSHOT_SPEED_MAP.put(6.0, ShooterConstants.kLeftShooterMoonSpeed * 0.85 * EDISON_PASS_FACTOR);
+      MOONSHOT_SPEED_MAP.put(7.0, ShooterConstants.kLeftShooterMoonSpeed * 1.0 * EDISON_PASS_FACTOR);
+      MOONSHOT_SPEED_MAP.put(8.0, ShooterConstants.kLeftShooterMoonSpeed * 1.1 * EDISON_PASS_FACTOR);
     }
 
     public static final double kDirectionSlewRate = 4.8; // radians per second

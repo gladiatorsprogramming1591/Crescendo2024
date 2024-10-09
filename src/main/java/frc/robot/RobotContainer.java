@@ -188,7 +188,8 @@ public class RobotContainer {
                                 .whileTrue(new RunCommand(() -> m_ShooterSubsystem.transferReverse(),
                                                 m_ShooterSubsystem)
                                                 .finallyDo((() -> m_ShooterSubsystem.transferOff())));
-                m_driverController.povDown().onTrue(new ArmToPosition(m_ArmSubsystem, armPositions.TRAP));
+                m_driverController.povDown().onTrue(new ArmToPositionWithEnd(
+                        m_ArmSubsystem, armPositions.TRANSFER).andThen(new InstantCommand(() -> m_ShooterSubsystem.shooterOff())));
                 m_driverController.rightBumper().onTrue(new ArmToPosition(m_ArmSubsystem, armPositions.CLIMBFINISH,
                                                 ArmConstants.kCurrentLimitClimbing).alongWith(new InstantCommand (() -> m_CANdleSubsystem.changeAnimation(AnimationTypes.Twinkle))));
                 // m_operatorController.leftStick().onTrue(new AmpScore(m_ShooterSubsystem, m_ArmSubsystem));
@@ -199,7 +200,8 @@ public class RobotContainer {
                                 new ArmToPosition(m_ArmSubsystem, armPositions.AMPFINISH)
                                                 .alongWith(new WarmUpShooter(m_ShooterSubsystem, true)));
                                 
-                m_operatorController.leftStick().onTrue(new ArmToPosition(m_ArmSubsystem, armPositions.TRANSFER));
+                m_operatorController.leftStick().onTrue(new ArmToPositionWithEnd
+                (m_ArmSubsystem, armPositions.TRANSFER).andThen(new InstantCommand(() -> m_ShooterSubsystem.shooterOff())));
                 m_operatorController.rightTrigger().onTrue(new ShootFast(m_ShooterSubsystem, m_ArmSubsystem, armPositions.SUBWOOFER)); 
                 m_operatorController.leftTrigger().onTrue(new ShootNote(m_ShooterSubsystem, m_ArmSubsystem, armPositions.TRANSFER)); 
 
