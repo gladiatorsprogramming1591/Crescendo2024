@@ -244,7 +244,7 @@ public class CANdleSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-      if(m_startupComplete && m_notePresent) setNoteDetectedOnIntake();
+      /*if(m_startupComplete && m_notePresent) setNoteDetectedOnIntake();
       else {
 
         Integer selectedAnimation = m_animationChooser.getSelected();
@@ -270,7 +270,7 @@ public class CANdleSubsystem extends SubsystemBase {
       }
       SmartDashboard.putBoolean("LED Note Present", m_notePresent);
       SmartDashboard.putBoolean("LED Startup Complete", m_startupComplete);
-    }
+    */} 
 
     @Override
     public void simulationPeriodic() {

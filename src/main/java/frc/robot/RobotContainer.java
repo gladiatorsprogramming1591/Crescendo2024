@@ -94,7 +94,7 @@ public class RobotContainer {
          */
         public RobotContainer() {
 
-                DataLogManager.start();
+                // DataLogManager.start();
                 m_CANdleSubsystem = new CANdleSubsystem();
 
                 // Register Named Commands
@@ -139,17 +139,15 @@ public class RobotContainer {
          * {@link JoystickButton}.
          */
         private void configureButtonBindings() {
-                m_driverController.back().onTrue(new InstantCommand(() -> m_robotDrive.zeroHeading()));
-                // m_driverController.a().onTrue(new RunCommand(() ->
-                // m_ShooterSubsystem.shooterOn(), m_ShooterSubsystem));
+                m_driverController.back().onTrue(new InstantCommand(() -> m_robotDrive.zeroHeading())); //Resets robot heading
                 m_driverController.a().whileTrue(
-                                new RunCommand(() -> m_ShooterSubsystem.transferOn(false), m_ShooterSubsystem)
-                                                .finallyDo(() -> m_ShooterSubsystem.transferOff()));
+                                new RunCommand(() -> m_ShooterSubsystem.transferOn(false), m_ShooterSubsystem) //When held, runs the transfer. 
+                                                .finallyDo(() -> m_ShooterSubsystem.transferOff()));                            
                 m_driverController.b()
                                 .onTrue(new InstantCommand(() -> m_ShooterSubsystem.shooterOff(), m_ShooterSubsystem));
-                m_driverController.x().onTrue(new TransferOnWithBeamBreak(m_ShooterSubsystem));
+                m_driverController.x().onTrue(new TransferOnWithBeamBreak(m_ShooterSubsystem)); //Runs Transfer
                 m_driverController.y()
-                                .onTrue(new InstantCommand(() -> m_ShooterSubsystem.transferOff(), m_ShooterSubsystem));
+                                .onTrue(new InstantCommand(() -> m_ShooterSubsystem.transferOff(), m_ShooterSubsystem)); // Turns transfer on 
                 m_driverController.start().whileTrue(new AlignAndShootNote(m_ShooterSubsystem, m_ArmSubsystem,
                                 () -> m_driverController.getLeftX(), () -> m_driverController.getLeftY(), m_robotDrive,
                                 m_IntakeSubsystem));
@@ -165,25 +163,6 @@ public class RobotContainer {
                                 .whileTrue(new IntakeNote(m_ShooterSubsystem, m_ArmSubsystem, m_IntakeSubsystem).finallyDo( (()-> m_IntakeSubsystem.intakeOff())));
                 m_driverController.leftBumper()
                                 .onTrue(new InstantCommand(() -> m_IntakeSubsystem.intakeOn(), m_IntakeSubsystem));
-                // m_driverController.rightTrigger(OIConstants.kArmDeadband).whileTrue(new
-                // RunCommand(() ->
-                // m_ArmSubsystem.ArmBackward(m_driverController.getRightTriggerAxis()),
-                // m_ArmSubsystem));
-                // m_driverController.rightTrigger(OIConstants.kArmDeadband).onFalse(new
-                // InstantCommand(() -> m_ArmSubsystem.ArmOff(), m_ArmSubsystem));
-                // m_driverController.leftTrigger(OIConstants.kArmDeadband).whileTrue(new
-                // RunCommand(() ->
-                // m_ArmSubsystem.ArmForward(m_driverController.getLeftTriggerAxis()),
-                // m_ArmSubsystem));
-                // m_driverController.leftTrigger(OIConstants.kArmDeadband).onFalse(new
-                // InstantCommand(() -> m_ArmSubsystem.ArmOff(), m_ArmSubsystem));
-                // m_driverController.povDown().onTrue(new TurnToAngleProfiled(180,
-                // m_robotDrive));
-                // m_driverController.povLeft().onTrue(new TurnToAngleProfiled(270,
-                // m_robotDrive));
-                // m_driverController.povUp().onTrue(new TurnToAngleProfiled(0, m_robotDrive));
-                // m_driverController.povRight().onTrue(new
-                // TurnToAngleProfiled(90,m_robotDrive));
                 m_driverController.leftStick()
                                 .whileTrue(new RunCommand(() -> m_ShooterSubsystem.transferReverse(),
                                                 m_ShooterSubsystem)
@@ -205,9 +184,6 @@ public class RobotContainer {
                 m_operatorController.rightTrigger().onTrue(new ShootFast(m_ShooterSubsystem, m_ArmSubsystem, armPositions.SUBWOOFER)); 
                 m_operatorController.leftTrigger().onTrue(new ShootNote(m_ShooterSubsystem, m_ArmSubsystem, armPositions.TRANSFER)); 
 
-                                
-                // m_operatorController.x().onTrue(new ShootNote(m_ShooterSubsystem,
-                // m_ArmSubsystem, armPositions.STAGELINE));
                 m_operatorController.b()
                                 .onTrue(new InstantCommand(() -> m_IntakeSubsystem.intakeOff(), m_IntakeSubsystem));
                 m_operatorController.y()
@@ -222,14 +198,10 @@ public class RobotContainer {
                 m_operatorController.rightBumper().onTrue(new TrapShootPrep(m_ShooterSubsystem, m_ArmSubsystem, armPositions.TRAP, m_BlowerSubsystem));
                 m_operatorController.rightBumper().onFalse(new TrapShootFinish(m_ShooterSubsystem, m_BlowerSubsystem));
                 m_operatorController.back().onTrue(new ArmToPosition(m_ArmSubsystem, armPositions.CLIMBSTART));
-                // m_operatorController.start()
-                //                 .onTrue(new ArmToPosition(m_ArmSubsystem, armPositions.CLIMBFINISH,
-                //                                 ArmConstants.kCurrentLimitClimbing).alongWith(new InstantCommand (() -> m_CANdleSubsystem.changeAnimation(AnimationTypes.Twinkle))));
                 m_operatorController.x().onTrue(new InstantCommand(() -> m_CANdleSubsystem.setAmplify()));
                 m_operatorController.x().onFalse(new InstantCommand(() -> m_CANdleSubsystem.setDefault(!m_ShooterSubsystem.isBeamBroken())));
                 
                
-                // TODO change the rotation to be the letter buttons
         }
 
         // * Use this to pass the autonomous command to the main {@link Robot} class.

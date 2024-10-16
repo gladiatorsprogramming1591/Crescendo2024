@@ -147,7 +147,7 @@ public class DriveSubsystem extends SubsystemBase {
     PhotonCamera m_frontCamera;
     PhotonCamera m_leftCamera;
     PhotonCamera m_rightCamera;
-    private double m_lastNoteNeight = 0.0;
+    private double m_lastNoteHeight = 0.0;
     private boolean targetLost = true;
     AprilTagFieldLayout fieldLayout;
 
@@ -168,7 +168,7 @@ public class DriveSubsystem extends SubsystemBase {
         m_noteCamera = new PhotonCamera("Note");
         m_frontCamera = new PhotonCamera("Front");
         m_leftCamera = new PhotonCamera("Left");
-        m_rightCamera = new PhotonCamera("Right");
+        // m_rightCamera = new PhotonCamera("Right");
 
         // Configure AutoBuilder last
 
@@ -335,7 +335,7 @@ public class DriveSubsystem extends SubsystemBase {
         SmartDashboard.putBoolean("FrontConnected", m_frontCamera.isConnected());
         SmartDashboard.putBoolean("NoteConnected", m_noteCamera.isConnected());
         SmartDashboard.putBoolean("LeftConnected", m_leftCamera.isConnected());
-        SmartDashboard.putBoolean("RightConnected", m_rightCamera.isConnected());
+        // SmartDashboard.putBoolean("RightConnected", m_rightCamera.isConnected());
         try {
             SmartDashboard.putNumber("Front Latency", m_frontCamera.getLatestResult().getLatencyMillis());
             SmartDashboard.putNumber("Note Latency", m_noteCamera.getLatestResult().getLatencyMillis());
@@ -344,7 +344,7 @@ public class DriveSubsystem extends SubsystemBase {
             double latencyThreshold = 12.0;
             SmartDashboard.putBoolean("Front Latency OK", m_frontCamera.getLatestResult().getLatencyMillis() > latencyThreshold);
             SmartDashboard.putBoolean("Left Latency OK", m_leftCamera.getLatestResult().getLatencyMillis() > latencyThreshold);
-            SmartDashboard.putBoolean("Right Latency OK", m_rightCamera.getLatestResult().getLatencyMillis() > latencyThreshold);
+            // SmartDashboard.putBoolean("Right Latency OK", m_rightCamera.getLatestResult().getLatencyMillis() > latencyThreshold);
         } catch(Exception e) {
 
         }
@@ -850,7 +850,7 @@ public class DriveSubsystem extends SubsystemBase {
 
     public void resetNoteHeight() {
         targetLost = false;
-        m_lastNoteNeight = getNoteHeight();
+        m_lastNoteHeight = getNoteHeight();
     }
 
     public void setAutoAimRotPIDConstants(boolean auto) {
@@ -877,9 +877,9 @@ public class DriveSubsystem extends SubsystemBase {
                 // translate.
                 double height = target.getPitch() + DriveConstants.kNoteCameraHeightFOV / 2.0;
                 // If height difference from last read is bigger than tolerance, stop driving
-                if (Math.abs(height - m_lastNoteNeight) < DriveConstants.kNoteDifferentialTolerance
+                if (Math.abs(height - m_lastNoteHeight) < DriveConstants.kNoteDifferentialTolerance
                         && (height > DriveConstants.kMinNoteHeight)) {
-                    m_lastNoteNeight = height;
+                    m_lastNoteHeight = height;
                     targetLost = false;
                     // System.out.println("Running AutoAim");
                     drive(
