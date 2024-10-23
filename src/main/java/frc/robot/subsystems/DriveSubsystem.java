@@ -185,7 +185,6 @@ public class DriveSubsystem extends SubsystemBase {
                         radius, // Drive base radius in meters. Distance from robot center to furthest module.
                         new ReplanningConfig() // Default path replanning config. See the API for the options here
                 ),
-                // TODO edit constants above
                 () -> {
                     // Boolean supplier that controls when the path will be mirrored for the red
                     // alliance

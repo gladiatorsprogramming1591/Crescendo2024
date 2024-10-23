@@ -94,7 +94,7 @@ public class RobotContainer {
          */
         public RobotContainer() {
 
-                // DataLogManager.start();
+                DataLogManager.start();
                 m_CANdleSubsystem = new CANdleSubsystem();
 
                 // Register Named Commands

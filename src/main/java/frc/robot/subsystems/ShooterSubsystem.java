@@ -207,7 +207,6 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   public Subsystem withTimeout(int i) {
-    // TODO Auto-generated method stub
     throw new UnsupportedOperationException("Unimplemented method 'withTimeout'");
   }
 
