@@ -115,8 +115,8 @@ public final class Constants {
     public static final double TRANSLATION_SPEED_SCALAR_AUTO_AIM = 0.5;
 
     // TODO: Fix for Ruckus
-    public static final double EDISON_FACTOR = 0.9; // set to 1 for Milstein Field Map
-    public static final double EDISON_PASS_FACTOR = 0.825;
+    public static final double EDISON_FACTOR = 1.0; // set to 1 for Milstein Field Map
+    public static final double EDISON_PASS_FACTOR = 1.0;
     ;
 
     static {
